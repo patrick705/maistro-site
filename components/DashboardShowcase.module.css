@@ -1,0 +1,375 @@
+.wrap {
+  padding: 0 48px 40px;
+}
+
+.card {
+  max-width: 1120px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 26px;
+  padding: 20px;
+  box-shadow: 0 34px 80px rgba(27, 72, 217, 0.18);
+  border: 1px solid #eef0f4;
+}
+
+.dashHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 6px 18px;
+  border-bottom: 1px solid #eef0f4;
+}
+
+.dashHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.dashBadge {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  background: var(--brand);
+  border-radius: 9px;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--warm);
+  font-size: 17px;
+}
+
+.dashTitle {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--brand);
+}
+
+.dashSubtitle {
+  font-size: 11px;
+  color: #8a8f9c;
+}
+
+.dashHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashDate {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #5b6172;
+  background: #f5f7fc;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.dashAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand), var(--pos));
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 4px 18px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b6172;
+  background: #f5f7fc;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  font-family: var(--font-body);
+}
+
+.tabActive {
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.kpiGrid3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.kpi {
+  background: #f5f7fc;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.kpiLabel {
+  font-size: 12px;
+  color: #8a8f9c;
+  margin-bottom: 8px;
+}
+
+.kpiValue {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--brand);
+}
+
+.kpiValueSmall {
+  font-size: 26px;
+}
+
+.kpiValueAccent {
+  color: var(--accent);
+}
+
+.kpiDelta {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #8a8f9c;
+}
+
+.kpiDeltaPos {
+  color: var(--pos);
+  font-weight: 600;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  gap: 14px;
+}
+
+.panelCard {
+  background: #fff;
+  border: 1px solid #eef0f4;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.panelCardTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.panelCardTitle {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--brand);
+}
+
+.legend {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  color: #8a8f9c;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legendSwatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.chartRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 168px;
+}
+
+.barGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.barPair {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 150px;
+}
+
+.barSingle {
+  align-items: flex-end;
+  height: 150px;
+  display: flex;
+}
+
+.barLabel {
+  font-size: 11px;
+  color: #8a8f9c;
+}
+
+.sideCol {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.personRow {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.personName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2a2e38;
+}
+
+.personRole {
+  font-size: 11px;
+  color: #8a8f9c;
+}
+
+.progressBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.progressHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.progressName {
+  color: #2a2e38;
+  font-weight: 600;
+}
+
+.progressStatus {
+  font-weight: 600;
+}
+
+.progressTrack {
+  height: 8px;
+  background: #eef0f4;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressTrackThin {
+  height: 7px;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.rotaRow {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.rotaName {
+  width: 80px;
+  font-size: 12px;
+  color: #8a8f9c;
+}
+
+.rotaTrack {
+  flex: 1;
+  height: 22px;
+  background: #f5f7fc;
+  border-radius: 6px;
+  position: relative;
+}
+
+.rotaBar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 6px;
+}
+
+.rotaAxis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #b0b4bf;
+  margin-top: 12px;
+  padding-left: 91px;
+}
+
+.reportBand {
+  background: var(--brand);
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.reportBandTitle {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.reportBandSub {
+  font-size: 13px;
+  color: var(--brand-tint);
+  margin-top: 4px;
+}
+
+.reportBandPill {
+  background: var(--warm);
+  color: var(--brand);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+@media (max-width: 820px) {
+  .kpiGrid,
+  .kpiGrid3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+}

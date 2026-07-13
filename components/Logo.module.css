@@ -1,0 +1,28 @@
+.header {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--brand);
+  letter-spacing: -0.02em;
+}
+
+.footer {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.aiHeader,
+.aiFooter {
+  display: inline-block;
+  animation: aiPulse 2.4s ease-in-out infinite;
+}
+
+.aiHeader {
+  color: var(--accent);
+}
+
+.aiFooter {
+  color: var(--warm);
+}

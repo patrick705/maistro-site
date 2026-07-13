@@ -1,0 +1,30 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "seed": "tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/vision": "^6.4.0",
+    "next": "16.2.10",
+    "next-sanity": "^13.1.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "sanity": "^6.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "tsx": "^4.23.0",
+    "typescript": "^5"
+  }
+}
