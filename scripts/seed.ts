@@ -13,7 +13,14 @@ loadEnvConfig(process.cwd())
 
 async function main() {
   const { getWriteClient, isSanityConfigured } = await import('../lib/sanity/client')
-  const { defaultHomePage, defaultSiteSettings } = await import('../lib/content/defaults')
+  const {
+    defaultCustomersPage,
+    defaultHomePage,
+    defaultNewsArticles,
+    defaultNewsPage,
+    defaultProductPage,
+    defaultSiteSettings,
+  } = await import('../lib/content/defaults')
 
   if (!isSanityConfigured) {
     console.error(
@@ -33,6 +40,22 @@ async function main() {
 
   console.log('Seeding Home Page…')
   await client.createOrReplace({ _id: 'homePage', _type: 'homePage', ...defaultHomePage })
+
+  console.log('Seeding Product Page…')
+  await client.createOrReplace({ _id: 'productPage', _type: 'productPage', ...defaultProductPage })
+
+  console.log('Seeding Customers Page…')
+  await client.createOrReplace({ _id: 'customersPage', _type: 'customersPage', ...defaultCustomersPage })
+
+  console.log('Seeding News Page…')
+  await client.createOrReplace({ _id: 'newsPage', _type: 'newsPage', ...defaultNewsPage })
+
+  console.log('Seeding News Articles…')
+  await Promise.all(
+    defaultNewsArticles.map((article, i) =>
+      client.createOrReplace({ _id: `newsArticle-${i + 1}`, _type: 'newsArticle', ...article }),
+    ),
+  )
 
   console.log('✔ Done. Open /studio to edit the content.')
 }

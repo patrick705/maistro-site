@@ -1,8 +1,29 @@
 import { client, isSanityConfigured } from './client'
-import { homePageQuery, siteSettingsQuery } from './queries'
-import { defaultHomePage, defaultSiteSettings } from '@/lib/content/defaults'
+import {
+  customersPageQuery,
+  homePageQuery,
+  newsArticlesQuery,
+  newsPageQuery,
+  productPageQuery,
+  siteSettingsQuery,
+} from './queries'
+import {
+  defaultCustomersPage,
+  defaultHomePage,
+  defaultNewsArticles,
+  defaultNewsPage,
+  defaultProductPage,
+  defaultSiteSettings,
+} from '@/lib/content/defaults'
 import { mergeDefined } from '@/lib/content/merge'
-import type { HomePage, SiteSettings } from '@/lib/content/types'
+import type {
+  CustomersPage,
+  HomePage,
+  NewsArticle,
+  NewsPage,
+  ProductPage,
+  SiteSettings,
+} from '@/lib/content/types'
 
 const REVALIDATE_SECONDS = 60
 
@@ -33,5 +54,65 @@ export async function getHomePage(): Promise<HomePage> {
   } catch (err) {
     console.warn('[sanity] failed to fetch homePage, using defaults:', err)
     return defaultHomePage
+  }
+}
+
+export async function getProductPage(): Promise<ProductPage> {
+  if (!isSanityConfigured) return defaultProductPage
+  try {
+    const data = await client.fetch<Partial<ProductPage> | null>(
+      productPageQuery,
+      {},
+      { next: { revalidate: REVALIDATE_SECONDS } },
+    )
+    return mergeDefined(defaultProductPage, data)
+  } catch (err) {
+    console.warn('[sanity] failed to fetch productPage, using defaults:', err)
+    return defaultProductPage
+  }
+}
+
+export async function getCustomersPage(): Promise<CustomersPage> {
+  if (!isSanityConfigured) return defaultCustomersPage
+  try {
+    const data = await client.fetch<Partial<CustomersPage> | null>(
+      customersPageQuery,
+      {},
+      { next: { revalidate: REVALIDATE_SECONDS } },
+    )
+    return mergeDefined(defaultCustomersPage, data, ['caseStudyHeroStat'])
+  } catch (err) {
+    console.warn('[sanity] failed to fetch customersPage, using defaults:', err)
+    return defaultCustomersPage
+  }
+}
+
+export async function getNewsPage(): Promise<NewsPage> {
+  if (!isSanityConfigured) return defaultNewsPage
+  try {
+    const data = await client.fetch<Partial<NewsPage> | null>(
+      newsPageQuery,
+      {},
+      { next: { revalidate: REVALIDATE_SECONDS } },
+    )
+    return mergeDefined(defaultNewsPage, data)
+  } catch (err) {
+    console.warn('[sanity] failed to fetch newsPage, using defaults:', err)
+    return defaultNewsPage
+  }
+}
+
+export async function getNewsArticles(): Promise<NewsArticle[]> {
+  if (!isSanityConfigured) return defaultNewsArticles
+  try {
+    const data = await client.fetch<NewsArticle[] | null>(
+      newsArticlesQuery,
+      {},
+      { next: { revalidate: REVALIDATE_SECONDS } },
+    )
+    return data && data.length > 0 ? data : defaultNewsArticles
+  } catch (err) {
+    console.warn('[sanity] failed to fetch newsArticles, using defaults:', err)
+    return defaultNewsArticles
   }
 }

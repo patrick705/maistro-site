@@ -7,7 +7,7 @@ type HeroContent = Pick<
   'heroEyebrow' | 'heroHeadlineBefore' | 'heroHeadlineHighlight' | 'heroSubhead' | 'heroPrimaryCta' | 'heroSecondaryCta' | 'heroStats'
 >
 
-export function Hero({ content }: { content: HeroContent }) {
+export function Hero({ content, secondaryHref = '#' }: { content: HeroContent; secondaryHref?: string }) {
   return (
     <section className={styles.hero}>
       <div className={`${styles.shape} ${styles.shapeA}`} />
@@ -25,19 +25,21 @@ export function Hero({ content }: { content: HeroContent }) {
 
       <div className={styles.ctaRow}>
         <BookDemoButton label={content.heroPrimaryCta} className={styles.primaryCta} />
-        <a href="#" className={styles.secondaryCta}>
+        <a href={secondaryHref} className={styles.secondaryCta}>
           {content.heroSecondaryCta}
         </a>
       </div>
 
-      <div className={styles.statsRow}>
-        {content.heroStats.map((stat, i) => (
-          <div key={i} className={styles.stat} data-variant={stat.variant}>
-            <div className={styles.statValue}>{stat.value}</div>
-            <div className={styles.statLabel}>{stat.label}</div>
-          </div>
-        ))}
-      </div>
+      {content.heroStats.length > 0 && (
+        <div className={styles.statsRow}>
+          {content.heroStats.map((stat, i) => (
+            <div key={i} className={styles.stat} data-variant={stat.variant}>
+              <div className={styles.statValue}>{stat.value}</div>
+              <div className={styles.statLabel}>{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   )
 }

@@ -1,15 +1,24 @@
 import type { Metadata } from 'next'
 
-import { ComingSoon } from '@/components/ComingSoon'
+import { CtaBand } from '@/components/CtaBand'
+import { FeaturedCaseStudy } from '@/components/FeaturedCaseStudy'
+import { LogoWall } from '@/components/LogoWall'
+import { SimpleHero } from '@/components/SimpleHero'
+import { TestimonialGrid } from '@/components/TestimonialGrid'
+import { getCustomersPage } from '@/lib/sanity/fetch'
 
 export const metadata: Metadata = { title: 'Customers — Maistro' }
 
-export default function CustomersPage() {
+export default async function CustomersPage() {
+  const customersPage = await getCustomersPage()
+
   return (
-    <ComingSoon
-      eyebrow="Customers"
-      title="Customer stories are coming soon."
-      body="We're putting together case studies and testimonials from venues already running on Maistro. Check back soon."
-    />
+    <main>
+      <SimpleHero content={customersPage} headlineClamp="clamp(40px, 10vw, 80px)" />
+      <LogoWall logos={customersPage.logos} />
+      <FeaturedCaseStudy content={customersPage} />
+      <TestimonialGrid content={customersPage} />
+      <CtaBand content={customersPage} />
+    </main>
   )
 }

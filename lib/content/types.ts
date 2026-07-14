@@ -76,6 +76,108 @@ export interface DemoModalContent {
   successBody: string
 }
 
+export interface Testimonial {
+  quote: string
+  author: string
+  role?: string
+  venue: string
+}
+
+export interface NewsArticle {
+  title: string
+  excerpt: string
+  category: string
+  icon: string
+  variant: ColorVariant
+  publishedAt: string
+}
+
+export interface IconTile {
+  icon: string
+  label: string
+}
+
+export type ModuleWidgetKey = 'rota' | 'stock' | 'voice' | 'forecast' | 'reports'
+
+export interface ModuleDeepDive {
+  icon: string
+  eyebrow: string
+  headline: string
+  body: string
+  bullets: string[]
+  widget: ModuleWidgetKey
+}
+
+export interface Stat {
+  value: string
+  label: string
+}
+
+export interface ProductPage {
+  heroEyebrow: string
+  heroHeadlineBefore: string
+  heroHeadlineHighlight: string
+  heroSubhead: string
+  heroPrimaryCta: string
+  heroSecondaryCta: string
+  heroStats: StatBadge[]
+
+  channelsLabel: string
+  channelsItems: IconTile[]
+  menuManagerIcon: string
+  menuManagerTitle: string
+  menuManagerSub: string
+  maistroIcon: string
+  maistroTitle: string
+  maistroSub: string
+  outcomesLabel: string
+  outcomesItems: IconTile[]
+
+  modulesEyebrow: string
+  modulesHeadline: string
+  modules: ModuleDeepDive[]
+
+  integrationsEyebrow: string
+  integrationsHeadline: string
+  integrations: string[]
+
+  ctaHeadline: string
+  ctaSubhead: string
+  ctaButtonLabel: string
+}
+
+export interface CustomersPage {
+  heroEyebrow: string
+  heroHeadlineBefore: string
+  heroHeadlineHighlight: string
+  heroSubhead: string
+
+  logos: string[]
+
+  caseStudyEyebrow: string
+  caseStudyHeadline: string
+  caseStudyBody: string
+  caseStudyQuote: string
+  caseStudyAuthor: string
+  caseStudyHeroStat: Stat
+  caseStudyStats: Stat[]
+
+  testimonialsEyebrow: string
+  testimonialsHeadline: string
+  testimonials: Testimonial[]
+
+  ctaHeadline: string
+  ctaSubhead: string
+  ctaButtonLabel: string
+}
+
+export interface NewsPage {
+  heroEyebrow: string
+  heroHeadlineBefore: string
+  heroHeadlineHighlight: string
+  heroSubhead: string
+}
+
 export interface HomePage {
   heroEyebrow: string
   heroHeadlineBefore: string

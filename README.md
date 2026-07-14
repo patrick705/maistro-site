@@ -10,9 +10,35 @@ content managed in an embedded Sanity Studio.
   pipeline diagram, services grid, results band, and a contact form.
   Copy, stats, service cards, results and the demo-modal text are all
   editable in the Studio.
-- **Product / Customers / News** (`/product`, `/customers`, `/news`) — thin
-  placeholder pages (nav needs somewhere to point) — not yet built out.
-  Say the word and these can be built next.
+- **Product** (`/product`) — built to match the approved `Product.dc.html`
+  mockup: hero (no stats row), a horizontal pipeline strip (channels →
+  Menu Manager → Maistro → outcomes, distinct from the homepage's vertical
+  About diagram), five alternating module deep-dive sections (Staff,
+  Stock, Voice Ordering, Forecasting, Reports) each with its own static
+  illustrated widget (rota bars, stock levels, a voice-call transcript, a
+  forecast chart, report tiles), and an "Integrations" band. Ends in a
+  `CtaBand`.
+- **Customers** (`/customers`) — matches `Customers.dc.html`: a simple
+  hero (no CTA/stats), a client logo wall (rendered as text wordmark
+  tiles — no real logo artwork was available to pull in), a featured
+  Romayo's case-study band, and 3 testimonials with real names (Dario
+  Macari/Romayo's, George Stamopoulos/Yeeros, Peter O'Sullivan/Fired Up
+  Pizza). Ends in a `CtaBand`.
+- **News** (`/news`) — matches `News.dc.html`: a simple hero and a grid of
+  6 real articles, each its own repeatable "News Article" document in the
+  Studio (title, excerpt, category, icon, date). Card thumbnails are
+  colored icon placeholders, not real photos — the mockup's photography
+  couldn't be pulled through my tooling (files over the 256KB read cap
+  came back truncated); drop real images into `public/images` and wire
+  them into `components/NewsGrid.tsx` whenever you have them. **No CTA
+  band** — the real mockup ends right after the grid.
+- Product/Customers/News reuse the homepage's design tokens (palette,
+  fonts, "playful" mode, emoji iconography) and its `Hero`/`CtaBand`
+  components where the mockups actually call for them, but each has its
+  own dedicated layout components (`PipelineStrip`, `ModuleFeature`,
+  `IntegrationsBand`, `SimpleHero`, `LogoWall`, `FeaturedCaseStudy`,
+  `TestimonialGrid`, `NewsGrid`) — the three pages are not simple reskins
+  of the homepage's sections.
 - **Contact** — the nav's "Contact" link jumps to the contact form at the
   bottom of the homepage (`/#contact`); there's no separate Contact page yet.
 - **"Book a demo"** (nav, hero, contact) opens an animated modal. Both that
@@ -69,7 +95,8 @@ npm run dev
 - `app/studio/` — embedded Sanity Studio, outside the `(site)` layout.
 - `app/api/leads/` — route handler that stores demo/contact submissions in
   Sanity.
-- `sanity/schemaTypes/` — content schema (Site Settings, Home Page, Lead).
+- `sanity/schemaTypes/` — content schema (Site Settings, Home/Product/
+  Customers/News Pages, News Article, Lead).
 - `lib/content/` — TypeScript types, the palette definitions, the
   hardcoded dashboard data, and the fallback/seed copy.
 - `lib/sanity/` — Sanity client, GROQ queries, and fetch-with-fallback

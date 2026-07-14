@@ -1,0 +1,124 @@
+.section {
+  padding: 0 48px 80px;
+}
+
+.band {
+  max-width: 1080px;
+  margin: 0 auto;
+  background: var(--brand);
+  border-radius: 26px;
+  padding: 56px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--warm);
+  margin-bottom: 18px;
+}
+
+.headline {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 42px;
+  line-height: 1.04;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.body {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--brand-tint);
+  margin-top: 20px;
+}
+
+.quoteChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-top: 26px;
+}
+
+.quoteText {
+  font-size: 14px;
+  color: #fff;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.author {
+  font-size: 13px;
+  color: var(--warm);
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+.statsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.heroStat {
+  background: var(--warm);
+  border-radius: 18px;
+  padding: 26px;
+}
+
+.heroStatValue {
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 0.9;
+  color: var(--brand);
+}
+
+.heroStatLabel {
+  font-size: 14px;
+  color: var(--warm-deep);
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.statRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  padding: 22px;
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--brand-tint);
+  margin-top: 4px;
+}
+
+@media (max-width: 820px) {
+  .band {
+    grid-template-columns: 1fr;
+  }
+}

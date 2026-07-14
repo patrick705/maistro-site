@@ -7,9 +7,16 @@ import { resultStat } from './objects/resultStat'
 import { pipelineOutput } from './objects/pipelineOutput'
 import { aboutPipeline } from './objects/aboutPipeline'
 import { demoModalContent } from './objects/demoModal'
+import { testimonial } from './objects/testimonial'
+import { iconTile } from './objects/iconTile'
+import { moduleDeepDive } from './objects/moduleDeepDive'
 
 import { siteSettings } from './siteSettings'
 import { homePage } from './homePage'
+import { productPage } from './productPage'
+import { customersPage } from './customersPage'
+import { newsPage } from './newsPage'
+import { newsArticle } from './newsArticle'
 import { lead } from './lead'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
@@ -21,8 +28,15 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   pipelineOutput,
   aboutPipeline,
   demoModalContent,
+  testimonial,
+  iconTile,
+  moduleDeepDive,
   // documents
   siteSettings,
   homePage,
+  productPage,
+  customersPage,
+  newsPage,
+  newsArticle,
   lead,
 ]
