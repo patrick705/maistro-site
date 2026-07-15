@@ -45,8 +45,23 @@ export const newsArticle = defineType({
       title: 'Body',
       description: 'The full article content — the excerpt above is just the teaser shown on the News grid.',
       type: 'array',
-      of: [{ type: 'block' }, { type: 'image', options: { hotspot: true } }],
+      of: [
+        { type: 'block' },
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alternative text',
+              type: 'string',
+              validation: (r) => r.required(),
+            }),
+          ],
+        },
+      ],
     }),
+    defineField({ name: 'seo', title: 'SEO', type: 'seo' }),
   ],
   orderings: [
     { title: 'Newest first', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] },

@@ -6,8 +6,12 @@ import { IntegrationsBand } from '@/components/IntegrationsBand'
 import { ModuleFeature, ModulesHeading } from '@/components/ModuleFeature'
 import { PipelineStrip } from '@/components/PipelineStrip'
 import { getProductPage } from '@/lib/sanity/fetch'
+import { buildMetadata } from '@/lib/seoMeta'
 
-export const metadata: Metadata = { title: 'Product — Maistro' }
+export async function generateMetadata(): Promise<Metadata> {
+  const productPage = await getProductPage()
+  return buildMetadata(productPage.seo, 'Product — Maistro', productPage.heroSubhead)
+}
 
 export default async function ProductPage() {
   const productPage = await getProductPage()

@@ -6,8 +6,12 @@ import { LogoWall } from '@/components/LogoWall'
 import { SimpleHero } from '@/components/SimpleHero'
 import { TestimonialGrid } from '@/components/TestimonialGrid'
 import { getCustomersPage } from '@/lib/sanity/fetch'
+import { buildMetadata } from '@/lib/seoMeta'
 
-export const metadata: Metadata = { title: 'Customers — Maistro' }
+export async function generateMetadata(): Promise<Metadata> {
+  const customersPage = await getCustomersPage()
+  return buildMetadata(customersPage.seo, 'Customers — Maistro', customersPage.heroSubhead)
+}
 
 export default async function CustomersPage() {
   const customersPage = await getCustomersPage()

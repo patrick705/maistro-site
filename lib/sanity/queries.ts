@@ -1,11 +1,21 @@
 import { groq } from 'next-sanity'
 
+const seoProjection = groq`
+  seo{
+    metaTitle,
+    metaDescription,
+    "ogImage": ogImage{"url": asset->url, alt},
+    noIndex
+  }
+`
+
 export const siteSettingsQuery = groq`
   *[_id == "siteSettings"][0]{
     siteName,
     navItems[]{label, href},
     ctaLabel,
     footerText,
+    gtmContainerId,
     theme{palette, playful, showResults}
   }
 `
@@ -44,7 +54,9 @@ export const homePageQuery = groq`
     contactHeadline,
     contactSubhead,
 
-    demoModal{eyebrow, headline, subhead, successHeadline, successBody}
+    demoModal{eyebrow, headline, subhead, successHeadline, successBody},
+
+    ${seoProjection}
   }
 `
 
@@ -75,7 +87,9 @@ export const productPageQuery = groq`
 
     ctaHeadline,
     ctaSubhead,
-    ctaButtonLabel
+    ctaButtonLabel,
+
+    ${seoProjection}
   }
 `
 
@@ -102,7 +116,9 @@ export const customersPageQuery = groq`
 
     ctaHeadline,
     ctaSubhead,
-    ctaButtonLabel
+    ctaButtonLabel,
+
+    ${seoProjection}
   }
 `
 
@@ -111,7 +127,9 @@ export const newsPageQuery = groq`
     heroEyebrow,
     heroHeadlineBefore,
     heroHeadlineHighlight,
-    heroSubhead
+    heroSubhead,
+
+    ${seoProjection}
   }
 `
 
@@ -128,7 +146,13 @@ export const newsArticleBySlugQuery = groq`
     "slug": slug.current,
     body[]{
       ...,
-      _type == "image" => { ..., asset-> }
-    }
+      _type == "image" => {
+        ...,
+        asset->,
+        alt
+      }
+    },
+
+    ${seoProjection}
   }
 `

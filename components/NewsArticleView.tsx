@@ -22,7 +22,7 @@ const portableTextComponents: PortableTextComponents = {
       <span className={styles.imageWrap}>
         <Image
           src={urlFor(value).width(1120).fit('max').auto('format').url()}
-          alt={value.alt || ''}
+          alt={value.alt}
           width={1120}
           height={630}
           className={styles.image}

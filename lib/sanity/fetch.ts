@@ -51,7 +51,7 @@ export async function getHomePage(): Promise<HomePage> {
       {},
       { next: { revalidate: REVALIDATE_SECONDS } },
     )
-    return mergeDefined(defaultHomePage, data, ['aboutPipeline', 'demoModal'])
+    return mergeDefined(defaultHomePage, data, ['aboutPipeline', 'demoModal', 'seo'])
   } catch (err) {
     console.warn('[sanity] failed to fetch homePage, using defaults:', err)
     return defaultHomePage
@@ -66,7 +66,7 @@ export async function getProductPage(): Promise<ProductPage> {
       {},
       { next: { revalidate: REVALIDATE_SECONDS } },
     )
-    return mergeDefined(defaultProductPage, data)
+    return mergeDefined(defaultProductPage, data, ['seo'])
   } catch (err) {
     console.warn('[sanity] failed to fetch productPage, using defaults:', err)
     return defaultProductPage
@@ -81,7 +81,7 @@ export async function getCustomersPage(): Promise<CustomersPage> {
       {},
       { next: { revalidate: REVALIDATE_SECONDS } },
     )
-    return mergeDefined(defaultCustomersPage, data, ['caseStudyHeroStat'])
+    return mergeDefined(defaultCustomersPage, data, ['caseStudyHeroStat', 'seo'])
   } catch (err) {
     console.warn('[sanity] failed to fetch customersPage, using defaults:', err)
     return defaultCustomersPage
@@ -96,7 +96,7 @@ export async function getNewsPage(): Promise<NewsPage> {
       {},
       { next: { revalidate: REVALIDATE_SECONDS } },
     )
-    return mergeDefined(defaultNewsPage, data)
+    return mergeDefined(defaultNewsPage, data, ['seo'])
   } catch (err) {
     console.warn('[sanity] failed to fetch newsPage, using defaults:', err)
     return defaultNewsPage

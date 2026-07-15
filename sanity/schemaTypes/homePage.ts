@@ -11,6 +11,7 @@ export const homePage = defineType({
     { name: 'results', title: 'Results' },
     { name: 'contact', title: 'Contact' },
     { name: 'demo', title: 'Demo modal' },
+    { name: 'seo', title: 'SEO' },
   ],
   fields: [
     // Hero
@@ -71,6 +72,9 @@ export const homePage = defineType({
 
     // Demo modal
     defineField({ name: 'demoModal', title: 'Book-a-demo modal', type: 'demoModalContent', group: 'demo' }),
+
+    // SEO
+    defineField({ name: 'seo', title: 'SEO', type: 'seo', group: 'seo' }),
   ],
   preview: {
     prepare() {

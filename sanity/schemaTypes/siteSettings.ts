@@ -20,6 +20,13 @@ export const siteSettings = defineType({
     defineField({ name: 'ctaLabel', title: '"Book a demo" button label', type: 'string', group: 'general', initialValue: 'Book a demo' }),
     defineField({ name: 'footerText', title: 'Footer text', type: 'string', group: 'general' }),
     defineField({
+      name: 'gtmContainerId',
+      title: 'Google Tag Manager container ID',
+      description: 'e.g. GTM-XXXXXXX. Leave empty to disable GTM site-wide.',
+      type: 'string',
+      group: 'general',
+    }),
+    defineField({
       name: 'theme',
       title: 'Theme',
       type: 'object',

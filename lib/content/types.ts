@@ -25,7 +25,20 @@ export interface SiteSettings {
   navItems: NavItem[]
   ctaLabel: string
   footerText: string
+  gtmContainerId?: string
   theme: SiteTheme
+}
+
+export interface SeoImage {
+  url: string
+  alt: string
+}
+
+export interface Seo {
+  metaTitle?: string
+  metaDescription?: string
+  ogImage?: SeoImage
+  noIndex?: boolean
 }
 
 export interface StatBadge {
@@ -94,6 +107,7 @@ export interface NewsArticle {
   variant: ColorVariant
   publishedAt: string
   body?: PortableTextBlock[]
+  seo?: Seo
 }
 
 export interface IconTile {
@@ -148,6 +162,8 @@ export interface ProductPage {
   ctaHeadline: string
   ctaSubhead: string
   ctaButtonLabel: string
+
+  seo?: Seo
 }
 
 export interface CustomersPage {
@@ -173,6 +189,8 @@ export interface CustomersPage {
   ctaHeadline: string
   ctaSubhead: string
   ctaButtonLabel: string
+
+  seo?: Seo
 }
 
 export interface NewsPage {
@@ -180,6 +198,8 @@ export interface NewsPage {
   heroHeadlineBefore: string
   heroHeadlineHighlight: string
   heroSubhead: string
+
+  seo?: Seo
 }
 
 export interface HomePage {
@@ -210,4 +230,6 @@ export interface HomePage {
   contactSubhead: string
 
   demoModal: DemoModalContent
+
+  seo?: Seo
 }

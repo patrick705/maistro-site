@@ -10,6 +10,7 @@ export const customersPage = defineType({
     { name: 'caseStudy', title: 'Featured case study' },
     { name: 'testimonials', title: 'Testimonials' },
     { name: 'cta', title: 'CTA' },
+    { name: 'seo', title: 'SEO' },
   ],
   fields: [
     // Hero (simple — no CTA row, no stats)
@@ -78,6 +79,9 @@ export const customersPage = defineType({
     defineField({ name: 'ctaHeadline', title: 'Headline', type: 'string', group: 'cta' }),
     defineField({ name: 'ctaSubhead', title: 'Subhead', type: 'text', rows: 2, group: 'cta' }),
     defineField({ name: 'ctaButtonLabel', title: 'Button label', type: 'string', group: 'cta' }),
+
+    // SEO
+    defineField({ name: 'seo', title: 'SEO', type: 'seo', group: 'seo' }),
   ],
   preview: {
     prepare() {

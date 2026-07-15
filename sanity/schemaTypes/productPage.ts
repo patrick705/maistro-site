@@ -10,6 +10,7 @@ export const productPage = defineType({
     { name: 'modules', title: 'Modules' },
     { name: 'integrations', title: 'Integrations' },
     { name: 'cta', title: 'CTA' },
+    { name: 'seo', title: 'SEO' },
   ],
   fields: [
     // Hero
@@ -84,6 +85,9 @@ export const productPage = defineType({
     defineField({ name: 'ctaHeadline', title: 'Headline', type: 'string', group: 'cta' }),
     defineField({ name: 'ctaSubhead', title: 'Subhead', type: 'text', rows: 2, group: 'cta' }),
     defineField({ name: 'ctaButtonLabel', title: 'Button label', type: 'string', group: 'cta' }),
+
+    // SEO
+    defineField({ name: 'seo', title: 'SEO', type: 'seo', group: 'seo' }),
   ],
   preview: {
     prepare() {
