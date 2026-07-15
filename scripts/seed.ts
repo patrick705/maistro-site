@@ -7,9 +7,42 @@
  * Usage: npm run seed   (requires NEXT_PUBLIC_SANITY_PROJECT_ID and
  * SANITY_API_WRITE_TOKEN in .env.local)
  */
+import { randomBytes } from 'node:crypto'
+
 import { loadEnvConfig } from '@next/env'
 
 loadEnvConfig(process.cwd())
+
+/**
+ * Sanity requires every item in an array-of-objects field to have a unique
+ * `_key` so the Studio can track/reorder/edit it. The Studio's own editor
+ * assigns these automatically, but writing raw objects through the API (as
+ * this script does) does not — so every array-of-objects field seeded this
+ * way needs one assigned by hand. Walks the whole object tree and adds a
+ * `_key` to every array item that's a plain object (portable text blocks,
+ * service cards, testimonials, etc.), leaving arrays of primitives
+ * (strings, numbers) untouched, since those don't need one.
+ */
+function assignKeys(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map((item) => {
+      const processed = assignKeys(item)
+      if (processed && typeof processed === 'object' && !Array.isArray(processed)) {
+        const obj = processed as Record<string, unknown>
+        return { _key: typeof obj._key === 'string' ? obj._key : randomBytes(6).toString('hex'), ...obj }
+      }
+      return processed
+    })
+  }
+  if (value && typeof value === 'object') {
+    const result: Record<string, unknown> = {}
+    for (const [key, v] of Object.entries(value)) {
+      result[key] = assignKeys(v)
+    }
+    return result
+  }
+  return value
+}
 
 async function main() {
   const { getWriteClient, isSanityConfigured } = await import('../lib/sanity/client')
@@ -36,19 +69,39 @@ async function main() {
   const client = getWriteClient()
 
   console.log('Seeding Site Settings…')
-  await client.createOrReplace({ _id: 'siteSettings', _type: 'siteSettings', ...defaultSiteSettings })
+  await client.createOrReplace({
+    _id: 'siteSettings',
+    _type: 'siteSettings',
+    ...(assignKeys(defaultSiteSettings) as Record<string, unknown>),
+  })
 
   console.log('Seeding Home Page…')
-  await client.createOrReplace({ _id: 'homePage', _type: 'homePage', ...defaultHomePage })
+  await client.createOrReplace({
+    _id: 'homePage',
+    _type: 'homePage',
+    ...(assignKeys(defaultHomePage) as Record<string, unknown>),
+  })
 
   console.log('Seeding Product Page…')
-  await client.createOrReplace({ _id: 'productPage', _type: 'productPage', ...defaultProductPage })
+  await client.createOrReplace({
+    _id: 'productPage',
+    _type: 'productPage',
+    ...(assignKeys(defaultProductPage) as Record<string, unknown>),
+  })
 
   console.log('Seeding Customers Page…')
-  await client.createOrReplace({ _id: 'customersPage', _type: 'customersPage', ...defaultCustomersPage })
+  await client.createOrReplace({
+    _id: 'customersPage',
+    _type: 'customersPage',
+    ...(assignKeys(defaultCustomersPage) as Record<string, unknown>),
+  })
 
   console.log('Seeding News Page…')
-  await client.createOrReplace({ _id: 'newsPage', _type: 'newsPage', ...defaultNewsPage })
+  await client.createOrReplace({
+    _id: 'newsPage',
+    _type: 'newsPage',
+    ...(assignKeys(defaultNewsPage) as Record<string, unknown>),
+  })
 
   console.log('Seeding News Articles…')
   await Promise.all(
@@ -56,7 +109,7 @@ async function main() {
       client.createOrReplace({
         _id: `newsArticle-${i + 1}`,
         _type: 'newsArticle',
-        ...article,
+        ...(assignKeys(article) as Record<string, unknown>),
         // The `slug` schema field expects Sanity's slug object shape, not a bare string.
         slug: { _type: 'slug', current: article.slug },
       }),
