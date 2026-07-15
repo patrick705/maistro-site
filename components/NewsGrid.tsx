@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import styles from './NewsGrid.module.css'
 import type { NewsArticle } from '@/lib/content/types'
 
@@ -7,7 +9,7 @@ function formatDate(iso: string) {
 
 function Card({ article }: { article: NewsArticle }) {
   return (
-    <div className={styles.card}>
+    <Link href={`/news/${article.slug}`} className={styles.card}>
       <div className={styles.thumb} data-variant={article.variant}>
         <span className={styles.thumbIcon}>{article.icon}</span>
       </div>
@@ -20,7 +22,7 @@ function Card({ article }: { article: NewsArticle }) {
         <p className={styles.excerpt}>{article.excerpt}</p>
         <span className={styles.readMore}>Read →</span>
       </div>
-    </div>
+    </Link>
   )
 }
 

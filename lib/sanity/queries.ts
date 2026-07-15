@@ -117,6 +117,18 @@ export const newsPageQuery = groq`
 
 export const newsArticlesQuery = groq`
   *[_type == "newsArticle"] | order(publishedAt desc){
-    title, excerpt, category, icon, variant, publishedAt
+    title, excerpt, category, icon, variant, publishedAt,
+    "slug": slug.current
+  }
+`
+
+export const newsArticleBySlugQuery = groq`
+  *[_type == "newsArticle" && slug.current == $slug][0]{
+    title, excerpt, category, icon, variant, publishedAt,
+    "slug": slug.current,
+    body[]{
+      ...,
+      _type == "image" => { ..., asset-> }
+    }
   }
 `

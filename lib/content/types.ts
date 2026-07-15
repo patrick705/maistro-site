@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from '@portabletext/types'
+
 export type ColorVariant = 'brand' | 'warm' | 'pos' | 'accent'
 
 export type PaletteName =
@@ -85,11 +87,13 @@ export interface Testimonial {
 
 export interface NewsArticle {
   title: string
+  slug: string
   excerpt: string
   category: string
   icon: string
   variant: ColorVariant
   publishedAt: string
+  body?: PortableTextBlock[]
 }
 
 export interface IconTile {

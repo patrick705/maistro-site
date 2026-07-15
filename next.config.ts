@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   // bundled through Next's RSC module graph — let Node's native require
   // handle it server-side instead of Turbopack/webpack.
   serverExternalPackages: ["sanity", "next-sanity"],
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
+  },
 };
 
 export default nextConfig;

@@ -2,6 +2,7 @@ import { client, isSanityConfigured } from './client'
 import {
   customersPageQuery,
   homePageQuery,
+  newsArticleBySlugQuery,
   newsArticlesQuery,
   newsPageQuery,
   productPageQuery,
@@ -114,5 +115,21 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
   } catch (err) {
     console.warn('[sanity] failed to fetch newsArticles, using defaults:', err)
     return defaultNewsArticles
+  }
+}
+
+export async function getNewsArticleBySlug(slug: string): Promise<NewsArticle | null> {
+  const fallback = () => defaultNewsArticles.find((article) => article.slug === slug) ?? null
+  if (!isSanityConfigured) return fallback()
+  try {
+    const data = await client.fetch<NewsArticle | null>(
+      newsArticleBySlugQuery,
+      { slug },
+      { next: { revalidate: REVALIDATE_SECONDS } },
+    )
+    return data ?? fallback()
+  } catch (err) {
+    console.warn('[sanity] failed to fetch newsArticle by slug, using defaults:', err)
+    return fallback()
   }
 }

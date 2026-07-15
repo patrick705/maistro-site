@@ -53,7 +53,13 @@ async function main() {
   console.log('Seeding News Articles…')
   await Promise.all(
     defaultNewsArticles.map((article, i) =>
-      client.createOrReplace({ _id: `newsArticle-${i + 1}`, _type: 'newsArticle', ...article }),
+      client.createOrReplace({
+        _id: `newsArticle-${i + 1}`,
+        _type: 'newsArticle',
+        ...article,
+        // The `slug` schema field expects Sanity's slug object shape, not a bare string.
+        slug: { _type: 'slug', current: article.slug },
+      }),
     ),
   )
 

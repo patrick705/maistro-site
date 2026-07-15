@@ -7,6 +7,13 @@ export const newsArticle = defineType({
   type: 'document',
   fields: [
     defineField({ name: 'title', title: 'Title', type: 'string', validation: (r) => r.required() }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: { source: 'title' },
+      validation: (r) => r.required(),
+    }),
     defineField({ name: 'excerpt', title: 'Excerpt', type: 'text', rows: 3, validation: (r) => r.required() }),
     defineField({
       name: 'category',
@@ -33,6 +40,13 @@ export const newsArticle = defineType({
     }),
     colorVariantField,
     defineField({ name: 'publishedAt', title: 'Published at', type: 'datetime', validation: (r) => r.required() }),
+    defineField({
+      name: 'body',
+      title: 'Body',
+      description: 'The full article content — the excerpt above is just the teaser shown on the News grid.',
+      type: 'array',
+      of: [{ type: 'block' }, { type: 'image', options: { hotspot: true } }],
+    }),
   ],
   orderings: [
     { title: 'Newest first', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] },
