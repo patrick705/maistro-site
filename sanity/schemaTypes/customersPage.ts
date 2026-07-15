@@ -22,10 +22,11 @@ export const customersPage = defineType({
     // Logo wall
     defineField({
       name: 'logos',
-      title: 'Client names',
+      title: 'Clients',
       type: 'array',
-      of: [{ type: 'string' }],
-      description: 'Rendered as text wordmark tiles. A "+ many more" tile is always appended.',
+      of: [{ type: 'clientLogo' }],
+      description:
+        'Rendered as logo tiles (or a text wordmark if no image is set) — click any tile on the live site for a popup with more info. A "+ many more" tile is always appended.',
       group: 'logos',
     }),
 

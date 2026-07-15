@@ -7,6 +7,7 @@ import { SimpleHero } from '@/components/SimpleHero'
 import { TestimonialGrid } from '@/components/TestimonialGrid'
 import { getCustomersPage } from '@/lib/sanity/fetch'
 import { buildMetadata } from '@/lib/seoMeta'
+import { clientsJsonLd, jsonLdScript } from '@/lib/structuredData'
 
 export async function generateMetadata(): Promise<Metadata> {
   const customersPage = await getCustomersPage()
@@ -18,6 +19,10 @@ export default async function CustomersPage() {
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(clientsJsonLd(customersPage.logos)) }}
+      />
       <SimpleHero content={customersPage} headlineClamp="clamp(40px, 10vw, 80px)" />
       <LogoWall logos={customersPage.logos} />
       <FeaturedCaseStudy content={customersPage} />

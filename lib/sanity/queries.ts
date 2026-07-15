@@ -100,7 +100,12 @@ export const customersPageQuery = groq`
     heroHeadlineHighlight,
     heroSubhead,
 
-    logos,
+    logos[]{
+      name,
+      "logo": logo{"url": asset->url, alt},
+      description,
+      website
+    },
 
     caseStudyEyebrow,
     caseStudyHeadline,

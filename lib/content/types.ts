@@ -41,6 +41,13 @@ export interface Seo {
   noIndex?: boolean
 }
 
+export interface ClientLogo {
+  name: string
+  logo?: SeoImage
+  description?: string
+  website?: string
+}
+
 export interface StatBadge {
   value: string
   label: string
@@ -172,7 +179,7 @@ export interface CustomersPage {
   heroHeadlineHighlight: string
   heroSubhead: string
 
-  logos: string[]
+  logos: ClientLogo[]
 
   caseStudyEyebrow: string
   caseStudyHeadline: string

@@ -10,6 +10,7 @@ import { demoModalContent } from './objects/demoModal'
 import { testimonial } from './objects/testimonial'
 import { iconTile } from './objects/iconTile'
 import { moduleDeepDive } from './objects/moduleDeepDive'
+import { clientLogo } from './objects/clientLogo'
 import { seo } from './seo'
 
 import { siteSettings } from './siteSettings'
@@ -32,6 +33,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   testimonial,
   iconTile,
   moduleDeepDive,
+  clientLogo,
   seo,
   // documents
   siteSettings,

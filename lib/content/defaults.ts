@@ -259,17 +259,27 @@ export const defaultCustomersPage: CustomersPage = {
     'From single sites to 23-venue groups, hospitality operators across the UK & Ireland run on Maistro and BossIT.',
 
   logos: [
-    "Romayo's",
-    'Yeeros',
-    'Fired Up Pizza',
-    "Mizzoni's Pizza",
-    'Beshoff',
-    "Vincenzo's",
-    'Lyons',
-    'Ballsbridge Pizza',
-    'BASE',
-    'The Pizza Co Belfast',
-    'Woodfire & Wings',
+    {
+      name: "Romayo's",
+      description:
+        "A third-generation quick-service group running 23 venues as one on Maistro — every sales channel centralised, kiosk order value up more than 30%.",
+    },
+    {
+      name: 'Yeeros',
+      description: 'Runs on Maistro across every site, with menu and service flows tailored to how Yeeros actually operates.',
+    },
+    {
+      name: 'Fired Up Pizza',
+      description: 'Uses Maistro to run waiting room, floor and kitchen flow across its venues.',
+    },
+    { name: "Mizzoni's Pizza", description: 'Hospitality group running on Maistro and BossIT.' },
+    { name: 'Beshoff', description: 'Hospitality group running on Maistro and BossIT.' },
+    { name: "Vincenzo's", description: 'Hospitality group running on Maistro and BossIT.' },
+    { name: 'Lyons', description: 'Hospitality group running on Maistro and BossIT.' },
+    { name: 'Ballsbridge Pizza', description: 'Hospitality group running on Maistro and BossIT.' },
+    { name: 'BASE', description: 'Hospitality group running on Maistro and BossIT.' },
+    { name: 'The Pizza Co Belfast', description: 'Hospitality group running on Maistro and BossIT.' },
+    { name: 'Woodfire & Wings', description: 'Hospitality group running on Maistro and BossIT.' },
   ],
 
   caseStudyEyebrow: "Customer success · Romayo's",

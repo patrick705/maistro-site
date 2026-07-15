@@ -1,5 +1,5 @@
 import { SITE_URL } from './site'
-import type { HomePage, NewsArticle, SiteSettings } from './content/types'
+import type { ClientLogo, HomePage, NewsArticle, SiteSettings } from './content/types'
 
 /**
  * JSON-LD is injected via dangerouslySetInnerHTML, so escape `<` to stop
@@ -19,6 +19,29 @@ export function organizationJsonLd(siteSettings: SiteSettings, homePage: HomePag
     url: SITE_URL,
     description: seo?.metaDescription || homePage.heroSubhead,
     ...(seo?.ogImage?.url ? { logo: seo.ogImage.url } : {}),
+  }
+}
+
+/**
+ * ItemList of client Organizations, so search engines and AI answer engines
+ * can see who Maistro's customers are as real entities, not just logo
+ * images in a grid.
+ */
+export function clientsJsonLd(clients: ClientLogo[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: clients.map((client, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Organization',
+        name: client.name,
+        ...(client.description ? { description: client.description } : {}),
+        ...(client.website ? { url: client.website } : {}),
+        ...(client.logo?.url ? { logo: client.logo.url } : {}),
+      },
+    })),
   }
 }
 
