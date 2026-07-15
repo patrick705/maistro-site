@@ -10,8 +10,14 @@ export default defineConfig({
   name: 'maistro',
   title: 'Maistro',
 
-  projectId: projectId || 'placeholder',
-  dataset,
+  // Two different bundlers read this file: the Sanity CLI's own build (for
+  // the standalone `sanity deploy`) only inlines `SANITY_STUDIO_*`-prefixed
+  // vars, while Next.js's bundler (for the embedded /studio route) only
+  // inlines `NEXT_PUBLIC_*`-prefixed ones. Whichever bundler doesn't
+  // recognize its variable leaves it undefined at runtime, so the fallback
+  // chain lets each build pick up the value its own convention exposes.
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || projectId || 'placeholder',
+  dataset: process.env.SANITY_STUDIO_DATASET || dataset || 'production',
 
   basePath: '/studio',
 
