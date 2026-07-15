@@ -51,7 +51,7 @@ export async function getHomePage(): Promise<HomePage> {
       {},
       { next: { revalidate: REVALIDATE_SECONDS } },
     )
-    return mergeDefined(defaultHomePage, data, ['aboutPipeline', 'demoModal', 'seo'])
+    return mergeDefined(defaultHomePage, data, ['aboutPipeline', 'demoModal', 'seo', 'dashboardShowcase'])
   } catch (err) {
     console.warn('[sanity] failed to fetch homePage, using defaults:', err)
     return defaultHomePage

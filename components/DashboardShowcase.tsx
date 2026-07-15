@@ -3,22 +3,7 @@
 import { useState } from 'react'
 
 import styles from './DashboardShowcase.module.css'
-import {
-  forecastChart,
-  forecastKpis,
-  onShift,
-  overviewChart,
-  overviewKpis,
-  reportBand,
-  reportsKpis,
-  rota,
-  staffKpis,
-  stockAlerts,
-  stockKpis,
-  stockLevels,
-  type Kpi,
-  type ProgressItem,
-} from '@/lib/content/dashboardData'
+import type { DashboardShowcase as DashboardShowcaseContent, KpiTile, ProgressItem } from '@/lib/content/types'
 
 const TABS = [
   { key: 'overview', label: 'Overview' },
@@ -30,7 +15,7 @@ const TABS = [
 
 type TabKey = (typeof TABS)[number]['key']
 
-function KpiCard({ kpi }: { kpi: Kpi }) {
+function KpiCard({ kpi }: { kpi: KpiTile }) {
   return (
     <div className={styles.kpi}>
       <div className={styles.kpiLabel}>{kpi.label}</div>
@@ -64,7 +49,7 @@ function ProgressRow({ item }: { item: ProgressItem }) {
   )
 }
 
-export function DashboardShowcase() {
+export function DashboardShowcase({ content }: { content: DashboardShowcaseContent }) {
   const [tab, setTab] = useState<TabKey>('overview')
 
   return (
@@ -100,7 +85,7 @@ export function DashboardShowcase() {
         {tab === 'overview' && (
           <div>
             <div className={styles.kpiGrid}>
-              {overviewKpis.map((k) => (
+              {content.overviewKpis.map((k) => (
                 <KpiCard key={k.label} kpi={k} />
               ))}
             </div>
@@ -120,7 +105,7 @@ export function DashboardShowcase() {
                   </div>
                 </div>
                 <div className={styles.chartRow}>
-                  {overviewChart.map((d) => (
+                  {content.overviewChart.map((d) => (
                     <div key={d.day} className={styles.barGroup}>
                       <div className={styles.barPair}>
                         <div
@@ -146,7 +131,7 @@ export function DashboardShowcase() {
                     On shift now
                   </div>
                   <div className={styles.progressBlock}>
-                    {onShift.map((p) => (
+                    {content.onShift.map((p) => (
                       <div key={p.name} className={styles.personRow}>
                         <span className={styles.avatar} style={{ background: `var(--${p.color})` }} />
                         <div>
@@ -162,7 +147,7 @@ export function DashboardShowcase() {
                     Stock alerts
                   </div>
                   <div className={styles.progressBlock}>
-                    {stockAlerts.map((item) => (
+                    {content.stockAlerts.map((item) => (
                       <ProgressRow key={item.name} item={item} />
                     ))}
                   </div>
@@ -175,7 +160,7 @@ export function DashboardShowcase() {
         {tab === 'forecast' && (
           <div>
             <div className={`${styles.kpiGrid} ${styles.kpiGrid3}`}>
-              {forecastKpis.map((k) => (
+              {content.forecastKpis.map((k) => (
                 <KpiCard key={k.label} kpi={k} />
               ))}
             </div>
@@ -184,7 +169,7 @@ export function DashboardShowcase() {
                 Predicted sales — next 7 days
               </div>
               <div className={styles.chartRow}>
-                {forecastChart.map((d) => (
+                {content.forecastChart.map((d) => (
                   <div key={d.day} className={styles.barGroup}>
                     <div className={styles.barSingle}>
                       <div
@@ -208,7 +193,7 @@ export function DashboardShowcase() {
         {tab === 'staff' && (
           <div>
             <div className={`${styles.kpiGrid} ${styles.kpiGrid3}`}>
-              {staffKpis.map((k) => (
+              {content.staffKpis.map((k) => (
                 <KpiCard key={k.label} kpi={k} />
               ))}
             </div>
@@ -217,7 +202,7 @@ export function DashboardShowcase() {
                 Today&apos;s rota · Camden Road
               </div>
               <div className={styles.progressBlock}>
-                {rota.map((r) => (
+                {content.rota.map((r) => (
                   <div key={r.name} className={styles.rotaRow}>
                     <span className={styles.rotaName}>{r.name}</span>
                     <div className={styles.rotaTrack}>
@@ -243,7 +228,7 @@ export function DashboardShowcase() {
         {tab === 'stock' && (
           <div>
             <div className={`${styles.kpiGrid} ${styles.kpiGrid3}`}>
-              {stockKpis.map((k) => (
+              {content.stockKpis.map((k) => (
                 <KpiCard key={k.label} kpi={k} />
               ))}
             </div>
@@ -252,7 +237,7 @@ export function DashboardShowcase() {
                 Stock levels
               </div>
               <div className={styles.progressBlock}>
-                {stockLevels.map((item) => (
+                {content.stockLevels.map((item) => (
                   <ProgressRow key={item.name} item={item} />
                 ))}
               </div>
@@ -263,16 +248,16 @@ export function DashboardShowcase() {
         {tab === 'reports' && (
           <div>
             <div className={styles.kpiGrid}>
-              {reportsKpis.map((k) => (
+              {content.reportsKpis.map((k) => (
                 <KpiCard key={k.label} kpi={k} />
               ))}
             </div>
             <div className={styles.reportBand}>
               <div>
-                <div className={styles.reportBandTitle}>{reportBand.title}</div>
-                <div className={styles.reportBandSub}>{reportBand.subtitle}</div>
+                <div className={styles.reportBandTitle}>{content.reportBand.title}</div>
+                <div className={styles.reportBandSub}>{content.reportBand.subtitle}</div>
               </div>
-              <span className={styles.reportBandPill}>{reportBand.pill}</span>
+              <span className={styles.reportBandPill}>{content.reportBand.pill}</span>
             </div>
           </div>
         )}

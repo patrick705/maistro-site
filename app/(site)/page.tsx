@@ -25,7 +25,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd(siteSettings, homePage)) }}
       />
       <Hero content={homePage} />
-      <DashboardShowcase />
+      <DashboardShowcase content={homePage.dashboardShowcase} />
       <AboutSection content={homePage} />
       <ServicesGrid content={homePage} />
       {siteSettings.theme.showResults && <ResultsBand content={homePage} />}

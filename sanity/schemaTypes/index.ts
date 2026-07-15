@@ -11,6 +11,13 @@ import { testimonial } from './objects/testimonial'
 import { iconTile } from './objects/iconTile'
 import { moduleDeepDive } from './objects/moduleDeepDive'
 import { clientLogo } from './objects/clientLogo'
+import { kpiTile } from './objects/kpiTile'
+import { dayBar } from './objects/dayBar'
+import { singleBar } from './objects/singleBar'
+import { shiftPerson } from './objects/shiftPerson'
+import { progressItem } from './objects/progressItem'
+import { rotaRow } from './objects/rotaRow'
+import { dashboardShowcase } from './objects/dashboardShowcase'
 import { seo } from './seo'
 
 import { siteSettings } from './siteSettings'
@@ -34,6 +41,13 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   iconTile,
   moduleDeepDive,
   clientLogo,
+  kpiTile,
+  dayBar,
+  singleBar,
+  shiftPerson,
+  progressItem,
+  rotaRow,
+  dashboardShowcase,
   seo,
   // documents
   siteSettings,

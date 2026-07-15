@@ -43,6 +43,25 @@ export const homePageQuery = groq`
       outputs[]{icon, label}
     },
 
+    dashboardShowcase{
+      overviewKpis[]{label, value, valueVariant, small, delta, tone},
+      overviewChart[]{day, forecast, actual, actualHighlight},
+      onShift[]{name, role, color},
+      stockAlerts[]{name, status, percent, color},
+
+      forecastKpis[]{label, value, valueVariant, small, delta, tone},
+      forecastChart[]{day, height, variant},
+
+      staffKpis[]{label, value, valueVariant, small, delta, tone},
+      rota[]{name, left, width, color},
+
+      stockKpis[]{label, value, valueVariant, small, delta, tone},
+      stockLevels[]{name, status, percent, color},
+
+      reportsKpis[]{label, value, valueVariant, small, delta, tone},
+      reportBand{title, subtitle, pill}
+    },
+
     servicesEyebrow,
     servicesHeadline,
     services[]{icon, title, description, bullets, variant},

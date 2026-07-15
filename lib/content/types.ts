@@ -209,6 +209,73 @@ export interface NewsPage {
   seo?: Seo
 }
 
+export interface KpiTile {
+  label: string
+  value: string
+  valueVariant?: 'brand' | 'accent'
+  small?: boolean
+  delta: string
+  tone: 'neutral' | 'pos' | 'accent'
+}
+
+export interface DayBar {
+  day: string
+  forecast: number
+  actual: number
+  actualHighlight?: boolean
+}
+
+export interface SingleBar {
+  day: string
+  height: number
+  variant: 'soft' | 'brand' | 'accent'
+}
+
+export interface ShiftPerson {
+  name: string
+  role: string
+  color: 'warm' | 'pos' | 'brand'
+}
+
+export interface ProgressItem {
+  name: string
+  status: string
+  percent: number
+  color: 'accent' | 'warm' | 'pos'
+}
+
+export interface RotaRow {
+  name: string
+  left: number
+  width: number
+  color: 'warm' | 'pos' | 'accent' | 'brand'
+}
+
+export interface ReportBand {
+  title: string
+  subtitle: string
+  pill: string
+}
+
+export interface DashboardShowcase {
+  overviewKpis: KpiTile[]
+  overviewChart: DayBar[]
+  onShift: ShiftPerson[]
+  stockAlerts: ProgressItem[]
+
+  forecastKpis: KpiTile[]
+  forecastChart: SingleBar[]
+
+  staffKpis: KpiTile[]
+  rota: RotaRow[]
+
+  stockKpis: KpiTile[]
+  stockLevels: ProgressItem[]
+
+  reportsKpis: KpiTile[]
+  reportBand: ReportBand
+}
+
 export interface HomePage {
   heroEyebrow: string
   heroHeadlineBefore: string
@@ -224,6 +291,8 @@ export interface HomePage {
   aboutHeadlineAfter: string
   aboutBody: string
   aboutPipeline: AboutPipeline
+
+  dashboardShowcase: DashboardShowcase
 
   servicesEyebrow: string
   servicesHeadline: string

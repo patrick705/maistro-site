@@ -7,6 +7,7 @@ export const homePage = defineType({
   groups: [
     { name: 'hero', title: 'Hero', default: true },
     { name: 'about', title: 'About' },
+    { name: 'dashboard', title: 'Dashboard showcase' },
     { name: 'services', title: 'Services' },
     { name: 'results', title: 'Results' },
     { name: 'contact', title: 'Contact' },
@@ -43,6 +44,14 @@ export const homePage = defineType({
     defineField({ name: 'aboutHeadlineAfter', title: 'Headline (after highlight)', type: 'text', rows: 2, group: 'about' }),
     defineField({ name: 'aboutBody', title: 'Body copy', type: 'text', rows: 4, group: 'about' }),
     defineField({ name: 'aboutPipeline', title: 'Diagram', type: 'aboutPipeline', group: 'about' }),
+
+    // Dashboard showcase
+    defineField({
+      name: 'dashboardShowcase',
+      title: 'Dashboard showcase',
+      type: 'dashboardShowcase',
+      group: 'dashboard',
+    }),
 
     // Services
     defineField({ name: 'servicesEyebrow', title: 'Eyebrow', type: 'string', group: 'services' }),
