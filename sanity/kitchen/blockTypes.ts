@@ -1,9 +1,10 @@
-/** Block types with a themeable section identity — these get a real Design tab. Dashboard showcase (fixed illustrative screenshot) and utility/media blocks (news grid, logo strip, social links, gallery, video) don't. */
+/** Block types with a themeable section identity — these get a real Design tab. Utility/media blocks (news grid, logo strip, social links, gallery, video) don't have a section identity of their own to restyle. */
 export const DESIGN_TAB_BLOCK_TYPES = new Set([
   'richHeroBlock',
   'simpleHeroBlock',
   'heroCarouselBlock',
   'aboutSectionBlock',
+  'dashboardShowcaseBlock',
   'servicesGridBlock',
   'statsBandBlock',
   'pipelineStripBlock',
@@ -30,14 +31,16 @@ export function hasHeadingControls(type: string): boolean {
  * color surface), pipelineStripBlock and featuredCaseStudyBlock (the colored
  * surface is a nested `.band`, not the section itself) are deliberately not
  * wired for this axis rather than half-implemented against the wrong target.
+ * dashboardShowcaseBlock's role targets its outer `.wrap`, not the white
+ * `.card` floating on top of it, so the card itself never needs an ink flip.
  */
 export function hasPaletteRoleControl(type: string): boolean {
   return DESIGN_TAB_BLOCK_TYPES.has(type) && !['heroCarouselBlock', 'pipelineStripBlock', 'featuredCaseStudyBlock'].includes(type)
 }
 
-/** Only the two blocks whose background is already edge-to-edge by default get the full-bleed toggle. */
+/** Blocks whose background is already edge-to-edge by default get the full-bleed toggle. */
 export function hasFullBleedControl(type: string): boolean {
-  return type === 'aboutSectionBlock' || type === 'integrationsBlock'
+  return type === 'aboutSectionBlock' || type === 'integrationsBlock' || type === 'dashboardShowcaseBlock'
 }
 
 export const BLOCK_CATEGORIES =['Heroes & headers', 'Product & story', 'Proof', 'Media & social', 'Editorial & conversion', 'Other'] as const

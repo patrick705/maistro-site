@@ -49,11 +49,17 @@ function ProgressRow({ item }: { item: ProgressItem }) {
   )
 }
 
-export function DashboardShowcase({ content }: { content: DashboardShowcaseContent }) {
+export function DashboardShowcase({
+  content,
+  style,
+}: {
+  content: DashboardShowcaseContent
+  style?: React.CSSProperties
+}) {
   const [tab, setTab] = useState<TabKey>('overview')
 
   return (
-    <section className={styles.wrap}>
+    <section className={styles.wrap} style={style}>
       <div className={styles.card}>
         <div className={styles.dashHeader}>
           <div className={styles.dashHeaderLeft}>

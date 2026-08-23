@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useClient } from 'sanity'
 
 import type { KitchenView, SettingsSection } from './KitchenTool'
@@ -11,6 +12,7 @@ interface PageRow {
   title: string
   slug?: string
   showInMenu?: boolean
+  archived?: boolean
   blockCount: number
 }
 
@@ -23,7 +25,7 @@ const SETTINGS_SECTIONS: { section: SettingsSection; label: string; glyph: strin
 ]
 
 const PAGES_QUERY = `*[_type == "page" && !(_id in path("drafts.**"))] | order(menuOrder asc, title asc){
-  _id, title, "slug": slug.current, showInMenu, "blockCount": count(blocks)
+  _id, title, "slug": slug.current, showInMenu, archived, "blockCount": count(blocks)
 }`
 
 const COUNTS_QUERY = `{
@@ -59,6 +61,10 @@ export function Sidebar({ view, onSelect }: { view: KitchenView; onSelect: (v: K
   const client = useClient({ apiVersion: API_VERSION })
   const { data: pages, refetch } = useLiveQuery<PageRow[]>(PAGES_QUERY)
   const { data: counts } = useLiveQuery<{ newsArticle: number; lead: number; media: number }>(COUNTS_QUERY)
+  const [showArchived, setShowArchived] = useState(false)
+
+  const activePages = (pages ?? []).filter((p) => !p.archived)
+  const archivedPages = (pages ?? []).filter((p) => p.archived)
 
   async function addPage() {
     const created = await client.create({
@@ -121,7 +127,7 @@ export function Sidebar({ view, onSelect }: { view: KitchenView; onSelect: (v: K
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 6px 5px' }}>
           <span style={sectionLabelStyle()}>Pages</span>
           <span style={{ fontSize: 10, color: kitchen.textFaint, fontFamily: kitchen.fontMono }}>
-            {pages?.length ?? 0}
+            {activePages.length}
           </span>
         </div>
         <button
@@ -147,8 +153,8 @@ export function Sidebar({ view, onSelect }: { view: KitchenView; onSelect: (v: K
           <span style={{ fontSize: 14, lineHeight: 1 }}>+</span>
           <span>Add new page</span>
         </button>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: 18 }}>
-          {(pages ?? []).map((p) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: archivedPages.length > 0 ? 6 : 18 }}>
+          {activePages.map((p) => (
             <div key={p._id} onClick={() => onSelect({ kind: 'page', id: p._id })} style={rowStyle(view?.kind === 'page' && view.id === p._id)}>
               <span style={{ width: 14, textAlign: 'center', fontSize: 11, color: kitchen.textFaint }}>▤</span>
               <span style={{ flex: '1 1 auto', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -168,6 +174,49 @@ export function Sidebar({ view, onSelect }: { view: KitchenView; onSelect: (v: K
             </div>
           ))}
         </div>
+
+        {archivedPages.length > 0 && (
+          <div style={{ marginBottom: 18 }}>
+            <button
+              type="button"
+              onClick={() => setShowArchived((v) => !v)}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '5px 6px',
+                border: 'none',
+                background: 'transparent',
+                cursor: 'pointer',
+                font: 'inherit',
+                fontSize: 11,
+                color: kitchen.textFaint,
+              }}
+            >
+              <span>{showArchived ? '▾' : '▸'} {archivedPages.length} archived</span>
+            </button>
+            {showArchived && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                {archivedPages.map((p) => (
+                  <div
+                    key={p._id}
+                    onClick={() => onSelect({ kind: 'page', id: p._id })}
+                    style={{ ...rowStyle(view?.kind === 'page' && view.id === p._id), opacity: 0.55 }}
+                  >
+                    <span style={{ width: 14, textAlign: 'center', fontSize: 11, color: kitchen.textFaint }}>▤</span>
+                    <span style={{ flex: '1 1 auto', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {p.title}
+                    </span>
+                    <span style={{ fontSize: 9.5, fontWeight: 600, color: kitchen.textFaint, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                      Archived
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div style={{ padding: '6px 6px 5px' }}>
           <span style={sectionLabelStyle()}>Site settings</span>

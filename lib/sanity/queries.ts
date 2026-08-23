@@ -43,7 +43,7 @@ export const newsArticlesQuery = groq`
 `
 
 export const pagesForNavQuery = groq`
-  *[_type == "page" && showInMenu == true] | order(menuOrder asc){
+  *[_type == "page" && showInMenu == true && archived != true] | order(menuOrder asc){
     title,
     navLabel,
     "slug": slug.current,
@@ -52,7 +52,7 @@ export const pagesForNavQuery = groq`
 `
 
 export const pageBySlugQuery = groq`
-  *[_type == "page" && slug.current == $slug][0]{
+  *[_type == "page" && slug.current == $slug && archived != true][0]{
     title,
     "slug": slug.current,
     navLabel,
@@ -127,6 +127,7 @@ export const pageBySlugQuery = groq`
         design{headingFont, headingScale, padding, paletteRole, fullBleed}
       },
       _type == "dashboardShowcaseBlock" => {
+        design{headingFont, headingScale, padding, paletteRole, fullBleed},
         showcase{
           overviewKpis[]{label, value, valueVariant, small, delta, tone},
           overviewChart[]{day, forecast, actual, actualHighlight},

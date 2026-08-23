@@ -62,6 +62,14 @@ export const page = defineType({
     defineField({ name: 'navLabel', title: 'Top-menu label', description: 'Falls back to Title if left empty.', type: 'string', group: 'nav' }),
     defineField({ name: 'showInMenu', title: 'Show in top menu', type: 'boolean', group: 'nav', initialValue: false }),
     defineField({ name: 'menuOrder', title: 'Menu order', description: 'Lower numbers appear first.', type: 'number', group: 'nav' }),
+    defineField({
+      name: 'archived',
+      title: 'Archived',
+      description: 'Archived pages are taken offline — their URL 404s and they drop out of the top menu — but stay editable here.',
+      type: 'boolean',
+      group: 'nav',
+      initialValue: false,
+    }),
     defineField({ name: 'seo', title: 'SEO', type: 'seo', group: 'seo' }),
   ],
   preview: {

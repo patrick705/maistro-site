@@ -359,6 +359,7 @@ export interface DashboardShowcaseBlock {
   _type: 'dashboardShowcaseBlock'
   _key: string
   showcase?: DashboardShowcase
+  design?: BlockDesign
 }
 
 export interface ServicesGridBlock {

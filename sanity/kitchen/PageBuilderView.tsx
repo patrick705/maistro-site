@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { AddBlockPicker } from './AddBlockPicker'
 import { LivePreview } from './livePreview/LivePreview'
 import { EditSectionDrawer } from './EditSectionDrawer'
+import { PageSeoDrawer } from './PageSeoDrawer'
 import { KitchenErrorBoundary } from './KitchenErrorBoundary'
 import { BLOCK_TYPES, blockCountBadge, emptyBlock, pascalTag } from './blockTypes'
 import { kitchen } from './theme'
@@ -16,7 +17,22 @@ interface PageDoc {
   showInMenu?: boolean
   menuOrder?: number
   navLabel?: string
+  archived?: boolean
+  seo?: Record<string, any>
   blocks?: Record<string, any>[]
+  _updatedAt?: string
+}
+
+function relativeTime(iso: string | undefined): string | null {
+  if (!iso) return null
+  const diffMs = Date.now() - new Date(iso).getTime()
+  const min = Math.round(diffMs / 60000)
+  if (min < 1) return 'just now'
+  if (min < 60) return `${min} min ago`
+  const hr = Math.round(min / 60)
+  if (hr < 24) return `${hr} hr ago`
+  const day = Math.round(hr / 24)
+  return `${day} day${day === 1 ? '' : 's'} ago`
 }
 
 export function PageBuilderView({
@@ -34,6 +50,7 @@ export function PageBuilderView({
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
   const [editing, setEditing] = useState<string | null>(null)
   const [addMenuOpen, setAddMenuOpen] = useState(false)
+  const [seoOpen, setSeoOpen] = useState(false)
 
   const page = doc as PageDoc | null
   const blocks = page?.blocks ?? []
@@ -59,15 +76,77 @@ export function PageBuilderView({
     setEditing(null)
   }
 
+  const isHome = page.slug?.current === 'home'
+  const isArchived = page.archived === true
+  const pageTitle = page.title || 'this page'
+
+  function toggleArchived() {
+    if (isHome) return
+    const next = !isArchived
+    if (next && !confirm(`Archive "${pageTitle}"? Once published, its URL will 404 and it drops out of the top menu. You can restore it any time from here.`)) {
+      return
+    }
+    patch({ archived: next })
+  }
+
   return (
     <div style={{ maxWidth: 780, margin: '0 auto', padding: '26px 24px 72px' }}>
-      <h1 style={{ margin: '0 0 6px', fontFamily: kitchen.fontDisplay, fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>
-        {page.title || 'Untitled page'}
-      </h1>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 6 }}>
+        <h1 style={{ margin: 0, fontFamily: kitchen.fontDisplay, fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>
+          {page.title || 'Untitled page'}
+        </h1>
+        <div style={{ display: 'flex', gap: 8, flex: '0 0 auto' }}>
+          <button
+            type="button"
+            onClick={() => setSeoOpen(true)}
+            style={{
+              padding: '6px 12px',
+              border: `1px solid ${kitchen.borderInput}`,
+              borderRadius: 7,
+              background: '#fff',
+              color: kitchen.textBody,
+              fontWeight: 600,
+              fontSize: 11.5,
+              cursor: 'pointer',
+            }}
+          >
+            SEO &amp; metadata
+          </button>
+          <button
+            type="button"
+            onClick={toggleArchived}
+            disabled={isHome}
+            title={isHome ? 'The Home page can’t be archived — that would take your whole site offline.' : undefined}
+            style={{
+              padding: '6px 12px',
+              border: `1px solid ${isArchived ? kitchen.accent : kitchen.borderInput}`,
+              borderRadius: 7,
+              background: isArchived ? kitchen.accent : '#fff',
+              color: isHome ? kitchen.textFaint : isArchived ? '#fff' : kitchen.textBody,
+              fontWeight: 600,
+              fontSize: 11.5,
+              cursor: isHome ? 'not-allowed' : 'pointer',
+              opacity: isHome ? 0.5 : 1,
+            }}
+          >
+            {isArchived ? 'Restore page' : 'Archive page'}
+          </button>
+        </div>
+      </div>
       <div style={{ display: 'flex', gap: 14, fontSize: 11, color: kitchen.textMuted, fontFamily: kitchen.fontMono, marginBottom: 22 }}>
         <span>/{page.slug?.current ?? '(no slug yet)'}</span>
         <span>{blocks.length} block(s)</span>
         <span>{page.showInMenu ? 'in top menu' : 'hidden from top menu'}</span>
+        {relativeTime(page._updatedAt) && <span>edited {relativeTime(page._updatedAt)}</span>}
+        {isArchived && <span style={{ color: '#9c6a1c', fontWeight: 700 }}>archived</span>}
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+        <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', color: kitchen.textMuted }}>
+          Sections on this page
+        </span>
+        <div style={{ flex: 1, height: 1, background: kitchen.border }} />
+        {blocks.length > 1 && <span style={{ fontSize: 10.5, color: kitchen.textFaint }}>drag to reorder</span>}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -173,6 +252,10 @@ export function PageBuilderView({
             />
           )
         })()}
+
+      {seoOpen && (
+        <PageSeoDrawer seo={page.seo} onPatchSeo={(fields) => patch(fields)} onClose={() => setSeoOpen(false)} />
+      )}
 
       <div style={{ marginTop: 12 }}>
         <button
