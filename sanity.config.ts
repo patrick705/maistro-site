@@ -5,6 +5,7 @@ import { visionTool } from '@sanity/vision'
 import { apiVersion, dataset, projectId } from './lib/sanity/env'
 import { schemaTypes } from './sanity/schemaTypes'
 import { structure } from './sanity/structure'
+import { KitchenTool } from './sanity/kitchen/KitchenTool'
 
 export default defineConfig({
   name: 'maistro',
@@ -24,4 +25,9 @@ export default defineConfig({
   schema: { types: schemaTypes },
 
   plugins: [structureTool({ structure }), visionTool({ defaultApiVersion: apiVersion })],
+
+  // Kitchen CMS is the primary editing surface; the default structure tool
+  // stays registered as a fallback escape hatch for anything the bespoke
+  // Kitchen views don't cover yet (see docs/page-builder-spec.md follow-up).
+  tools: (prev) => [{ name: 'kitchen', title: 'Kitchen CMS', component: KitchenTool }, ...prev],
 })

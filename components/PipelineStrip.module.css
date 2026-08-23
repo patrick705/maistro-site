@@ -1,5 +1,5 @@
 .section {
-  padding: 0 48px 80px;
+  padding: 0 48px calc(80px * var(--block-padding-scale, 1));
 }
 
 .band {

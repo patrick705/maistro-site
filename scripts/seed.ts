@@ -1,8 +1,12 @@
 /**
- * Populates a fresh Sanity dataset with the Site Settings and Home Page
- * singletons, using the same copy as the approved design mockup
- * (lib/content/defaults.ts). Safe to re-run — it upserts by a fixed _id
- * rather than creating duplicates.
+ * Populates a fresh Sanity dataset with Site Settings, the brand palette
+ * library, and the News Articles, using the same copy as the approved
+ * design mockup (lib/content/defaults.ts). Safe to re-run — it upserts by a
+ * fixed _id rather than creating duplicates.
+ *
+ * The marketing pages themselves (Home/Product/Customers/News) live as
+ * `page` documents in Sanity now, not seeded content — see
+ * docs/page-builder-spec.md.
  *
  * Usage: npm run seed   (requires NEXT_PUBLIC_SANITY_PROJECT_ID and
  * SANITY_API_WRITE_TOKEN in .env.local)
@@ -46,14 +50,7 @@ function assignKeys(value: unknown): unknown {
 
 async function main() {
   const { getWriteClient, isSanityConfigured } = await import('../lib/sanity/client')
-  const {
-    defaultCustomersPage,
-    defaultHomePage,
-    defaultNewsArticles,
-    defaultNewsPage,
-    defaultProductPage,
-    defaultSiteSettings,
-  } = await import('../lib/content/defaults')
+  const { defaultNewsArticles, defaultSiteSettings } = await import('../lib/content/defaults')
 
   if (!isSanityConfigured) {
     console.error(
@@ -68,39 +65,42 @@ async function main() {
 
   const client = getWriteClient()
 
+  console.log('Seeding Brand Palettes…')
+  const BRAND_PALETTES = [
+    { id: 'brandPalette-violet', name: 'Violet', brandHex: '#3A2A66', accentHex: '#7B5BE6', warmHex: '#F0B84E', posHex: '#4F9E86', isDefault: true },
+    { id: 'brandPalette-ink-terracotta', name: 'Ink & Terracotta', brandHex: '#1F2A44', accentHex: '#D8593C', warmHex: '#E8A94B', posHex: '#3E9E7A', isDefault: false },
+    { id: 'brandPalette-plum-peach', name: 'Plum & Peach', brandHex: '#4A2340', accentHex: '#EE6C4D', warmHex: '#F0B84E', posHex: '#4F9E86', isDefault: false },
+    { id: 'brandPalette-forest-clay', name: 'Forest & Clay', brandHex: '#243E2E', accentHex: '#C85A3E', warmHex: '#E4A34A', posHex: '#C86B45', isDefault: false },
+    { id: 'brandPalette-brazil', name: 'Brazil', brandHex: '#1B48D9', accentHex: '#FF5C39', warmHex: '#FFD400', posHex: '#00A651', isDefault: false },
+  ]
+  await Promise.all(
+    BRAND_PALETTES.map((p) =>
+      client.createOrReplace({
+        _id: p.id,
+        _type: 'brandPalette',
+        name: p.name,
+        brandHex: p.brandHex,
+        accentHex: p.accentHex,
+        warmHex: p.warmHex,
+        posHex: p.posHex,
+        isDefaultForNewSites: p.isDefault,
+      }),
+    ),
+  )
+
   console.log('Seeding Site Settings…')
+  const { theme: defaultTheme, ...siteSettingsRest } = defaultSiteSettings
   await client.createOrReplace({
     _id: 'siteSettings',
     _type: 'siteSettings',
-    ...(assignKeys(defaultSiteSettings) as Record<string, unknown>),
-  })
-
-  console.log('Seeding Home Page…')
-  await client.createOrReplace({
-    _id: 'homePage',
-    _type: 'homePage',
-    ...(assignKeys(defaultHomePage) as Record<string, unknown>),
-  })
-
-  console.log('Seeding Product Page…')
-  await client.createOrReplace({
-    _id: 'productPage',
-    _type: 'productPage',
-    ...(assignKeys(defaultProductPage) as Record<string, unknown>),
-  })
-
-  console.log('Seeding Customers Page…')
-  await client.createOrReplace({
-    _id: 'customersPage',
-    _type: 'customersPage',
-    ...(assignKeys(defaultCustomersPage) as Record<string, unknown>),
-  })
-
-  console.log('Seeding News Page…')
-  await client.createOrReplace({
-    _id: 'newsPage',
-    _type: 'newsPage',
-    ...(assignKeys(defaultNewsPage) as Record<string, unknown>),
+    ...(assignKeys(siteSettingsRest) as Record<string, unknown>),
+    theme: {
+      ...(assignKeys({ playful: defaultTheme.playful, showResults: defaultTheme.showResults }) as Record<
+        string,
+        unknown
+      >),
+      palette: { _type: 'reference', _ref: 'brandPalette-violet' },
+    },
   })
 
   console.log('Seeding News Articles…')

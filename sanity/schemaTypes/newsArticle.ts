@@ -41,6 +41,13 @@ export const newsArticle = defineType({
     colorVariantField,
     defineField({ name: 'publishedAt', title: 'Published at', type: 'datetime', validation: (r) => r.required() }),
     defineField({
+      name: 'archived',
+      title: 'Archived',
+      description: 'Archived articles are hidden from the public News grid but keep their own page reachable by direct link.',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       description: 'The full article content — the excerpt above is just the teaser shown on the News grid.',

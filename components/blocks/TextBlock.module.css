@@ -1,0 +1,23 @@
+.section {
+  background: var(--block-bg, transparent);
+  max-width: 760px;
+  margin: 0 auto;
+  padding: calc(48px * var(--block-padding-scale, 1)) 24px;
+}
+
+.heading {
+  font-family: var(--block-heading-font, var(--font-display));
+  font-size: clamp(calc(24px * var(--block-heading-scale, 1)), calc(3vw * var(--block-heading-scale, 1)), calc(34px * var(--block-heading-scale, 1)));
+  margin: 0 0 16px;
+  color: var(--block-ink, var(--brand, #111));
+}
+
+.body {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--block-ink, #333);
+}
+
+.body p {
+  margin: 0 0 16px;
+}

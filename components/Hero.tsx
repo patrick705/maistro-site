@@ -1,15 +1,30 @@
-import { BookDemoButton } from './BookDemoButton'
 import styles from './Hero.module.css'
-import type { HomePage } from '@/lib/content/types'
+import type { StatBadge } from '@/lib/content/types'
 
-type HeroContent = Pick<
-  HomePage,
-  'heroEyebrow' | 'heroHeadlineBefore' | 'heroHeadlineHighlight' | 'heroSubhead' | 'heroPrimaryCta' | 'heroSecondaryCta' | 'heroStats'
->
+interface HeroContent {
+  heroEyebrow: string
+  heroHeadlineBefore: string
+  heroHeadlineHighlight: string
+  heroSubhead: string
+  heroPrimaryCta: string
+  heroSecondaryCta: string
+  heroStats: StatBadge[]
+}
 
-export function Hero({ content, secondaryHref = '#' }: { content: HeroContent; secondaryHref?: string }) {
+export function Hero({
+  content,
+  secondaryHref = '#',
+  renderPrimaryCta,
+  style,
+}: {
+  content: HeroContent
+  secondaryHref?: string
+  /** Injected rather than hardcoded so this component has no dependency on the live demo-modal — lets the Kitchen CMS preview reuse it with an inert stand-in. */
+  renderPrimaryCta: (label: string, className: string) => React.ReactNode
+  style?: React.CSSProperties
+}) {
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} style={style}>
       <div className={`${styles.shape} ${styles.shapeA}`} />
       <div className={`${styles.shape} ${styles.shapeB}`} />
       <div className={`${styles.shape} ${styles.shapeC}`} />
@@ -24,7 +39,7 @@ export function Hero({ content, secondaryHref = '#' }: { content: HeroContent; s
       <p className={styles.subhead}>{content.heroSubhead}</p>
 
       <div className={styles.ctaRow}>
-        <BookDemoButton label={content.heroPrimaryCta} className={styles.primaryCta} />
+        {renderPrimaryCta(content.heroPrimaryCta, styles.primaryCta)}
         <a href={secondaryHref} className={styles.secondaryCta}>
           {content.heroSecondaryCta}
         </a>

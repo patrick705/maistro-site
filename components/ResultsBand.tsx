@@ -1,11 +1,15 @@
 import styles from './ResultsBand.module.css'
-import type { HomePage } from '@/lib/content/types'
+import type { ResultStat } from '@/lib/content/types'
 
-type ResultsContent = Pick<HomePage, 'resultsEyebrow' | 'resultsHeadline' | 'resultStats'>
+interface ResultsContent {
+  resultsEyebrow: string
+  resultsHeadline: string
+  resultStats: ResultStat[]
+}
 
-export function ResultsBand({ content }: { content: ResultsContent }) {
+export function ResultsBand({ content, style }: { content: ResultsContent; style?: React.CSSProperties }) {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} style={style}>
       <div className={styles.head}>
         <div className={styles.eyebrow}>{content.resultsEyebrow}</div>
         <h2 className={styles.headline}>{content.resultsHeadline}</h2>

@@ -1,7 +1,11 @@
 import styles from './ServicesGrid.module.css'
-import type { HomePage, ServiceCard } from '@/lib/content/types'
+import type { ServiceCard } from '@/lib/content/types'
 
-type ServicesContent = Pick<HomePage, 'servicesEyebrow' | 'servicesHeadline' | 'services'>
+interface ServicesContent {
+  servicesEyebrow: string
+  servicesHeadline: string
+  services: ServiceCard[]
+}
 
 function Card({ service }: { service: ServiceCard }) {
   return (
@@ -23,11 +27,11 @@ function Card({ service }: { service: ServiceCard }) {
   )
 }
 
-export function ServicesGrid({ content }: { content: ServicesContent }) {
+export function ServicesGrid({ content, style }: { content: ServicesContent; style?: React.CSSProperties }) {
   const [firstRow, secondRow] = [content.services.slice(0, 3), content.services.slice(3)]
 
   return (
-    <section className={styles.section}>
+    <section className={styles.section} style={style}>
       <div className={styles.head}>
         <div className={styles.eyebrow}>{content.servicesEyebrow}</div>
         <h2 className={styles.headline}>{content.servicesHeadline}</h2>

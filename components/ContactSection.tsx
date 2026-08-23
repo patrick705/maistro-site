@@ -2,15 +2,25 @@
 
 import { useState, type FormEvent } from 'react'
 
-import { submitLead } from '@/lib/submitLead'
 import styles from './ContactSection.module.css'
-import type { HomePage } from '@/lib/content/types'
 
-type ContactContent = Pick<HomePage, 'contactHeadline' | 'contactSubhead'>
+interface ContactContent {
+  contactHeadline: string
+  contactSubhead: string
+}
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
-export function ContactSection({ content }: { content: ContactContent }) {
+export function ContactSection({
+  content,
+  onSubmit,
+  style,
+}: {
+  content: ContactContent
+  /** Injected rather than hardcoded so this component has no dependency on the live leads API — lets the Kitchen CMS preview reuse it without risking a real lead getting submitted. */
+  onSubmit: (fields: { name: string; email: string; message: string }) => Promise<void>
+  style?: React.CSSProperties
+}) {
   const [status, setStatus] = useState<Status>('idle')
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -18,11 +28,10 @@ export function ContactSection({ content }: { content: ContactContent }) {
     const data = new FormData(e.currentTarget)
     setStatus('submitting')
     try {
-      await submitLead({
+      await onSubmit({
         name: String(data.get('name') || ''),
         email: String(data.get('email') || ''),
         message: String(data.get('message') || ''),
-        source: 'contact-form',
       })
       setStatus('success')
     } catch {
@@ -31,7 +40,7 @@ export function ContactSection({ content }: { content: ContactContent }) {
   }
 
   return (
-    <section id="contact" className={styles.section}>
+    <section id="contact" className={styles.section} style={style}>
       <div className={styles.head}>
         <h2 className={styles.headline}>{content.contactHeadline}</h2>
         <p className={styles.subhead}>{content.contactSubhead}</p>

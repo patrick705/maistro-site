@@ -1,6 +1,8 @@
 .section {
-  background: var(--brand);
-  padding: 80px 48px;
+  background: var(--block-bg, var(--brand));
+  padding: calc(80px * var(--block-padding-scale, 1)) 48px;
+  max-width: var(--block-max-width, none);
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -14,11 +16,11 @@
 }
 
 .headline {
-  font-family: var(--font-display);
+  font-family: var(--block-heading-font, var(--font-display));
   font-weight: 800;
-  font-size: 48px;
+  font-size: calc(48px * var(--block-heading-scale, 1));
   line-height: 1.04;
-  color: #fff;
+  color: var(--block-ink, #fff);
   letter-spacing: -0.02em;
   max-width: 720px;
   margin: 0 auto;

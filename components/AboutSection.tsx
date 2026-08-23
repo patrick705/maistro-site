@@ -1,10 +1,14 @@
 import styles from './AboutSection.module.css'
-import type { HomePage } from '@/lib/content/types'
+import type { AboutPipeline } from '@/lib/content/types'
 
-type AboutContent = Pick<
-  HomePage,
-  'aboutEyebrow' | 'aboutHeadlineBefore' | 'aboutHeadlineHighlight' | 'aboutHeadlineAfter' | 'aboutBody' | 'aboutPipeline'
->
+interface AboutContent {
+  aboutEyebrow: string
+  aboutHeadlineBefore: string
+  aboutHeadlineHighlight: string
+  aboutHeadlineAfter: string
+  aboutBody: string
+  aboutPipeline: AboutPipeline
+}
 
 function Connector({ delay }: { delay: string }) {
   return (
@@ -14,11 +18,11 @@ function Connector({ delay }: { delay: string }) {
   )
 }
 
-export function AboutSection({ content }: { content: AboutContent }) {
+export function AboutSection({ content, style }: { content: AboutContent; style?: React.CSSProperties }) {
   const p = content.aboutPipeline
 
   return (
-    <section className={styles.section}>
+    <section className={styles.section} style={style}>
       <div>
         <div className={styles.eyebrow}>{content.aboutEyebrow}</div>
         <h2 className={styles.headline}>

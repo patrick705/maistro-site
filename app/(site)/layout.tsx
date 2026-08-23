@@ -5,22 +5,29 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { ThemeVars } from '@/components/ThemeVars'
 import { DemoModalProvider } from '@/lib/demo-modal-context'
-import { getHomePage, getSiteSettings } from '@/lib/sanity/fetch'
+import { getPagesForNav, getSiteSettings } from '@/lib/sanity/fetch'
 
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  const [siteSettings, homePage] = await Promise.all([getSiteSettings(), getHomePage()])
+  const [siteSettings, pageNavItems] = await Promise.all([getSiteSettings(), getPagesForNav()])
+  const navItems = [...siteSettings.navItems, ...pageNavItems]
 
   return (
     <ThemeVars theme={siteSettings.theme}>
       <DemoModalProvider>
         <SiteHeader
           siteName={siteSettings.siteName}
-          navItems={siteSettings.navItems}
-          ctaLabel={siteSettings.ctaLabel}
+          logo={siteSettings.logo}
+          navItems={navItems}
+          primaryCta={siteSettings.primaryCta}
+          stickyNav={siteSettings.stickyNav}
         />
         {children}
-        <SiteFooter siteName={siteSettings.siteName} footerText={siteSettings.footerText} />
-        <DemoModal content={homePage.demoModal} />
+        <SiteFooter
+          siteName={siteSettings.siteName}
+          footerText={siteSettings.footerText}
+          socialLinks={siteSettings.socialLinks}
+        />
+        <DemoModal content={siteSettings.demoModal} />
       </DemoModalProvider>
     </ThemeVars>
   )

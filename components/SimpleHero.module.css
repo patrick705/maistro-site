@@ -1,5 +1,6 @@
 .hero {
-  padding: 72px 48px 56px;
+  background: var(--block-bg, transparent);
+  padding: calc(72px * var(--block-padding-scale, 1)) 48px calc(56px * var(--block-padding-scale, 1));
   text-align: center;
 }
 
@@ -18,11 +19,12 @@
 }
 
 .headline {
-  font-family: var(--font-display);
+  font-family: var(--block-heading-font, var(--font-display));
   font-weight: 800;
+  font-size: calc(var(--simple-hero-clamp) * var(--block-heading-scale, 1));
   line-height: 0.94;
   letter-spacing: -0.03em;
-  color: var(--brand);
+  color: var(--block-ink, var(--brand));
   max-width: 940px;
   margin: 0 auto;
 }
@@ -37,7 +39,7 @@
 .subhead {
   font-size: 20px;
   line-height: 1.55;
-  color: #4a4636;
+  color: var(--block-ink, #4a4636);
   max-width: 620px;
   margin: 28px auto 0;
 }

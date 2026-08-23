@@ -12,9 +12,9 @@ type CaseStudyContent = {
   caseStudyStats: Stat[]
 }
 
-export function FeaturedCaseStudy({ content }: { content: CaseStudyContent }) {
+export function FeaturedCaseStudy({ content, style }: { content: CaseStudyContent; style?: React.CSSProperties }) {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} style={style}>
       <div className={styles.band}>
         <div className={styles.copy}>
           <div className={styles.eyebrow}>{content.caseStudyEyebrow}</div>

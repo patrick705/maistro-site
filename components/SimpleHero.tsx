@@ -7,11 +7,19 @@ type SimpleHeroContent = {
   heroSubhead: string
 }
 
-export function SimpleHero({ content, headlineClamp }: { content: SimpleHeroContent; headlineClamp: string }) {
+export function SimpleHero({
+  content,
+  headlineClamp,
+  style,
+}: {
+  content: SimpleHeroContent
+  headlineClamp: string
+  style?: React.CSSProperties
+}) {
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} style={style}>
       <div className={styles.eyebrow}>{content.heroEyebrow}</div>
-      <h1 className={styles.headline} style={{ fontSize: headlineClamp }}>
+      <h1 className={styles.headline} style={{ ['--simple-hero-clamp' as string]: headlineClamp }}>
         {content.heroHeadlineBefore}{' '}
         <span className={styles.headlineHighlight}>{content.heroHeadlineHighlight}</span>
       </h1>

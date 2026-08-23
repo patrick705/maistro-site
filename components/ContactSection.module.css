@@ -1,5 +1,6 @@
 .section {
-  padding: 90px 48px;
+  background: var(--block-bg, transparent);
+  padding: calc(90px * var(--block-padding-scale, 1)) 48px;
   position: relative;
   overflow: hidden;
 }
@@ -11,18 +12,18 @@
 }
 
 .headline {
-  font-family: var(--font-display);
+  font-family: var(--block-heading-font, var(--font-display));
   font-weight: 800;
-  font-size: 62px;
+  font-size: calc(62px * var(--block-heading-scale, 1));
   line-height: 1;
-  color: var(--brand);
+  color: var(--block-ink, var(--brand));
   letter-spacing: -0.02em;
 }
 
 .subhead {
   font-size: 18px;
   line-height: 1.6;
-  color: #4a4636;
+  color: var(--block-ink, #4a4636);
   margin-top: 18px;
 }
 

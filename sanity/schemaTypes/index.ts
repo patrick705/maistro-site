@@ -18,15 +18,36 @@ import { shiftPerson } from './objects/shiftPerson'
 import { progressItem } from './objects/progressItem'
 import { rotaRow } from './objects/rotaRow'
 import { dashboardShowcase } from './objects/dashboardShowcase'
+import { blockDesign } from './objects/blockDesign'
 import { seo } from './seo'
+import { socialLink } from './objects/socialLink'
+import { heroCarouselBlock } from './objects/heroCarouselBlock'
+import { textBlock } from './objects/textBlock'
+import { sideBySideBlock } from './objects/sideBySideBlock'
+import { imageGalleryBlock } from './objects/imageGalleryBlock'
+import { socialLinksBlock } from './objects/socialLinksBlock'
+import { liveVideoBlock } from './objects/liveVideoBlock'
+import { logoStripBlock } from './objects/logoStripBlock'
+import { ctaBannerBlock } from './objects/ctaBannerBlock'
+import { richHeroBlock } from './objects/richHeroBlock'
+import { simpleHeroBlock } from './objects/simpleHeroBlock'
+import { aboutSectionBlock } from './objects/aboutSectionBlock'
+import { dashboardShowcaseBlock } from './objects/dashboardShowcaseBlock'
+import { servicesGridBlock } from './objects/servicesGridBlock'
+import { statsBandBlock } from './objects/statsBandBlock'
+import { contactFormBlock } from './objects/contactFormBlock'
+import { pipelineStripBlock } from './objects/pipelineStripBlock'
+import { moduleDeepDiveListBlock } from './objects/moduleDeepDiveListBlock'
+import { integrationsBlock } from './objects/integrationsBlock'
+import { featuredCaseStudyBlock } from './objects/featuredCaseStudyBlock'
+import { testimonialGridBlock } from './objects/testimonialGridBlock'
+import { newsGridBlock } from './objects/newsGridBlock'
 
 import { siteSettings } from './siteSettings'
-import { homePage } from './homePage'
-import { productPage } from './productPage'
-import { customersPage } from './customersPage'
-import { newsPage } from './newsPage'
 import { newsArticle } from './newsArticle'
+import { page } from './page'
 import { lead } from './lead'
+import { brandPalette } from './brandPalette'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // objects
@@ -48,13 +69,34 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   progressItem,
   rotaRow,
   dashboardShowcase,
+  blockDesign,
   seo,
+  socialLink,
+  heroCarouselBlock,
+  textBlock,
+  sideBySideBlock,
+  imageGalleryBlock,
+  socialLinksBlock,
+  liveVideoBlock,
+  logoStripBlock,
+  ctaBannerBlock,
+  richHeroBlock,
+  simpleHeroBlock,
+  aboutSectionBlock,
+  dashboardShowcaseBlock,
+  servicesGridBlock,
+  statsBandBlock,
+  contactFormBlock,
+  pipelineStripBlock,
+  moduleDeepDiveListBlock,
+  integrationsBlock,
+  featuredCaseStudyBlock,
+  testimonialGridBlock,
+  newsGridBlock,
   // documents
   siteSettings,
-  homePage,
-  productPage,
-  customersPage,
-  newsPage,
   newsArticle,
+  page,
   lead,
+  brandPalette,
 ]

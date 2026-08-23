@@ -1,6 +1,7 @@
 .section {
-  background: var(--surface);
-  padding: 20px 48px 90px;
+  display: var(--results-display, block);
+  background: var(--block-bg, var(--surface));
+  padding: calc(20px * var(--block-padding-scale, 1)) 48px calc(90px * var(--block-padding-scale, 1));
   position: relative;
   overflow: hidden;
 }
@@ -20,11 +21,11 @@
 }
 
 .headline {
-  font-family: var(--font-display);
+  font-family: var(--block-heading-font, var(--font-display));
   font-weight: 800;
-  font-size: 54px;
+  font-size: calc(54px * var(--block-heading-scale, 1));
   line-height: 1.02;
-  color: var(--brand);
+  color: var(--block-ink, var(--brand));
   letter-spacing: -0.02em;
 }
 

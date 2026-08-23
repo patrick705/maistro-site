@@ -152,9 +152,17 @@ const widgets: Record<ModuleWidgetKey, () => ReactElement> = {
   reports: ReportsWidget,
 }
 
-export function ModulesHeading({ eyebrow, headline }: { eyebrow: string; headline: string }) {
+export function ModulesHeading({
+  eyebrow,
+  headline,
+  style,
+}: {
+  eyebrow: string
+  headline: string
+  style?: React.CSSProperties
+}) {
   return (
-    <div className={styles.headSection}>
+    <div className={styles.headSection} style={style}>
       <div className={styles.headEyebrow}>{eyebrow}</div>
       <h2 className={styles.headHeadline}>{headline}</h2>
     </div>

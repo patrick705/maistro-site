@@ -6,12 +6,22 @@ export function BookDemoButton({
   label,
   className,
   as = 'a',
+  href,
 }: {
   label: string
   className?: string
   as?: 'a' | 'button'
+  href?: string
 }) {
   const { open } = useDemoModal()
+
+  if (href) {
+    return (
+      <a href={href} className={className}>
+        {label}
+      </a>
+    )
+  }
 
   if (as === 'button') {
     return (

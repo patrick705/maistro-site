@@ -2,12 +2,13 @@ import type { PortableTextBlock } from '@portabletext/types'
 
 export type ColorVariant = 'brand' | 'warm' | 'pos' | 'accent'
 
-export type PaletteName =
-  | 'Violet'
-  | 'Ink & Terracotta'
-  | 'Plum & Peach'
-  | 'Forest & Clay'
-  | 'Brazil'
+export interface BrandPalette {
+  name: string
+  brandHex: string
+  accentHex: string
+  warmHex: string
+  posHex: string
+}
 
 export interface NavItem {
   label: string
@@ -15,18 +16,41 @@ export interface NavItem {
 }
 
 export interface SiteTheme {
-  palette: PaletteName
+  palette: BrandPalette
   playful: boolean
   showResults: boolean
 }
 
+export interface SocialLink {
+  platform: 'instagram' | 'facebook' | 'linkedin' | 'x' | 'tiktok' | 'youtube' | 'other'
+  url: string
+}
+
+export interface PrimaryCta {
+  label: string
+  href?: string
+}
+
+export interface SeoDefaults {
+  metaTitleSuffix?: string
+  defaultMetaDescription?: string
+  defaultOgImage?: SeoImage
+  twitterHandle?: string
+}
+
 export interface SiteSettings {
   siteName: string
+  logo?: SeoImage
+  logoDark?: SeoImage
   navItems: NavItem[]
-  ctaLabel: string
+  stickyNav: boolean
+  primaryCta: PrimaryCta
+  socialLinks: SocialLink[]
   footerText: string
   gtmContainerId?: string
   theme: SiteTheme
+  seoDefaults: SeoDefaults
+  demoModal: DemoModalContent
 }
 
 export interface SeoImage {
@@ -138,77 +162,6 @@ export interface Stat {
   label: string
 }
 
-export interface ProductPage {
-  heroEyebrow: string
-  heroHeadlineBefore: string
-  heroHeadlineHighlight: string
-  heroSubhead: string
-  heroPrimaryCta: string
-  heroSecondaryCta: string
-  heroStats: StatBadge[]
-
-  channelsLabel: string
-  channelsItems: IconTile[]
-  menuManagerIcon: string
-  menuManagerTitle: string
-  menuManagerSub: string
-  maistroIcon: string
-  maistroTitle: string
-  maistroSub: string
-  outcomesLabel: string
-  outcomesItems: IconTile[]
-
-  modulesEyebrow: string
-  modulesHeadline: string
-  modules: ModuleDeepDive[]
-
-  integrationsEyebrow: string
-  integrationsHeadline: string
-  integrations: string[]
-
-  ctaHeadline: string
-  ctaSubhead: string
-  ctaButtonLabel: string
-
-  seo?: Seo
-}
-
-export interface CustomersPage {
-  heroEyebrow: string
-  heroHeadlineBefore: string
-  heroHeadlineHighlight: string
-  heroSubhead: string
-
-  logos: ClientLogo[]
-
-  caseStudyEyebrow: string
-  caseStudyHeadline: string
-  caseStudyBody: string
-  caseStudyQuote: string
-  caseStudyAuthor: string
-  caseStudyHeroStat: Stat
-  caseStudyStats: Stat[]
-
-  testimonialsEyebrow: string
-  testimonialsHeadline: string
-  testimonials: Testimonial[]
-
-  ctaHeadline: string
-  ctaSubhead: string
-  ctaButtonLabel: string
-
-  seo?: Seo
-}
-
-export interface NewsPage {
-  heroEyebrow: string
-  heroHeadlineBefore: string
-  heroHeadlineHighlight: string
-  heroSubhead: string
-
-  seo?: Seo
-}
-
 export interface KpiTile {
   label: string
   value: string
@@ -276,36 +229,254 @@ export interface DashboardShowcase {
   reportBand: ReportBand
 }
 
-export interface HomePage {
-  heroEyebrow: string
-  heroHeadlineBefore: string
-  heroHeadlineHighlight: string
-  heroSubhead: string
-  heroPrimaryCta: string
-  heroSecondaryCta: string
-  heroStats: StatBadge[]
+// --- Page builder blocks ---
 
-  aboutEyebrow: string
-  aboutHeadlineBefore: string
-  aboutHeadlineHighlight: string
-  aboutHeadlineAfter: string
-  aboutBody: string
-  aboutPipeline: AboutPipeline
+export interface HeroSlide {
+  image: SeoImage
+  caption?: string
+}
 
-  dashboardShowcase: DashboardShowcase
+/** Per-instance design overrides for blocks with a themeable section identity (see docs/page-builder-spec.md phase 2). */
+export interface BlockDesign {
+  headingFont?: 'display' | 'body'
+  headingScale?: 's' | 'm' | 'l'
+  padding?: 'compact' | 'standard' | 'roomy'
+  paletteRole?: 'surface' | 'white' | 'brand' | 'accent'
+  fullBleed?: boolean
+}
 
-  servicesEyebrow: string
-  servicesHeadline: string
-  services: ServiceCard[]
+export interface HeroCarouselBlock {
+  _type: 'heroCarouselBlock'
+  _key: string
+  eyebrow?: string
+  overlayHeading?: string
+  overlaySubhead?: string
+  slides: HeroSlide[]
+  design?: BlockDesign
+}
 
-  resultsEyebrow: string
-  resultsHeadline: string
-  resultStats: ResultStat[]
+export interface TextBlockData {
+  _type: 'textBlock'
+  _key: string
+  heading?: string
+  body: PortableTextBlock[]
+  design?: BlockDesign
+}
 
-  contactHeadline: string
-  contactSubhead: string
+export interface SideBySideBlock {
+  _type: 'sideBySideBlock'
+  _key: string
+  image: SeoImage
+  imagePosition: 'left' | 'right'
+  heading: string
+  body?: PortableTextBlock[]
+  design?: BlockDesign
+}
 
-  demoModal: DemoModalContent
+export interface GalleryImage {
+  image: SeoImage
+  caption?: string
+}
 
+export interface ImageGalleryBlock {
+  _type: 'imageGalleryBlock'
+  _key: string
+  heading?: string
+  images: GalleryImage[]
+}
+
+export interface SocialLinksBlockData {
+  _type: 'socialLinksBlock'
+  _key: string
+  heading?: string
+  links: SocialLink[]
+}
+
+export interface LiveVideoBlock {
+  _type: 'liveVideoBlock'
+  _key: string
+  title?: string
+  embedUrl?: string
+  posterImage?: SeoImage
+  offlineMessage?: string
+}
+
+export interface LogoStripBlock {
+  _type: 'logoStripBlock'
+  _key: string
+  heading?: string
+  logos: ClientLogo[]
+}
+
+export interface CtaBannerBlock {
+  _type: 'ctaBannerBlock'
+  _key: string
+  heading: string
+  subhead?: string
+  buttonLabel: string
+  buttonHref?: string
+  design?: BlockDesign
+}
+
+export interface RichHeroBlock {
+  _type: 'richHeroBlock'
+  _key: string
+  eyebrow?: string
+  headlineBefore?: string
+  headlineHighlight?: string
+  subhead?: string
+  primaryCta?: string
+  secondaryCta?: string
+  secondaryHref?: string
+  heroStats?: StatBadge[]
+  design?: BlockDesign
+}
+
+export interface SimpleHeroBlock {
+  _type: 'simpleHeroBlock'
+  _key: string
+  eyebrow?: string
+  headlineBefore?: string
+  headlineHighlight?: string
+  subhead?: string
+  headlineClamp?: string
+  design?: BlockDesign
+}
+
+export interface AboutSectionBlock {
+  _type: 'aboutSectionBlock'
+  _key: string
+  eyebrow?: string
+  headlineBefore?: string
+  headlineHighlight?: string
+  headlineAfter?: string
+  body?: string
+  pipeline?: AboutPipeline
+  design?: BlockDesign
+}
+
+export interface DashboardShowcaseBlock {
+  _type: 'dashboardShowcaseBlock'
+  _key: string
+  showcase?: DashboardShowcase
+}
+
+export interface ServicesGridBlock {
+  _type: 'servicesGridBlock'
+  _key: string
+  eyebrow?: string
+  headline?: string
+  services?: ServiceCard[]
+  design?: BlockDesign
+}
+
+export interface StatsBandBlock {
+  _type: 'statsBandBlock'
+  _key: string
+  eyebrow?: string
+  headline?: string
+  stats?: ResultStat[]
+  design?: BlockDesign
+}
+
+export interface ContactFormBlock {
+  _type: 'contactFormBlock'
+  _key: string
+  headline: string
+  subhead?: string
+  design?: BlockDesign
+}
+
+export interface PipelineStripBlock {
+  _type: 'pipelineStripBlock'
+  _key: string
+  channelsLabel?: string
+  channelsItems?: IconTile[]
+  menuManagerIcon?: string
+  menuManagerTitle?: string
+  menuManagerSub?: string
+  maistroIcon?: string
+  maistroTitle?: string
+  maistroSub?: string
+  outcomesLabel?: string
+  outcomesItems?: IconTile[]
+  design?: BlockDesign
+}
+
+export interface ModuleDeepDiveListBlock {
+  _type: 'moduleDeepDiveListBlock'
+  _key: string
+  eyebrow?: string
+  headline?: string
+  modules?: ModuleDeepDive[]
+  design?: BlockDesign
+}
+
+export interface IntegrationsBlock {
+  _type: 'integrationsBlock'
+  _key: string
+  eyebrow?: string
+  headline?: string
+  integrations?: string[]
+  design?: BlockDesign
+}
+
+export interface FeaturedCaseStudyBlock {
+  _type: 'featuredCaseStudyBlock'
+  _key: string
+  eyebrow?: string
+  headline?: string
+  body?: string
+  quote?: string
+  author?: string
+  heroStat?: Stat
+  stats?: Stat[]
+  design?: BlockDesign
+}
+
+export interface TestimonialGridBlock {
+  _type: 'testimonialGridBlock'
+  _key: string
+  eyebrow?: string
+  headline?: string
+  testimonials?: Testimonial[]
+  design?: BlockDesign
+}
+
+export interface NewsGridBlock {
+  _type: 'newsGridBlock'
+  _key: string
+}
+
+export type PageBlock =
+  | HeroCarouselBlock
+  | TextBlockData
+  | SideBySideBlock
+  | ImageGalleryBlock
+  | SocialLinksBlockData
+  | LiveVideoBlock
+  | LogoStripBlock
+  | CtaBannerBlock
+  | RichHeroBlock
+  | SimpleHeroBlock
+  | AboutSectionBlock
+  | DashboardShowcaseBlock
+  | ServicesGridBlock
+  | StatsBandBlock
+  | ContactFormBlock
+  | PipelineStripBlock
+  | ModuleDeepDiveListBlock
+  | IntegrationsBlock
+  | FeaturedCaseStudyBlock
+  | TestimonialGridBlock
+  | NewsGridBlock
+
+export interface Page {
+  title: string
+  slug: string
+  navLabel?: string
+  showInMenu: boolean
+  menuOrder?: number
+  blocks: PageBlock[]
   seo?: Seo
 }

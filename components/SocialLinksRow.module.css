@@ -1,0 +1,23 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 18px;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.iconLink:hover {
+  background: var(--brand-tint, rgba(0, 0, 0, 0.1));
+  transform: translateY(-2px);
+}

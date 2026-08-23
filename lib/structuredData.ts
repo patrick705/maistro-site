@@ -1,5 +1,5 @@
 import { SITE_URL } from './site'
-import type { ClientLogo, HomePage, NewsArticle, SiteSettings } from './content/types'
+import type { ClientLogo, NewsArticle, Seo, SiteSettings } from './content/types'
 
 /**
  * JSON-LD is injected via dangerouslySetInnerHTML, so escape `<` to stop
@@ -10,14 +10,13 @@ export function jsonLdScript(data: unknown) {
   return JSON.stringify(data).replace(/</g, '\\u003c')
 }
 
-export function organizationJsonLd(siteSettings: SiteSettings, homePage: HomePage) {
-  const seo = homePage.seo
+export function organizationJsonLd(siteSettings: SiteSettings, seo: Seo | undefined, fallbackDescription: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: siteSettings.siteName,
     url: SITE_URL,
-    description: seo?.metaDescription || homePage.heroSubhead,
+    description: seo?.metaDescription || fallbackDescription,
     ...(seo?.ogImage?.url ? { logo: seo.ogImage.url } : {}),
   }
 }

@@ -1,30 +1,14 @@
 import { client, isSanityConfigured } from './client'
 import {
-  customersPageQuery,
-  homePageQuery,
   newsArticleBySlugQuery,
   newsArticlesQuery,
-  newsPageQuery,
-  productPageQuery,
+  pageBySlugQuery,
+  pagesForNavQuery,
   siteSettingsQuery,
 } from './queries'
-import {
-  defaultCustomersPage,
-  defaultHomePage,
-  defaultNewsArticles,
-  defaultNewsPage,
-  defaultProductPage,
-  defaultSiteSettings,
-} from '@/lib/content/defaults'
+import { defaultNewsArticles, defaultSiteSettings } from '@/lib/content/defaults'
 import { mergeDefined } from '@/lib/content/merge'
-import type {
-  CustomersPage,
-  HomePage,
-  NewsArticle,
-  NewsPage,
-  ProductPage,
-  SiteSettings,
-} from '@/lib/content/types'
+import type { NavItem, NewsArticle, Page, SiteSettings } from '@/lib/content/types'
 
 const REVALIDATE_SECONDS = 60
 
@@ -36,70 +20,14 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       {},
       { next: { revalidate: REVALIDATE_SECONDS } },
     )
-    return mergeDefined(defaultSiteSettings, data, ['theme'])
+    const merged = mergeDefined(defaultSiteSettings, data, ['theme', 'primaryCta', 'seoDefaults', 'demoModal'])
+    // An unset or dangling `theme.palette` reference dereferences to null in
+    // GROQ — fall back to the default palette rather than crash color math.
+    if (!merged.theme.palette) merged.theme.palette = defaultSiteSettings.theme.palette
+    return merged
   } catch (err) {
     console.warn('[sanity] failed to fetch siteSettings, using defaults:', err)
     return defaultSiteSettings
-  }
-}
-
-export async function getHomePage(): Promise<HomePage> {
-  if (!isSanityConfigured) return defaultHomePage
-  try {
-    const data = await client.fetch<Partial<HomePage> | null>(
-      homePageQuery,
-      {},
-      { next: { revalidate: REVALIDATE_SECONDS } },
-    )
-    return mergeDefined(defaultHomePage, data, ['aboutPipeline', 'demoModal', 'seo', 'dashboardShowcase'])
-  } catch (err) {
-    console.warn('[sanity] failed to fetch homePage, using defaults:', err)
-    return defaultHomePage
-  }
-}
-
-export async function getProductPage(): Promise<ProductPage> {
-  if (!isSanityConfigured) return defaultProductPage
-  try {
-    const data = await client.fetch<Partial<ProductPage> | null>(
-      productPageQuery,
-      {},
-      { next: { revalidate: REVALIDATE_SECONDS } },
-    )
-    return mergeDefined(defaultProductPage, data, ['seo'])
-  } catch (err) {
-    console.warn('[sanity] failed to fetch productPage, using defaults:', err)
-    return defaultProductPage
-  }
-}
-
-export async function getCustomersPage(): Promise<CustomersPage> {
-  if (!isSanityConfigured) return defaultCustomersPage
-  try {
-    const data = await client.fetch<Partial<CustomersPage> | null>(
-      customersPageQuery,
-      {},
-      { next: { revalidate: REVALIDATE_SECONDS } },
-    )
-    return mergeDefined(defaultCustomersPage, data, ['caseStudyHeroStat', 'seo'])
-  } catch (err) {
-    console.warn('[sanity] failed to fetch customersPage, using defaults:', err)
-    return defaultCustomersPage
-  }
-}
-
-export async function getNewsPage(): Promise<NewsPage> {
-  if (!isSanityConfigured) return defaultNewsPage
-  try {
-    const data = await client.fetch<Partial<NewsPage> | null>(
-      newsPageQuery,
-      {},
-      { next: { revalidate: REVALIDATE_SECONDS } },
-    )
-    return mergeDefined(defaultNewsPage, data, ['seo'])
-  } catch (err) {
-    console.warn('[sanity] failed to fetch newsPage, using defaults:', err)
-    return defaultNewsPage
   }
 }
 
@@ -131,5 +59,33 @@ export async function getNewsArticleBySlug(slug: string): Promise<NewsArticle | 
   } catch (err) {
     console.warn('[sanity] failed to fetch newsArticle by slug, using defaults:', err)
     return fallback()
+  }
+}
+
+export async function getPagesForNav(): Promise<NavItem[]> {
+  if (!isSanityConfigured) return []
+  try {
+    const data = await client.fetch<
+      { title: string; navLabel?: string; slug: string; menuOrder?: number }[] | null
+    >(pagesForNavQuery, {}, { next: { revalidate: REVALIDATE_SECONDS } })
+    return (data ?? []).map((page) => ({ label: page.navLabel || page.title, href: `/${page.slug}` }))
+  } catch (err) {
+    console.warn('[sanity] failed to fetch pages for nav:', err)
+    return []
+  }
+}
+
+export async function getPageBySlug(slug: string): Promise<Page | null> {
+  if (!isSanityConfigured) return null
+  try {
+    const data = await client.fetch<Page | null>(
+      pageBySlugQuery,
+      { slug },
+      { next: { revalidate: REVALIDATE_SECONDS } },
+    )
+    return data ?? null
+  } catch (err) {
+    console.warn('[sanity] failed to fetch page by slug:', err)
+    return null
   }
 }

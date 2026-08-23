@@ -3,7 +3,8 @@
 }
 
 .headSection {
-  padding: 20px 48px 40px;
+  background: var(--block-bg, transparent);
+  padding: calc(20px * var(--block-padding-scale, 1)) 48px calc(40px * var(--block-padding-scale, 1));
   text-align: center;
 }
 
@@ -17,11 +18,11 @@
 }
 
 .headHeadline {
-  font-family: var(--font-display);
+  font-family: var(--block-heading-font, var(--font-display));
   font-weight: 800;
-  font-size: 54px;
+  font-size: calc(54px * var(--block-heading-scale, 1));
   line-height: 1.02;
-  color: var(--brand);
+  color: var(--block-ink, var(--brand));
   letter-spacing: -0.02em;
 }
 

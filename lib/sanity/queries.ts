@@ -12,155 +12,187 @@ const seoProjection = groq`
 export const siteSettingsQuery = groq`
   *[_id == "siteSettings"][0]{
     siteName,
+    "logo": logo{"url": asset->url, alt},
+    "logoDark": logoDark{"url": asset->url, alt},
     navItems[]{label, href},
-    ctaLabel,
+    stickyNav,
+    primaryCta{label, href},
+    socialLinks[]{platform, url},
     footerText,
     gtmContainerId,
-    theme{palette, playful, showResults}
-  }
-`
-
-export const homePageQuery = groq`
-  *[_id == "homePage"][0]{
-    heroEyebrow,
-    heroHeadlineBefore,
-    heroHeadlineHighlight,
-    heroSubhead,
-    heroPrimaryCta,
-    heroSecondaryCta,
-    heroStats[]{value, label, variant},
-
-    aboutEyebrow,
-    aboutHeadlineBefore,
-    aboutHeadlineHighlight,
-    aboutHeadlineAfter,
-    aboutBody,
-    aboutPipeline{
-      channelsIcon, channelsLabel, channelsTags,
-      menuManagerIcon, menuManagerTitle, menuManagerSub,
-      maistroIcon, maistroTitle, maistroSub,
-      deliversIcon, deliversLabel,
-      outputs[]{icon, label}
+    theme{
+      "palette": palette->{name, brandHex, accentHex, warmHex, posHex},
+      playful,
+      showResults
     },
-
-    dashboardShowcase{
-      overviewKpis[]{label, value, valueVariant, small, delta, tone},
-      overviewChart[]{day, forecast, actual, actualHighlight},
-      onShift[]{name, role, color},
-      stockAlerts[]{name, status, percent, color},
-
-      forecastKpis[]{label, value, valueVariant, small, delta, tone},
-      forecastChart[]{day, height, variant},
-
-      staffKpis[]{label, value, valueVariant, small, delta, tone},
-      rota[]{name, left, width, color},
-
-      stockKpis[]{label, value, valueVariant, small, delta, tone},
-      stockLevels[]{name, status, percent, color},
-
-      reportsKpis[]{label, value, valueVariant, small, delta, tone},
-      reportBand{title, subtitle, pill}
+    seoDefaults{
+      metaTitleSuffix,
+      defaultMetaDescription,
+      "defaultOgImage": defaultOgImage{"url": asset->url, alt},
+      twitterHandle
     },
-
-    servicesEyebrow,
-    servicesHeadline,
-    services[]{icon, title, description, bullets, variant},
-
-    resultsEyebrow,
-    resultsHeadline,
-    resultStats[]{eyebrow, prefix, value, label, variant},
-
-    contactHeadline,
-    contactSubhead,
-
-    demoModal{eyebrow, headline, subhead, successHeadline, successBody},
-
-    ${seoProjection}
-  }
-`
-
-export const productPageQuery = groq`
-  *[_id == "productPage"][0]{
-    heroEyebrow,
-    heroHeadlineBefore,
-    heroHeadlineHighlight,
-    heroSubhead,
-    heroPrimaryCta,
-    heroSecondaryCta,
-    heroStats[]{value, label, variant},
-
-    channelsLabel,
-    channelsItems[]{icon, label},
-    menuManagerIcon, menuManagerTitle, menuManagerSub,
-    maistroIcon, maistroTitle, maistroSub,
-    outcomesLabel,
-    outcomesItems[]{icon, label},
-
-    modulesEyebrow,
-    modulesHeadline,
-    modules[]{icon, eyebrow, headline, body, bullets, widget},
-
-    integrationsEyebrow,
-    integrationsHeadline,
-    integrations,
-
-    ctaHeadline,
-    ctaSubhead,
-    ctaButtonLabel,
-
-    ${seoProjection}
-  }
-`
-
-export const customersPageQuery = groq`
-  *[_id == "customersPage"][0]{
-    heroEyebrow,
-    heroHeadlineBefore,
-    heroHeadlineHighlight,
-    heroSubhead,
-
-    logos[]{
-      name,
-      "logo": logo{"url": asset->url, alt},
-      description,
-      website
-    },
-
-    caseStudyEyebrow,
-    caseStudyHeadline,
-    caseStudyBody,
-    caseStudyQuote,
-    caseStudyAuthor,
-    caseStudyHeroStat{value, label},
-    caseStudyStats[]{value, label},
-
-    testimonialsEyebrow,
-    testimonialsHeadline,
-    testimonials[]{quote, author, role, venue},
-
-    ctaHeadline,
-    ctaSubhead,
-    ctaButtonLabel,
-
-    ${seoProjection}
-  }
-`
-
-export const newsPageQuery = groq`
-  *[_id == "newsPage"][0]{
-    heroEyebrow,
-    heroHeadlineBefore,
-    heroHeadlineHighlight,
-    heroSubhead,
-
-    ${seoProjection}
+    demoModal{eyebrow, headline, subhead, successHeadline, successBody}
   }
 `
 
 export const newsArticlesQuery = groq`
-  *[_type == "newsArticle"] | order(publishedAt desc){
+  *[_type == "newsArticle" && archived != true] | order(publishedAt desc){
     title, excerpt, category, icon, variant, publishedAt,
     "slug": slug.current
+  }
+`
+
+export const pagesForNavQuery = groq`
+  *[_type == "page" && showInMenu == true] | order(menuOrder asc){
+    title,
+    navLabel,
+    "slug": slug.current,
+    menuOrder
+  }
+`
+
+export const pageBySlugQuery = groq`
+  *[_type == "page" && slug.current == $slug][0]{
+    title,
+    "slug": slug.current,
+    navLabel,
+    showInMenu,
+    menuOrder,
+    blocks[]{
+      _key,
+      _type,
+      _type == "heroCarouselBlock" => {
+        eyebrow,
+        overlayHeading,
+        overlaySubhead,
+        slides[]{"image": image{"url": asset->url, alt}, caption},
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "textBlock" => {
+        heading,
+        body,
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "sideBySideBlock" => {
+        "image": image{"url": asset->url, alt},
+        imagePosition,
+        heading,
+        body,
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "imageGalleryBlock" => {
+        heading,
+        images[]{"image": image{"url": asset->url, alt}, caption}
+      },
+      _type == "socialLinksBlock" => {
+        heading,
+        links[]{platform, url}
+      },
+      _type == "liveVideoBlock" => {
+        title,
+        embedUrl,
+        "posterImage": posterImage{"url": asset->url, alt},
+        offlineMessage
+      },
+      _type == "logoStripBlock" => {
+        heading,
+        logos[]{name, "logo": logo{"url": asset->url, alt}, description, website}
+      },
+      _type == "ctaBannerBlock" => {
+        heading,
+        subhead,
+        buttonLabel,
+        buttonHref,
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "richHeroBlock" => {
+        eyebrow, headlineBefore, headlineHighlight, subhead,
+        primaryCta, secondaryCta, secondaryHref,
+        heroStats[]{value, label, variant},
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "simpleHeroBlock" => {
+        eyebrow, headlineBefore, headlineHighlight, subhead, headlineClamp,
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "aboutSectionBlock" => {
+        eyebrow, headlineBefore, headlineHighlight, headlineAfter, body,
+        pipeline{
+          channelsIcon, channelsLabel, channelsTags,
+          menuManagerIcon, menuManagerTitle, menuManagerSub,
+          maistroIcon, maistroTitle, maistroSub,
+          deliversIcon, deliversLabel,
+          outputs[]{icon, label}
+        },
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "dashboardShowcaseBlock" => {
+        showcase{
+          overviewKpis[]{label, value, valueVariant, small, delta, tone},
+          overviewChart[]{day, forecast, actual, actualHighlight},
+          onShift[]{name, role, color},
+          stockAlerts[]{name, status, percent, color},
+
+          forecastKpis[]{label, value, valueVariant, small, delta, tone},
+          forecastChart[]{day, height, variant},
+
+          staffKpis[]{label, value, valueVariant, small, delta, tone},
+          rota[]{name, left, width, color},
+
+          stockKpis[]{label, value, valueVariant, small, delta, tone},
+          stockLevels[]{name, status, percent, color},
+
+          reportsKpis[]{label, value, valueVariant, small, delta, tone},
+          reportBand{title, subtitle, pill}
+        }
+      },
+      _type == "servicesGridBlock" => {
+        eyebrow, headline,
+        services[]{icon, title, description, bullets, variant},
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "statsBandBlock" => {
+        eyebrow, headline,
+        stats[]{eyebrow, prefix, value, label, variant},
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "contactFormBlock" => {
+        headline, subhead,
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "pipelineStripBlock" => {
+        channelsLabel, channelsItems[]{icon, label},
+        menuManagerIcon, menuManagerTitle, menuManagerSub,
+        maistroIcon, maistroTitle, maistroSub,
+        outcomesLabel, outcomesItems[]{icon, label},
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "moduleDeepDiveListBlock" => {
+        eyebrow, headline,
+        modules[]{icon, eyebrow, headline, body, bullets, widget},
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "integrationsBlock" => {
+        eyebrow, headline, integrations,
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "featuredCaseStudyBlock" => {
+        eyebrow, headline, body, quote, author,
+        heroStat{value, label},
+        stats[]{value, label},
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "testimonialGridBlock" => {
+        eyebrow, headline,
+        testimonials[]{quote, author, role, venue},
+        design{headingFont, headingScale, padding, paletteRole, fullBleed}
+      },
+      _type == "newsGridBlock" => {
+        _key
+      }
+    },
+
+    ${seoProjection}
   }
 `
 

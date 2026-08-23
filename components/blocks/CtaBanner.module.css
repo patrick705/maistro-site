@@ -1,0 +1,31 @@
+.section {
+  max-width: 800px;
+  margin: 48px auto;
+  padding: calc(56px * var(--block-padding-scale, 1)) 40px;
+  border-radius: 24px;
+  background: var(--block-bg, var(--brand, #111));
+  color: var(--block-ink, #fff);
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--block-heading-font, var(--font-display));
+  font-size: clamp(calc(26px * var(--block-heading-scale, 1)), calc(3.5vw * var(--block-heading-scale, 1)), calc(36px * var(--block-heading-scale, 1)));
+  margin: 0 0 12px;
+}
+
+.subhead {
+  font-size: 16px;
+  opacity: 0.85;
+  margin: 0 0 28px;
+}
+
+.button {
+  display: inline-block;
+  background: #fff;
+  color: var(--brand, #111);
+  font-weight: 700;
+  padding: 14px 32px;
+  border-radius: 999px;
+  text-decoration: none;
+}

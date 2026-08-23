@@ -1,0 +1,115 @@
+import { useDocumentOperation, useEditState } from 'sanity'
+
+import type { KitchenView } from './KitchenTool'
+import { kitchen } from './theme'
+
+const BREADCRUMB_LABEL: Record<string, string> = {
+  page: 'Pages',
+  collection: 'Collections',
+  doc: 'Collections',
+  media: 'Media',
+}
+
+const SETTINGS_SECTION_LABEL: Record<string, string> = {
+  theme: 'Theme',
+  general: 'General',
+  navigation: 'Navigation',
+  seo: 'SEO defaults',
+  demoModal: 'Demo modal',
+}
+
+function DocPublishControls({ id, type }: { id: string; type: string }) {
+  const ops = useDocumentOperation(id, type)
+  const editState = useEditState(id, type)
+
+  const hasDraft = Boolean(editState.draft)
+  const status = hasDraft ? 'Unpublished changes' : editState.published ? 'Published' : 'Draft'
+
+  return (
+    <>
+      <span
+        style={{
+          fontSize: 10.5,
+          fontWeight: 600,
+          padding: '2px 8px',
+          borderRadius: 999,
+          background: hasDraft ? '#FCEFD8' : '#DFF0E8',
+          color: hasDraft ? '#9c6a1c' : '#2f6b52',
+        }}
+      >
+        {status}
+      </span>
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <button
+          type="button"
+          disabled={ops.discardChanges.disabled !== false}
+          onClick={() => ops.discardChanges.execute()}
+          style={{
+            padding: '5px 11px',
+            border: `1px solid ${kitchen.borderInput}`,
+            borderRadius: 7,
+            background: '#fff',
+            cursor: ops.discardChanges.disabled ? 'not-allowed' : 'pointer',
+            font: 'inherit',
+            fontSize: 12,
+            color: kitchen.textBody,
+            opacity: ops.discardChanges.disabled ? 0.5 : 1,
+          }}
+        >
+          Discard changes
+        </button>
+        <button
+          type="button"
+          disabled={ops.publish.disabled !== false}
+          onClick={() => ops.publish.execute()}
+          style={{
+            padding: '5px 14px',
+            border: `1px solid ${kitchen.accent}`,
+            borderRadius: 7,
+            background: kitchen.accent,
+            color: '#fff',
+            cursor: ops.publish.disabled ? 'not-allowed' : 'pointer',
+            font: 'inherit',
+            fontSize: 12,
+            fontWeight: 600,
+            opacity: ops.publish.disabled ? 0.6 : 1,
+          }}
+        >
+          Publish
+        </button>
+      </div>
+    </>
+  )
+}
+
+export function TopBar({ view }: { view: KitchenView }) {
+  const crumb = view
+    ? view.kind === 'settings'
+      ? `Site Settings / ${SETTINGS_SECTION_LABEL[view.section]}`
+      : BREADCRUMB_LABEL[view.kind]
+    : 'Kitchen CMS'
+  const docRef = view?.kind === 'page' ? { id: view.id, type: 'page' } : view?.kind === 'doc' ? { id: view.id, type: view.type } : null
+
+  return (
+    <header
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '0 16px',
+        height: 47,
+        flex: '0 0 47px',
+        borderBottom: `1px solid ${kitchen.border}`,
+        background: '#fff',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: kitchen.textMuted, fontFamily: kitchen.fontMono }}>
+        <span>Kitchen CMS</span>
+        <span style={{ color: kitchen.borderDashed }}>/</span>
+        <span style={{ color: kitchen.ink }}>{crumb}</span>
+      </div>
+
+      {docRef && <DocPublishControls id={docRef.id} type={docRef.type} />}
+    </header>
+  )
+}

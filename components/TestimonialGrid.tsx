@@ -21,9 +21,9 @@ function Card({ testimonial }: { testimonial: Testimonial }) {
   )
 }
 
-export function TestimonialGrid({ content }: { content: TestimonialsContent }) {
+export function TestimonialGrid({ content, style }: { content: TestimonialsContent; style?: React.CSSProperties }) {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} style={style}>
       <div className={styles.head}>
         <div className={styles.eyebrow}>{content.testimonialsEyebrow}</div>
         <h2 className={styles.headline}>{content.testimonialsHeadline}</h2>

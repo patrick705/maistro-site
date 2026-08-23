@@ -31,3 +31,8 @@
 .aiFooter {
   color: var(--warm);
 }
+
+.headerImage,
+.footerImage {
+  object-fit: contain;
+}
