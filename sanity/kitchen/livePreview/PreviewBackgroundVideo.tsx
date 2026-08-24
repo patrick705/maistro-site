@@ -48,7 +48,10 @@ export function PreviewBackgroundVideo({ block, isFirst }: { block: Record<strin
   const hasCopy = Boolean(block.eyebrow || block.heading || block.subhead || block.primaryCta || block.secondaryCta)
 
   return (
-    <section className={`${styles.section} ${full ? styles.sectionFull : styles.sectionThreeQuarter}`}>
+    <section
+      className={`${styles.section} ${full ? styles.sectionFull : styles.sectionThreeQuarter}`}
+      style={posterUrl ? { backgroundImage: `url(${posterUrl})` } : undefined}
+    >
       {showNavOverlay && (
         <div
           style={{

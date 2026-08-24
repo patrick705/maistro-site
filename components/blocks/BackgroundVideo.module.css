@@ -2,18 +2,24 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: #0c0a1a;
+  background-color: #0c0a1a;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .sectionFull {
-  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
 }
 
 .sectionThreeQuarter {
-  height: 75vh;
+  height: 75svh;
+  min-height: 420px;
 }
 
 .video {
+  display: block;
   position: absolute;
   inset: 0;
   width: 100%;

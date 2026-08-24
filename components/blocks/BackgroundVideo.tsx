@@ -16,7 +16,10 @@ export function BackgroundVideo({
   const hasCopy = Boolean(block.eyebrow || block.heading || block.subhead || block.primaryCta || block.secondaryCta)
 
   return (
-    <section className={`${styles.section} ${full ? styles.sectionFull : styles.sectionThreeQuarter}`}>
+    <section
+      className={`${styles.section} ${full ? styles.sectionFull : styles.sectionThreeQuarter}`}
+      style={block.posterImage.url ? { backgroundImage: `url(${block.posterImage.url})` } : undefined}
+    >
       <video
         className={styles.video}
         src={block.video}
