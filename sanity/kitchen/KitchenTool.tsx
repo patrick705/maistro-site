@@ -14,6 +14,7 @@ import { SeoDefaultsSettings } from './settings/SeoDefaults'
 import { DemoModalSettings } from './settings/DemoModal'
 import { googleFontsHref, kitchen } from './theme'
 import { useLiveQuery } from './useLiveQuery'
+import { useIsMobile } from './useIsMobile'
 
 export type SettingsSection = 'theme' | 'general' | 'navigation' | 'seo' | 'demoModal'
 
@@ -28,8 +29,17 @@ export type KitchenView =
 const DEFAULT_PAGE_QUERY = `*[_type == "page" && !(_id in path("drafts.**"))] | order(menuOrder asc, title asc){_id, "slug": slug.current}`
 
 export function KitchenTool() {
-  const [view, setView] = useState<KitchenView>(null)
+  const [view, setViewRaw] = useState<KitchenView>(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const isMobile = useIsMobile()
   const { data: pages } = useLiveQuery<{ _id: string; slug?: string }[]>(DEFAULT_PAGE_QUERY)
+
+  // On mobile the sidebar is an off-canvas panel — close it the moment something is picked,
+  // same as any mobile nav drawer. On desktop it's always visible, so this is a no-op there.
+  function setView(next: KitchenView) {
+    setViewRaw(next)
+    if (isMobile) setSidebarOpen(false)
+  }
 
   useEffect(() => {
     if (document.querySelector('link[data-kitchen-fonts]')) return
@@ -62,10 +72,10 @@ export function KitchenTool() {
         color: kitchen.ink,
       }}
     >
-      <Sidebar view={view} onSelect={setView} />
+      <Sidebar view={view} onSelect={setView} isMobile={isMobile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        <TopBar view={view} />
+        <TopBar view={view} isMobile={isMobile} onOpenSidebar={() => setSidebarOpen(true)} />
 
         <div style={{ flex: 1, overflowY: 'auto', minWidth: 0 }}>
           {view === null && (

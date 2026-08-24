@@ -4,6 +4,7 @@ import { ArrayEditor } from './ArrayEditor'
 import { ImageUploadField, type SanityImageValue } from './ImageUploadField'
 import { portableBodyToText, randomKey, textToPortableBody } from './blockTypes'
 import { kitchen } from './theme'
+import { useIsMobile } from './useIsMobile'
 
 const inputStyle: React.CSSProperties = {
   padding: '7px 9px',
@@ -225,13 +226,14 @@ function FieldsetHeading({ children }: { children: React.ReactNode }) {
 }
 
 function KpiTileFields({ item, update }: { item: KpiTileItem; update: (fields: Partial<KpiTileItem>) => void }) {
+  const isMobile = useIsMobile()
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
         <input style={{ ...inputStyle, flex: 1 }} placeholder="Label" value={item.label ?? ''} onChange={(e) => update({ label: e.target.value })} />
         <input style={{ ...inputStyle, flex: 1 }} placeholder="Value" value={item.value ?? ''} onChange={(e) => update({ value: e.target.value })} />
       </div>
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
         <input style={{ ...inputStyle, flex: 1 }} placeholder="Delta / context text" value={item.delta ?? ''} onChange={(e) => update({ delta: e.target.value })} />
         <Select value={item.tone} onChange={(v) => update({ tone: v })} options={TONE_OPTIONS} flex="0 0 110px" />
         <Select value={item.valueVariant ?? ''} onChange={(v) => update({ valueVariant: v || undefined })} options={KPI_VALUE_VARIANT_OPTIONS} flex="0 0 110px" />
@@ -253,8 +255,9 @@ function ProgressItemFields({
   update: (fields: Partial<ProgressItemItem>) => void
   options: { value: string; label: string }[]
 }) {
+  const isMobile = useIsMobile()
   return (
-    <div style={{ display: 'flex', gap: 8 }}>
+    <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
       <input style={{ ...inputStyle, flex: 1 }} placeholder="Name" value={item.name ?? ''} onChange={(e) => update({ name: e.target.value })} />
       <input style={{ ...inputStyle, flex: 1 }} placeholder="Status" value={item.status ?? ''} onChange={(e) => update({ status: e.target.value })} />
       <input
@@ -333,6 +336,8 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
     // types and doesn't get spread onto their saved fields (see isUnrelatedEmptyDefault below).
     showcase: block.showcase ?? {},
   }))
+
+  const isMobile = useIsMobile()
 
   function set(key: string, value: unknown) {
     setDraft((d) => ({ ...d, [key]: value }))
@@ -490,7 +495,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             newItem={() => ({ _key: randomKey(), platform: 'instagram', url: '' })}
             addLabel="+ Add link"
             renderItem={(item, update) => (
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                 <select style={{ ...inputStyle, flex: '0 0 130px' }} value={item.platform ?? 'instagram'} onChange={(e) => update({ platform: e.target.value })}>
                   {PLATFORM_OPTIONS.map((p) => (
                     <option key={p.value} value={p.value}>
@@ -559,7 +564,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             addLabel="+ Add stat"
             max={3}
             renderItem={(item, update) => (
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                 <input style={{ ...inputStyle, flex: 1 }} placeholder="Value" value={item.value ?? ''} onChange={(e) => update({ value: e.target.value })} />
                 <input style={{ ...inputStyle, flex: 1 }} placeholder="Label" value={item.label ?? ''} onChange={(e) => update({ label: e.target.value })} />
                 <VariantSelect value={item.variant} onChange={(v) => update({ variant: v })} />
@@ -607,7 +612,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
         </Field>
         <div style={{ padding: 10, border: `1px solid ${kitchen.borderSoft}`, borderRadius: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
           <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', color: kitchen.textMuted }}>Diagram</span>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
             <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={draft.pipeline.channelsIcon ?? ''} onChange={(e) => setPipeline({ channelsIcon: e.target.value })} />
             <input style={{ ...inputStyle, flex: 1 }} placeholder="Channels label" value={draft.pipeline.channelsLabel ?? ''} onChange={(e) => setPipeline({ channelsLabel: e.target.value })} />
           </div>
@@ -617,17 +622,17 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             value={(draft.pipeline.channelsTags ?? []).join('\n')}
             onChange={(e) => setPipeline({ channelsTags: linesToArray(e.target.value) })}
           />
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
             <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={draft.pipeline.menuManagerIcon ?? ''} onChange={(e) => setPipeline({ menuManagerIcon: e.target.value })} />
             <input style={{ ...inputStyle, flex: 1 }} placeholder="Menu Manager title" value={draft.pipeline.menuManagerTitle ?? ''} onChange={(e) => setPipeline({ menuManagerTitle: e.target.value })} />
           </div>
           <input style={inputStyle} placeholder="Menu Manager sub-copy" value={draft.pipeline.menuManagerSub ?? ''} onChange={(e) => setPipeline({ menuManagerSub: e.target.value })} />
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
             <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={draft.pipeline.maistroIcon ?? ''} onChange={(e) => setPipeline({ maistroIcon: e.target.value })} />
             <input style={{ ...inputStyle, flex: 1 }} placeholder="Maistro title" value={draft.pipeline.maistroTitle ?? ''} onChange={(e) => setPipeline({ maistroTitle: e.target.value })} />
           </div>
           <input style={inputStyle} placeholder="Maistro sub-copy" value={draft.pipeline.maistroSub ?? ''} onChange={(e) => setPipeline({ maistroSub: e.target.value })} />
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
             <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={draft.pipeline.deliversIcon ?? ''} onChange={(e) => setPipeline({ deliversIcon: e.target.value })} />
             <input style={{ ...inputStyle, flex: 1 }} placeholder="Delivers label" value={draft.pipeline.deliversLabel ?? ''} onChange={(e) => setPipeline({ deliversLabel: e.target.value })} />
           </div>
@@ -638,7 +643,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
               newItem={() => ({ _key: randomKey() })}
               addLabel="+ Add output"
               renderItem={(item, update) => (
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                   <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={item.icon ?? ''} onChange={(e) => update({ icon: e.target.value })} />
                   <input style={{ ...inputStyle, flex: 1 }} placeholder="Label" value={item.label ?? ''} onChange={(e) => update({ label: e.target.value })} />
                 </div>
@@ -668,7 +673,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             newItem={() => ({ _key: randomKey() })}
             addLabel="+ Add day bar"
             renderItem={(item, update) => (
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: isMobile ? 'stretch' : 'center', flexDirection: isMobile ? 'column' : 'row' }}>
                 <input style={{ ...inputStyle, flex: '0 0 70px' }} placeholder="Day" value={item.day ?? ''} onChange={(e) => update({ day: e.target.value })} />
                 <input style={{ ...inputStyle, flex: 1 }} type="number" placeholder="Forecast (px)" value={item.forecast ?? ''} onChange={(e) => update({ forecast: Number(e.target.value) })} />
                 <input style={{ ...inputStyle, flex: 1 }} type="number" placeholder="Actual (px)" value={item.actual ?? ''} onChange={(e) => update({ actual: Number(e.target.value) })} />
@@ -687,7 +692,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             newItem={() => ({ _key: randomKey(), color: 'brand' })}
             addLabel="+ Add person"
             renderItem={(item, update) => (
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                 <input style={{ ...inputStyle, flex: 1 }} placeholder="Name" value={item.name ?? ''} onChange={(e) => update({ name: e.target.value })} />
                 <input style={{ ...inputStyle, flex: 1 }} placeholder="Role / until time" value={item.role ?? ''} onChange={(e) => update({ role: e.target.value })} />
                 <Select value={item.color} onChange={(v) => update({ color: v })} options={PERSON_COLOR_OPTIONS} flex="0 0 110px" />
@@ -723,7 +728,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             newItem={() => ({ _key: randomKey(), variant: 'soft' })}
             addLabel="+ Add bar"
             renderItem={(item, update) => (
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                 <input style={{ ...inputStyle, flex: '0 0 70px' }} placeholder="Day" value={item.day ?? ''} onChange={(e) => update({ day: e.target.value })} />
                 <input style={{ ...inputStyle, flex: 1 }} type="number" placeholder="Height (px)" value={item.height ?? ''} onChange={(e) => update({ height: Number(e.target.value) })} />
                 <Select value={item.variant} onChange={(v) => update({ variant: v })} options={SINGLE_BAR_VARIANT_OPTIONS} flex="0 0 130px" />
@@ -750,7 +755,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             newItem={() => ({ _key: randomKey(), color: 'brand' })}
             addLabel="+ Add rota row"
             renderItem={(item, update) => (
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                 <input style={{ ...inputStyle, flex: 1 }} placeholder="Name" value={item.name ?? ''} onChange={(e) => update({ name: e.target.value })} />
                 <input style={{ ...inputStyle, flex: '0 0 90px' }} type="number" placeholder="Left %" value={item.left ?? ''} onChange={(e) => update({ left: Number(e.target.value) })} />
                 <input style={{ ...inputStyle, flex: '0 0 90px' }} type="number" placeholder="Width %" value={item.width ?? ''} onChange={(e) => update({ width: Number(e.target.value) })} />
@@ -817,7 +822,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             addLabel="+ Add service"
             renderItem={(item, update) => (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                   <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={item.icon ?? ''} onChange={(e) => update({ icon: e.target.value })} />
                   <input style={{ ...inputStyle, flex: 1 }} placeholder="Title" value={item.title ?? ''} onChange={(e) => update({ title: e.target.value })} />
                   <VariantSelect value={item.variant} onChange={(v) => update({ variant: v })} />
@@ -851,11 +856,11 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             addLabel="+ Add stat"
             renderItem={(item, update) => (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                   <input style={{ ...inputStyle, flex: 1 }} placeholder="Eyebrow" value={item.eyebrow ?? ''} onChange={(e) => update({ eyebrow: e.target.value })} />
                   <input style={{ ...inputStyle, flex: '0 0 70px' }} placeholder="Prefix" value={item.prefix ?? ''} onChange={(e) => update({ prefix: e.target.value })} />
                 </div>
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                   <input style={{ ...inputStyle, flex: 1 }} placeholder="Value" value={item.value ?? ''} onChange={(e) => update({ value: e.target.value })} />
                   <input style={{ ...inputStyle, flex: 1 }} placeholder="Label" value={item.label ?? ''} onChange={(e) => update({ label: e.target.value })} />
                   <VariantSelect value={item.variant} onChange={(v) => update({ variant: v })} />
@@ -888,19 +893,19 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             newItem={() => ({ _key: randomKey() })}
             addLabel="+ Add tile"
             renderItem={(item, update) => (
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                 <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={item.icon ?? ''} onChange={(e) => update({ icon: e.target.value })} />
                 <input style={{ ...inputStyle, flex: 1 }} placeholder="Label" value={item.label ?? ''} onChange={(e) => update({ label: e.target.value })} />
               </div>
             )}
           />
         </Field>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
           <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={draft.menuManagerIcon ?? ''} onChange={(e) => set('menuManagerIcon', e.target.value)} />
           <input style={{ ...inputStyle, flex: 1 }} placeholder="Menu Manager title" value={draft.menuManagerTitle ?? ''} onChange={(e) => set('menuManagerTitle', e.target.value)} />
         </div>
         <input style={inputStyle} placeholder="Menu Manager sub-copy" value={draft.menuManagerSub ?? ''} onChange={(e) => set('menuManagerSub', e.target.value)} />
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
           <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={draft.maistroIcon ?? ''} onChange={(e) => set('maistroIcon', e.target.value)} />
           <input style={{ ...inputStyle, flex: 1 }} placeholder="Maistro title" value={draft.maistroTitle ?? ''} onChange={(e) => set('maistroTitle', e.target.value)} />
         </div>
@@ -915,7 +920,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             newItem={() => ({ _key: randomKey() })}
             addLabel="+ Add tile"
             renderItem={(item, update) => (
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                 <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={item.icon ?? ''} onChange={(e) => update({ icon: e.target.value })} />
                 <input style={{ ...inputStyle, flex: 1 }} placeholder="Label" value={item.label ?? ''} onChange={(e) => update({ label: e.target.value })} />
               </div>
@@ -940,7 +945,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             addLabel="+ Add module"
             renderItem={(item, update) => (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                   <input style={{ ...inputStyle, flex: '0 0 60px' }} placeholder="Icon" value={item.icon ?? ''} onChange={(e) => update({ icon: e.target.value })} />
                   <input style={{ ...inputStyle, flex: 1 }} placeholder="Eyebrow" value={item.eyebrow ?? ''} onChange={(e) => update({ eyebrow: e.target.value })} />
                   <select style={{ ...inputStyle, flex: '0 0 130px' }} value={item.widget ?? 'rota'} onChange={(e) => update({ widget: e.target.value })}>
@@ -1000,7 +1005,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
           <input style={inputStyle} value={draft.author ?? ''} onChange={(e) => set('author', e.target.value)} />
         </Field>
         <Field label="Headline stat">
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
             <input style={{ ...inputStyle, flex: 1 }} placeholder="Value" value={draft.heroStat.value ?? ''} onChange={(e) => setHeroStat({ value: e.target.value })} />
             <input style={{ ...inputStyle, flex: 1 }} placeholder="Label" value={draft.heroStat.label ?? ''} onChange={(e) => setHeroStat({ label: e.target.value })} />
           </div>
@@ -1013,7 +1018,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             addLabel="+ Add stat"
             max={2}
             renderItem={(item, update) => (
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                 <input style={{ ...inputStyle, flex: 1 }} placeholder="Value" value={item.value ?? ''} onChange={(e) => update({ value: e.target.value })} />
                 <input style={{ ...inputStyle, flex: 1 }} placeholder="Label" value={item.label ?? ''} onChange={(e) => update({ label: e.target.value })} />
               </div>
@@ -1039,7 +1044,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             renderItem={(item, update) => (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <textarea style={textareaStyle} placeholder="Quote" value={item.quote ?? ''} onChange={(e) => update({ quote: e.target.value })} />
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
                   <input style={{ ...inputStyle, flex: 1 }} placeholder="Author" value={item.author ?? ''} onChange={(e) => update({ author: e.target.value })} />
                   <input style={{ ...inputStyle, flex: 1 }} placeholder="Role (optional)" value={item.role ?? ''} onChange={(e) => update({ role: e.target.value })} />
                   <input style={{ ...inputStyle, flex: 1 }} placeholder="Venue" value={item.venue ?? ''} onChange={(e) => update({ venue: e.target.value })} />

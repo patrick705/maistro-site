@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { BLOCK_CATEGORIES, BLOCK_TYPES } from './blockTypes'
 import { kitchen } from './theme'
+import { useIsMobile } from './useIsMobile'
 
 interface DemoModalEntry {
   label: string
@@ -17,6 +18,8 @@ const DEMO_MODAL_ENTRY: DemoModalEntry = {
 
 export function AddBlockPicker({ onAdd, onOpenDemoModalSettings }: { onAdd: (type: string) => void; onOpenDemoModalSettings: () => void }) {
   const [search, setSearch] = useState('')
+  const isMobile = useIsMobile()
+  const gridColumns = isMobile ? '1fr' : '1fr 1fr'
 
   const query = search.trim().toLowerCase()
   const matches = (label: string, description: string) => !query || label.toLowerCase().includes(query) || description.toLowerCase().includes(query)
@@ -77,7 +80,7 @@ export function AddBlockPicker({ onAdd, onOpenDemoModalSettings }: { onAdd: (typ
             >
               {g.category}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 20, rowGap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: gridColumns, columnGap: 20, rowGap: 14 }}>
               {g.items.map((t) => (
                 <BlockOption key={t.type} icon={t.icon} label={t.label} description={t.description} onClick={() => onAdd(t.type)} />
               ))}
@@ -99,7 +102,7 @@ export function AddBlockPicker({ onAdd, onOpenDemoModalSettings }: { onAdd: (typ
             >
               Global
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 20, rowGap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: gridColumns, columnGap: 20, rowGap: 14 }}>
               <BlockOption
                 icon={DEMO_MODAL_ENTRY.icon}
                 label={DEMO_MODAL_ENTRY.label}

@@ -82,13 +82,33 @@ function DocPublishControls({ id, type }: { id: string; type: string }) {
   )
 }
 
-export function TopBar({ view }: { view: KitchenView }) {
+export function TopBar({
+  view,
+  isMobile,
+  onOpenSidebar,
+}: {
+  view: KitchenView
+  isMobile: boolean
+  onOpenSidebar: () => void
+}) {
   const crumb = view
     ? view.kind === 'settings'
       ? `Site Settings / ${SETTINGS_SECTION_LABEL[view.section]}`
       : BREADCRUMB_LABEL[view.kind]
     : 'Kitchen CMS'
-  const docRef = view?.kind === 'page' ? { id: view.id, type: 'page' } : view?.kind === 'doc' ? { id: view.id, type: view.type } : null
+  // Site Settings is a singleton document ('siteSettings') — every section (Theme, General,
+  // Navigation, SEO defaults, Demo modal) edits the SAME document, just different fields on it.
+  // This was missing entirely, so every settings edit patched a draft with no way to publish it
+  // from Kitchen — changes looked like they "did nothing" because the live site only ever reads
+  // the published document.
+  const docRef =
+    view?.kind === 'page'
+      ? { id: view.id, type: 'page' }
+      : view?.kind === 'doc'
+        ? { id: view.id, type: view.type }
+        : view?.kind === 'settings'
+          ? { id: 'siteSettings', type: 'siteSettings' }
+          : null
 
   return (
     <header
@@ -103,10 +123,24 @@ export function TopBar({ view }: { view: KitchenView }) {
         background: '#fff',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: kitchen.textMuted, fontFamily: kitchen.fontMono }}>
-        <span>Kitchen CMS</span>
-        <span style={{ color: kitchen.borderDashed }}>/</span>
-        <span style={{ color: kitchen.ink }}>{crumb}</span>
+      {isMobile && (
+        <button
+          type="button"
+          onClick={onOpenSidebar}
+          aria-label="Open menu"
+          style={{ border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 18, color: kitchen.textBody, padding: 0, lineHeight: 1 }}
+        >
+          ☰
+        </button>
+      )}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: kitchen.textMuted, fontFamily: kitchen.fontMono, minWidth: 0, overflow: 'hidden' }}>
+        {!isMobile && (
+          <>
+            <span>Kitchen CMS</span>
+            <span style={{ color: kitchen.borderDashed }}>/</span>
+          </>
+        )}
+        <span style={{ color: kitchen.ink, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{crumb}</span>
       </div>
 
       {docRef && <DocPublishControls id={docRef.id} type={docRef.type} />}

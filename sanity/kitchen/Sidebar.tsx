@@ -57,7 +57,19 @@ function sectionLabelStyle(): React.CSSProperties {
   }
 }
 
-export function Sidebar({ view, onSelect }: { view: KitchenView; onSelect: (v: KitchenView) => void }) {
+export function Sidebar({
+  view,
+  onSelect,
+  isMobile,
+  isOpen,
+  onClose,
+}: {
+  view: KitchenView
+  onSelect: (v: KitchenView) => void
+  isMobile: boolean
+  isOpen: boolean
+  onClose: () => void
+}) {
   const client = useClient({ apiVersion: API_VERSION })
   const { data: pages, refetch } = useLiveQuery<PageRow[]>(PAGES_QUERY)
   const { data: counts } = useLiveQuery<{ newsArticle: number; lead: number; media: number }>(COUNTS_QUERY)
@@ -78,15 +90,40 @@ export function Sidebar({ view, onSelect }: { view: KitchenView; onSelect: (v: K
   }
 
   return (
-    <aside
-      style={{
-        width: 266,
-        flex: '0 0 266px',
-        display: 'flex',
-        flexDirection: 'column',
-        background: '#fff',
-        borderRight: `1px solid ${kitchen.border}`,
-      }}
+    <>
+      {isMobile && isOpen && (
+        <div
+          onClick={onClose}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(20,14,36,0.35)', zIndex: 29 }}
+        />
+      )}
+      <aside
+      style={
+        isMobile
+          ? {
+              position: 'fixed',
+              top: 0,
+              bottom: 0,
+              left: isOpen ? 0 : '-85vw',
+              width: '85vw',
+              maxWidth: 320,
+              zIndex: 30,
+              display: 'flex',
+              flexDirection: 'column',
+              background: '#fff',
+              borderRight: `1px solid ${kitchen.border}`,
+              transition: 'left 0.2s ease',
+              boxShadow: isOpen ? '8px 0 24px rgba(58,42,102,0.18)' : 'none',
+            }
+          : {
+              width: 266,
+              flex: '0 0 266px',
+              display: 'flex',
+              flexDirection: 'column',
+              background: '#fff',
+              borderRight: `1px solid ${kitchen.border}`,
+            }
+      }
     >
       <div
         style={{
@@ -288,6 +325,7 @@ export function Sidebar({ view, onSelect }: { view: KitchenView; onSelect: (v: K
           Default Studio view →
         </a>
       </div>
-    </aside>
+      </aside>
+    </>
   )
 }
