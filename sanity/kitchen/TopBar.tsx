@@ -1,4 +1,4 @@
-import { useDocumentOperation, useEditState } from 'sanity'
+import { useClient, useDocumentOperation, useEditState } from 'sanity'
 
 import type { KitchenView } from './KitchenTool'
 import { kitchen } from './theme'
@@ -43,6 +43,7 @@ function DocPublishControls({ id, type }: { id: string; type: string }) {
   const ops = useDocumentOperation(id, type)
   const editState = useEditState(id, type)
   const { patch } = useKitchenPatch(id, type)
+  const client = useClient({ apiVersion: '2024-01-01' })
 
   const hasDraft = Boolean(editState.draft)
   const status = hasDraft ? 'Unpublished changes' : editState.published ? 'Published' : 'Draft'
@@ -65,7 +66,13 @@ function DocPublishControls({ id, type }: { id: string; type: string }) {
   }
 
   function unpublish() {
-    patch({ showInMenu: false })
+    // A dedicated top-bar button named "Unpublish" reads as an immediate action, not
+    // a change to stage for later — so unlike every other field edit, this writes
+    // straight to the published document instead of going through the normal
+    // patch → publish flow. Also patch the draft (if one exists) so a later Publish
+    // of unrelated changes doesn't silently revert this back to shown-in-menu.
+    client.patch(id).set({ showInMenu: false }).commit()
+    if (editState.draft) client.patch(`drafts.${id}`).set({ showInMenu: false }).commit()
   }
 
   return (
