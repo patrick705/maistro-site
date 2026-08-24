@@ -23,7 +23,13 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     const merged = mergeDefined(defaultSiteSettings, data, ['theme', 'primaryCta', 'seoDefaults', 'demoModal'])
     // An unset or dangling `theme.palette` reference dereferences to null in
     // GROQ — fall back to the default palette rather than crash color math.
+    // Same for pairing/typeScale/chromeFont on documents saved before those
+    // fields existed: GROQ projects them as null rather than omitting them,
+    // so mergeDefined's nested-object spread overwrites the default with null.
     if (!merged.theme.palette) merged.theme.palette = defaultSiteSettings.theme.palette
+    if (!merged.theme.pairing) merged.theme.pairing = defaultSiteSettings.theme.pairing
+    if (!merged.theme.typeScale) merged.theme.typeScale = defaultSiteSettings.theme.typeScale
+    if (merged.theme.chromeFont == null) merged.theme.chromeFont = defaultSiteSettings.theme.chromeFont
     return merged
   } catch (err) {
     console.warn('[sanity] failed to fetch siteSettings, using defaults:', err)
