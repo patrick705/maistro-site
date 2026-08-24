@@ -516,6 +516,13 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
         <Field label="Heading">
           <input style={inputStyle} value={draft.heading ?? ''} onChange={(e) => set('heading', e.target.value)} />
         </Field>
+        <Field label="Layout">
+          <select style={inputStyle} value={draft.layout ?? 'Grid'} onChange={(e) => set('layout', e.target.value)}>
+            <option value="Grid">Grid</option>
+            <option value="Mosaic">Mosaic</option>
+            <option value="Filmstrip">Filmstrip</option>
+          </select>
+        </Field>
         <Field label="Images">
           <ArrayEditor<ImageItem>
             items={draft.images}

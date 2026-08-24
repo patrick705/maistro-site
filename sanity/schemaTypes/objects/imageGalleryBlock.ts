@@ -7,6 +7,14 @@ export const imageGalleryBlock = defineType({
   fields: [
     defineField({ name: 'heading', title: 'Heading', type: 'string' }),
     defineField({
+      name: 'layout',
+      title: 'Layout',
+      type: 'string',
+      options: { list: ['Grid', 'Mosaic', 'Filmstrip'] },
+      initialValue: 'Grid',
+      description: 'Grid: even tiles. Mosaic: a large lead tile plus a wide tile mid-grid. Filmstrip: a horizontal run with a wider opening frame.',
+    }),
+    defineField({
       name: 'images',
       title: 'Images',
       type: 'array',

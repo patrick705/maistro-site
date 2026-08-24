@@ -301,6 +301,7 @@ export interface ImageGalleryBlock {
   _type: 'imageGalleryBlock'
   _key: string
   heading?: string
+  layout?: 'Grid' | 'Mosaic' | 'Filmstrip'
   images: GalleryImage[]
 }
 

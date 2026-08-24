@@ -135,7 +135,7 @@ export function emptyBlock(type: string): Record<string, any> {
     case 'sideBySideBlock':
       return { _type: type, _key, imagePosition: 'left', heading: 'New section' }
     case 'imageGalleryBlock':
-      return { _type: type, _key, images: [] }
+      return { _type: type, _key, layout: 'Grid', images: [] }
     case 'socialLinksBlock':
       return { _type: type, _key, links: [] }
     case 'liveVideoBlock':

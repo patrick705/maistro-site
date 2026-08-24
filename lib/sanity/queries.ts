@@ -88,6 +88,7 @@ export const pageBySlugQuery = groq`
       },
       _type == "imageGalleryBlock" => {
         heading,
+        layout,
         images[]{"image": image{"url": asset->url, alt}, caption}
       },
       _type == "socialLinksBlock" => {
