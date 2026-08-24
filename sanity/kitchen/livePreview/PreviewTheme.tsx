@@ -4,7 +4,10 @@ import { useLiveQuery } from '../useLiveQuery'
 
 const THEME_QUERY = `*[_id == "siteSettings"][0]{
   theme{
-    "palette": palette->{name, brandHex, accentHex, warmHex, posHex},
+    "palette": palette->{
+      name, brandHex, accentHex, warmHex, posHex,
+      surfaceHex, brandTintHex, brandSoftHex, brandInkHex, accentInkHex, warmDeepHex, posTintHex, bodyHex
+    },
     playful,
     showResults,
     pairing,

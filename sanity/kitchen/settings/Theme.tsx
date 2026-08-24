@@ -1,3 +1,4 @@
+import { ColourRoles } from './ColourRoles'
 import { PaletteLibrary } from './PaletteLibrary'
 import { TypePairing } from './TypePairing'
 import { Toggle } from '../Toggle'
@@ -33,6 +34,8 @@ export function ThemeSettings() {
           currentPaletteId={theme.palette?._ref}
           onApply={(id) => patch({ theme: { ...theme, palette: { _type: 'reference', _ref: id } } })}
         />
+
+        <ColourRoles paletteId={theme.palette?._ref} />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <Toggle

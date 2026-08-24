@@ -8,6 +8,14 @@ export interface BrandPalette {
   accentHex: string
   warmHex: string
   posHex: string
+  surfaceHex?: string
+  brandTintHex?: string
+  brandSoftHex?: string
+  brandInkHex?: string
+  accentInkHex?: string
+  warmDeepHex?: string
+  posTintHex?: string
+  bodyHex?: string
 }
 
 export interface NavItem {

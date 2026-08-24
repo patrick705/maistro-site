@@ -21,7 +21,10 @@ export const siteSettingsQuery = groq`
     footerText,
     gtmContainerId,
     theme{
-      "palette": palette->{name, brandHex, accentHex, warmHex, posHex},
+      "palette": palette->{
+        name, brandHex, accentHex, warmHex, posHex,
+        surfaceHex, brandTintHex, brandSoftHex, brandInkHex, accentInkHex, warmDeepHex, posTintHex, bodyHex
+      },
       playful,
       showResults,
       pairing,

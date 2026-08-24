@@ -74,7 +74,7 @@
 
 .subhead {
   font-size: calc(14px * var(--type-scale));
-  color: #4a4636;
+  color: var(--body);
   margin-top: 8px;
 }
 

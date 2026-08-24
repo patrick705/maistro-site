@@ -85,7 +85,7 @@
 }
 
 .card[data-variant='warm'] .description {
-  color: #4a4636;
+  color: var(--body);
 }
 
 .card[data-variant='pos'] .description {
@@ -116,7 +116,7 @@
 }
 
 .card[data-variant='warm'] .bullet {
-  color: #4a4636;
+  color: var(--body);
 }
 
 .card[data-variant='pos'] .bullet {

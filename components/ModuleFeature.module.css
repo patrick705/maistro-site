@@ -77,7 +77,7 @@
 .body {
   font-size: calc(17px * var(--type-scale));
   line-height: 1.7;
-  color: #4a4636;
+  color: var(--body);
   margin-top: 18px;
 }
 

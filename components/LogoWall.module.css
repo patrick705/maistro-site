@@ -141,7 +141,7 @@
 .popupDescription {
   font-size: calc(15px * var(--type-scale));
   line-height: 1.6;
-  color: #4a4636;
+  color: var(--body);
   margin-top: 12px;
 }
 

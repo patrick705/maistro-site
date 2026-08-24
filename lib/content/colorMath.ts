@@ -116,6 +116,16 @@ export interface PaletteBase {
   accentHex: string
   warmHex: string
   posHex: string
+  // Optional per-role overrides — when unset, the role is auto-derived from
+  // the 4 base colors above (see Kitchen's "Colour roles" panel).
+  surfaceHex?: string
+  brandTintHex?: string
+  brandSoftHex?: string
+  brandInkHex?: string
+  accentInkHex?: string
+  warmDeepHex?: string
+  posTintHex?: string
+  bodyHex?: string
 }
 
 export interface DerivedPaletteColors {
@@ -130,21 +140,26 @@ export interface DerivedPaletteColors {
   accent: string
   accentInk: string
   surface: string
+  body: string
 }
 
-/** Expands a palette's 4 editable base colors into the full CSS-variable color set. */
+/** Flat neutral used for long-form body copy — unlike the other roles this isn't derived from brand hue. */
+const DEFAULT_BODY = '#4a4636'
+
+/** Expands a palette's 4 editable base colors into the full CSS-variable color set, honoring any per-role overrides. */
 export function derivePaletteColors(base: PaletteBase): DerivedPaletteColors {
   return {
     brand: base.brandHex,
-    brandTint: deriveTint(base.brandHex),
-    brandSoft: deriveSoft(base.brandHex),
-    brandInk: deriveInk(base.brandHex),
+    brandTint: base.brandTintHex || deriveTint(base.brandHex),
+    brandSoft: base.brandSoftHex || deriveSoft(base.brandHex),
+    brandInk: base.brandInkHex || deriveInk(base.brandHex),
     warm: base.warmHex,
-    warmDeep: deriveDeep(base.warmHex),
+    warmDeep: base.warmDeepHex || deriveDeep(base.warmHex),
     pos: base.posHex,
-    posTint: deriveTint(base.posHex),
+    posTint: base.posTintHex || deriveTint(base.posHex),
     accent: base.accentHex,
-    accentInk: deriveInk(base.accentHex),
-    surface: deriveSurface(base.brandHex),
+    accentInk: base.accentInkHex || deriveInk(base.accentHex),
+    surface: base.surfaceHex || deriveSurface(base.brandHex),
+    body: base.bodyHex || DEFAULT_BODY,
   }
 }

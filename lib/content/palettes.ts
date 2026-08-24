@@ -42,6 +42,7 @@ export function paletteToCssVars(theme: SiteTheme): Record<string, string> {
     '--accent': p.accent,
     '--accent-ink': p.accentInk,
     '--surface': p.surface,
+    '--body': p.body,
     '--playful-display': theme.playful ? 'block' : 'none',
     '--tilt-a': theme.playful ? '-2deg' : '0deg',
     '--tilt-b': theme.playful ? '2deg' : '0deg',

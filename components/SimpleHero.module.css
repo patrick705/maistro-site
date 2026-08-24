@@ -39,7 +39,7 @@
 .subhead {
   font-size: calc(20px * var(--type-scale));
   line-height: 1.55;
-  color: var(--block-ink, #4a4636);
+  color: var(--block-ink, var(--body));
   max-width: 620px;
   margin: 28px auto 0;
 }

@@ -13,10 +13,21 @@ interface PaletteDoc {
   warmHex: string
   posHex: string
   isDefaultForNewSites?: boolean
+  surfaceHex?: string
+  brandTintHex?: string
+  brandSoftHex?: string
+  brandInkHex?: string
+  accentInkHex?: string
+  warmDeepHex?: string
+  posTintHex?: string
+  bodyHex?: string
 }
 
 const API_VERSION = '2024-01-01'
-const PALETTES_QUERY = `*[_type == "brandPalette" && !(_id in path("drafts.**"))] | order(name asc){_id, name, brandHex, accentHex, warmHex, posHex, isDefaultForNewSites}`
+const PALETTES_QUERY = `*[_type == "brandPalette" && !(_id in path("drafts.**"))] | order(name asc){
+  _id, name, brandHex, accentHex, warmHex, posHex, isDefaultForNewSites,
+  surfaceHex, brandTintHex, brandSoftHex, brandInkHex, accentInkHex, warmDeepHex, posTintHex, bodyHex
+}`
 
 function randomId() {
   return 'brandPalette-' + Math.random().toString(36).slice(2, 10)

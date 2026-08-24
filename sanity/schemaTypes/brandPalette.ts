@@ -11,6 +11,16 @@ function hexField(name: string, title: string) {
   })
 }
 
+function hexOverrideField(name: string, title: string) {
+  return defineField({
+    name,
+    title,
+    description: 'Optional — leave empty to keep the value auto-derived from the 4 base colors.',
+    type: 'string',
+    validation: (r) => r.regex(HEX_RE, { name: 'hex color' }),
+  })
+}
+
 export const brandPalette = defineType({
   name: 'brandPalette',
   title: 'Brand Palette',
@@ -27,6 +37,14 @@ export const brandPalette = defineType({
       type: 'boolean',
       initialValue: false,
     }),
+    hexOverrideField('surfaceHex', 'Surface (override)'),
+    hexOverrideField('brandTintHex', 'Brand tint (override)'),
+    hexOverrideField('brandSoftHex', 'Brand soft (override)'),
+    hexOverrideField('brandInkHex', 'Brand ink (override)'),
+    hexOverrideField('accentInkHex', 'Accent ink (override)'),
+    hexOverrideField('warmDeepHex', 'Warm deep (override)'),
+    hexOverrideField('posTintHex', 'Positive tint (override)'),
+    hexOverrideField('bodyHex', 'Body text (override)'),
   ],
   preview: {
     select: { title: 'name', brand: 'brandHex', accent: 'accentHex' },
