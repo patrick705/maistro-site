@@ -136,7 +136,26 @@ export function PageBuilderView({
       <div style={{ display: 'flex', gap: 14, fontSize: 11, color: kitchen.textMuted, fontFamily: kitchen.fontMono, marginBottom: 22 }}>
         <span>/{page.slug?.current ?? '(no slug yet)'}</span>
         <span>{blocks.length} block(s)</span>
-        <span>{page.showInMenu ? 'in top menu' : 'hidden from top menu'}</span>
+        <button
+          type="button"
+          onClick={() => patch({ showInMenu: !page.showInMenu })}
+          title="Click to toggle whether this page appears in the site's top navigation"
+          style={{
+            font: 'inherit',
+            fontFamily: kitchen.fontMono,
+            fontSize: 11,
+            padding: 0,
+            border: 'none',
+            background: 'none',
+            cursor: 'pointer',
+            color: page.showInMenu ? '#2f6b52' : kitchen.textMuted,
+            textDecoration: 'underline',
+            textDecorationStyle: 'dotted',
+            textUnderlineOffset: 2,
+          }}
+        >
+          {page.showInMenu ? 'in top menu' : 'hidden from top menu'}
+        </button>
         {relativeTime(page._updatedAt) && <span>edited {relativeTime(page._updatedAt)}</span>}
         {isArchived && <span style={{ color: '#9c6a1c', fontWeight: 700 }}>archived</span>}
       </div>
