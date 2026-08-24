@@ -26,6 +26,7 @@ export function VideoUploadField({
 }) {
   const client = useClient({ apiVersion: API_VERSION })
   const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const previewUrl = studioFileUrlFor(client, value?.asset?._ref)
 
@@ -34,9 +35,12 @@ export function VideoUploadField({
     e.target.value = ''
     if (!file) return
     setUploading(true)
+    setError(null)
     try {
       const asset = await client.assets.upload('file', file, { filename: file.name })
       onChange({ _type: 'file', asset: { _type: 'reference', _ref: asset._id } })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Upload failed — try again.')
     } finally {
       setUploading(false)
     }
@@ -58,6 +62,7 @@ export function VideoUploadField({
         )}
         <input ref={inputRef} type="file" accept="video/mp4,video/webm" onChange={onFile} style={{ display: 'none' }} />
       </div>
+      {error && <span style={{ fontSize: 11, color: kitchen.danger }}>{error}</span>}
     </div>
   )
 }

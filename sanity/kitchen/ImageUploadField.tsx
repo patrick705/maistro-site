@@ -33,6 +33,7 @@ export function ImageUploadField({
 }) {
   const client = useClient({ apiVersion: API_VERSION })
   const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const url = value?.asset?._ref ? studioUrlFor(client, value).width(width * 2).height(height * 2).fit('crop').url() : null
@@ -42,9 +43,15 @@ export function ImageUploadField({
     e.target.value = ''
     if (!file) return
     setUploading(true)
+    setError(null)
     try {
       const asset = await client.assets.upload('image', file)
       onChange({ _type: 'image', asset: { _type: 'reference', _ref: asset._id }, alt: value?.alt })
+    } catch (err) {
+      // Without this, a failed upload (permissions, network, file too big)
+      // left the field silently unset — the block still saved fine, just
+      // missing its image, which then crashed the live page's <Image>.
+      setError(err instanceof Error ? err.message : 'Upload failed — try again.')
     } finally {
       setUploading(false)
     }
@@ -84,6 +91,7 @@ export function ImageUploadField({
           )}
           <input ref={inputRef} type="file" accept="image/*" onChange={onFile} style={{ display: 'none' }} />
         </div>
+        {error && <span style={{ fontSize: 11, color: kitchen.danger }}>{error}</span>}
         {showAlt && value?.asset && (
           <input
             placeholder="Alt text"

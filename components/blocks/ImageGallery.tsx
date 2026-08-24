@@ -8,7 +8,10 @@ import styles from './ImageGallery.module.css'
 
 export function ImageGallery({ block }: { block: ImageGalleryBlock }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
-  const images = block.images ?? []
+  // The image is schema-required per item, but Kitchen's custom save path
+  // doesn't enforce that before publish — drop any item that never actually
+  // got an image attached instead of crashing next/image for the whole page.
+  const images = (block.images ?? []).filter((item) => item.image?.url)
   if (!images.length) return null
 
   const open = openIndex !== null ? images[openIndex] : null

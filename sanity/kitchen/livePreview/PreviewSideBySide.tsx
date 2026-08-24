@@ -10,7 +10,26 @@ export function PreviewSideBySide({ block }: { block: SideBySideBlockData }) {
   return (
     <section className={styles.section} data-position={block.imagePosition} style={blockDesignStyle(block.design)}>
       <div className={styles.imageWrap}>
-        <PreviewImg src={block.image.url} alt={block.image.alt} fill className={styles.image} />
+        {block.image?.url ? (
+          <PreviewImg src={block.image.url} alt={block.image.alt} fill className={styles.image} />
+        ) : (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#f1eef7',
+              color: '#8b83a3',
+              fontSize: 12,
+              textAlign: 'center',
+              padding: 12,
+            }}
+          >
+            No image uploaded yet
+          </div>
+        )}
       </div>
       <div className={styles.textWrap}>
         <h2 className={styles.heading}>{block.heading}</h2>

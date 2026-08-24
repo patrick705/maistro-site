@@ -30,13 +30,32 @@ export function PreviewImageGallery({ block }: { block: ImageGalleryBlock }) {
             .join(' ')
           return (
             <button
-              key={item.image.url}
+              key={item.image?.url ?? i}
               type="button"
               className={tileClass}
-              onClick={() => setOpenIndex(i)}
+              onClick={() => item.image?.url && setOpenIndex(i)}
               aria-label={item.caption || `Open image ${i + 1}`}
             >
-              <PreviewImg src={item.image.url} alt={item.image.alt} fill className={styles.tileImage} />
+              {item.image?.url ? (
+                <PreviewImg src={item.image.url} alt={item.image.alt} fill className={styles.tileImage} />
+              ) : (
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#f1eef7',
+                    color: '#8b83a3',
+                    fontSize: 11,
+                    textAlign: 'center',
+                    padding: 8,
+                  }}
+                >
+                  No image uploaded yet
+                </div>
+              )}
             </button>
           )
         })}
