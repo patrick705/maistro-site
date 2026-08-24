@@ -49,6 +49,7 @@ export const BLOCK_TYPES: { type: string; label: string; icon: string; category:
   { type: 'richHeroBlock', label: 'Hero', icon: '🌟', category: 'Heroes & headers', description: 'Eyebrow, headline, CTAs, stat badges' },
   { type: 'simpleHeroBlock', label: 'Simple hero', icon: '✨', category: 'Heroes & headers', description: 'Headline + subhead, no CTA row' },
   { type: 'heroCarouselBlock', label: 'Page header', icon: '🖼️', category: 'Heroes & headers', description: 'Image or rotating images banner' },
+  { type: 'backgroundVideoBlock', label: 'Background video', icon: '📽️', category: 'Heroes & headers', description: 'Full-bleed looping video, optional overlay' },
 
   { type: 'dashboardShowcaseBlock', label: 'Dashboard showcase', icon: '📊', category: 'Product & story', description: 'Overview / Forecast / Staff / Stock / Reports' },
   { type: 'aboutSectionBlock', label: 'About section', icon: '🧭', category: 'Product & story', description: 'Headline, body copy, pipeline diagram' },
@@ -139,6 +140,8 @@ export function emptyBlock(type: string): Record<string, any> {
       return { _type: type, _key, links: [] }
     case 'liveVideoBlock':
       return { _type: type, _key, offlineMessage: 'Stream is currently offline' }
+    case 'backgroundVideoBlock':
+      return { _type: type, _key, loop: true, muted: true, videoHeight: 'Full screen', overlayCopy: true, scrim: true }
     case 'logoStripBlock':
       return { _type: type, _key, logos: [] }
     case 'ctaBannerBlock':

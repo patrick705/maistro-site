@@ -42,6 +42,7 @@ export const page = defineType({
         { type: 'imageGalleryBlock' },
         { type: 'socialLinksBlock' },
         { type: 'liveVideoBlock' },
+        { type: 'backgroundVideoBlock' },
         { type: 'logoStripBlock' },
         { type: 'ctaBannerBlock' },
         { type: 'richHeroBlock' },

@@ -2,6 +2,7 @@ import { forwardRef, useImperativeHandle, useState } from 'react'
 
 import { ArrayEditor } from './ArrayEditor'
 import { ImageUploadField, type SanityImageValue } from './ImageUploadField'
+import { VideoUploadField, type SanityFileValue } from './VideoUploadField'
 import { portableBodyToText, randomKey, textToPortableBody } from './blockTypes'
 import { kitchen } from './theme'
 import { useIsMobile } from './useIsMobile'
@@ -416,6 +417,51 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
         </Field>
         <Field label="Offline message">
           <input style={inputStyle} value={draft.offlineMessage ?? ''} onChange={(e) => set('offlineMessage', e.target.value)} />
+        </Field>
+      </>
+    ),
+    backgroundVideoBlock: (
+      <>
+        <Field label="Video file">
+          <VideoUploadField value={draft.video as SanityFileValue | undefined} onChange={(v) => set('video', v)} />
+        </Field>
+        <Field label="Poster frame">
+          <ImageUploadField value={draft.posterImage} onChange={(v) => set('posterImage', v)} />
+        </Field>
+        <Field label="Eyebrow">
+          <input style={inputStyle} value={draft.eyebrow ?? ''} onChange={(e) => set('eyebrow', e.target.value)} />
+        </Field>
+        <Field label="Overlay heading">
+          <input style={inputStyle} value={draft.heading ?? ''} onChange={(e) => set('heading', e.target.value)} />
+        </Field>
+        <Field label="Overlay subtext">
+          <input style={inputStyle} value={draft.subhead ?? ''} onChange={(e) => set('subhead', e.target.value)} />
+        </Field>
+        <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
+          <Field label="Primary CTA label">
+            <input style={inputStyle} value={draft.primaryCta ?? ''} onChange={(e) => set('primaryCta', e.target.value)} />
+          </Field>
+          <Field label="Secondary CTA label">
+            <input style={inputStyle} value={draft.secondaryCta ?? ''} onChange={(e) => set('secondaryCta', e.target.value)} />
+          </Field>
+        </div>
+        <Field label="Section height">
+          <select style={inputStyle} value={draft.videoHeight ?? 'Full screen'} onChange={(e) => set('videoHeight', e.target.value)}>
+            <option value="Full screen">Full screen</option>
+            <option value="Three-quarter">Three-quarter</option>
+          </select>
+        </Field>
+        <Field label="Text overlay (off puts the copy beneath the video)">
+          <input type="checkbox" checked={draft.overlayCopy ?? true} onChange={(e) => set('overlayCopy', e.target.checked)} />
+        </Field>
+        <Field label="Darken video behind text">
+          <input type="checkbox" checked={draft.scrim ?? true} onChange={(e) => set('scrim', e.target.checked)} />
+        </Field>
+        <Field label="Loop continuously">
+          <input type="checkbox" checked={draft.loop ?? true} onChange={(e) => set('loop', e.target.checked)} />
+        </Field>
+        <Field label="Muted (required for autoplay)">
+          <input type="checkbox" checked={draft.muted ?? true} onChange={(e) => set('muted', e.target.checked)} />
         </Field>
       </>
     ),

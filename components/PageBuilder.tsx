@@ -6,6 +6,7 @@ import { SideBySide } from './blocks/SideBySide'
 import { ImageGallery } from './blocks/ImageGallery'
 import { SocialLinksBlock } from './blocks/SocialLinksBlock'
 import { LiveVideo } from './blocks/LiveVideo'
+import { BackgroundVideo } from './blocks/BackgroundVideo'
 import { LogoStrip } from './blocks/LogoStrip'
 import { CtaBanner } from './blocks/CtaBanner'
 import { RichHero } from './blocks/RichHero'
@@ -39,6 +40,15 @@ export function PageBuilder({ blocks }: { blocks: PageBlock[] }) {
             return <SocialLinksBlock key={block._key} block={block} />
           case 'liveVideoBlock':
             return <LiveVideo key={block._key} block={block} />
+          case 'backgroundVideoBlock':
+            return (
+              <BackgroundVideo
+                key={block._key}
+                block={block}
+                renderPrimaryCta={(label, className) => <BookDemoButton label={label} className={className} />}
+                renderSecondaryCta={(label, className) => <BookDemoButton label={label} className={className} />}
+              />
+            )
           case 'logoStripBlock':
             return <LogoStrip key={block._key} block={block} />
           case 'ctaBannerBlock':

@@ -27,6 +27,7 @@ import { sideBySideBlock } from './objects/sideBySideBlock'
 import { imageGalleryBlock } from './objects/imageGalleryBlock'
 import { socialLinksBlock } from './objects/socialLinksBlock'
 import { liveVideoBlock } from './objects/liveVideoBlock'
+import { backgroundVideoBlock } from './objects/backgroundVideoBlock'
 import { logoStripBlock } from './objects/logoStripBlock'
 import { ctaBannerBlock } from './objects/ctaBannerBlock'
 import { richHeroBlock } from './objects/richHeroBlock'
@@ -78,6 +79,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   imageGalleryBlock,
   socialLinksBlock,
   liveVideoBlock,
+  backgroundVideoBlock,
   logoStripBlock,
   ctaBannerBlock,
   richHeroBlock,

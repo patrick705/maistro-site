@@ -100,6 +100,12 @@ export const pageBySlugQuery = groq`
         "posterImage": posterImage{"url": asset->url, alt},
         offlineMessage
       },
+      _type == "backgroundVideoBlock" => {
+        eyebrow, heading, subhead, primaryCta, secondaryCta,
+        "video": video.asset->url,
+        "posterImage": posterImage{"url": asset->url, alt},
+        loop, muted, videoHeight, overlayCopy, scrim
+      },
       _type == "logoStripBlock" => {
         heading,
         logos[]{name, "logo": logo{"url": asset->url, alt}, description, website}

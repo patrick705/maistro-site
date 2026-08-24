@@ -19,6 +19,7 @@ import { PreviewInertCta } from './PreviewInertCta'
 import { PreviewHeroCarousel } from './PreviewHeroCarousel'
 import { PreviewImageGallery } from './PreviewImageGallery'
 import { PreviewLiveVideo } from './PreviewLiveVideo'
+import { PreviewBackgroundVideo } from './PreviewBackgroundVideo'
 import { PreviewSideBySide } from './PreviewSideBySide'
 import { PreviewLogoStrip } from './PreviewLogoStrip'
 import { PreviewNewsGrid } from './PreviewNewsGrid'
@@ -55,6 +56,8 @@ function renderBlock(block: PageBlock) {
       return <SocialLinksBlock block={block} />
     case 'liveVideoBlock':
       return <PreviewLiveVideo block={block} />
+    case 'backgroundVideoBlock':
+      return <PreviewBackgroundVideo block={block} />
     case 'logoStripBlock':
       return <PreviewLogoStrip block={block} />
     case 'ctaBannerBlock':

@@ -320,6 +320,23 @@ export interface LiveVideoBlock {
   offlineMessage?: string
 }
 
+export interface BackgroundVideoBlock {
+  _type: 'backgroundVideoBlock'
+  _key: string
+  eyebrow?: string
+  heading?: string
+  subhead?: string
+  primaryCta?: string
+  secondaryCta?: string
+  video: string
+  posterImage: SeoImage
+  loop?: boolean
+  muted?: boolean
+  videoHeight?: 'Full screen' | 'Three-quarter'
+  overlayCopy?: boolean
+  scrim?: boolean
+}
+
 export interface LogoStripBlock {
   _type: 'logoStripBlock'
   _key: string
@@ -475,6 +492,7 @@ export type PageBlock =
   | ImageGalleryBlock
   | SocialLinksBlockData
   | LiveVideoBlock
+  | BackgroundVideoBlock
   | LogoStripBlock
   | CtaBannerBlock
   | RichHeroBlock
