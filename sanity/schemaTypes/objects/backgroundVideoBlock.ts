@@ -63,6 +63,21 @@ export const backgroundVideoBlock = defineType({
       initialValue: true,
       description: 'Keeps overlay copy legible over moving footage.',
     }),
+    defineField({
+      name: 'overlayPreset',
+      title: 'Overlay copy',
+      type: 'string',
+      options: { list: ['Full', 'Minimal'] },
+      initialValue: 'Full',
+      description: 'Minimal drops the eyebrow, subhead and second CTA — less to read over moving footage.',
+    }),
+    defineField({
+      name: 'scrollCue',
+      title: 'Scroll cue',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Shows a small bobbing ↓ indicator at the bottom of the hero.',
+    }),
   ],
   preview: {
     select: { title: 'heading', media: 'posterImage' },

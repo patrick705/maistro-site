@@ -337,6 +337,8 @@ export interface BackgroundVideoBlock {
   overlayCopy?: boolean
   scrim?: boolean
   menuOverlay?: boolean
+  overlayPreset?: 'Full' | 'Minimal'
+  scrollCue?: boolean
 }
 
 export interface LogoStripBlock {

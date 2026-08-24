@@ -150,6 +150,8 @@ export function emptyBlock(type: string): Record<string, any> {
         overlayCopy: true,
         scrim: true,
         menuOverlay: true,
+        overlayPreset: 'Full',
+        scrollCue: true,
       }
     case 'logoStripBlock':
       return { _type: type, _key, logos: [] }

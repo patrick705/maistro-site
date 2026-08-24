@@ -460,6 +460,18 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
         <Field label="Darken video behind text">
           <input type="checkbox" checked={draft.scrim ?? true} onChange={(e) => set('scrim', e.target.checked)} />
         </Field>
+        <Field label="Overlay copy">
+          <select style={inputStyle} value={draft.overlayPreset ?? 'Full'} onChange={(e) => set('overlayPreset', e.target.value)}>
+            <option value="Full">Full</option>
+            <option value="Minimal">Minimal</option>
+          </select>
+          <span style={{ display: 'block', fontSize: 10.5, lineHeight: 1.45, color: kitchen.textFaint, marginTop: 4 }}>
+            Minimal drops the eyebrow, subhead and second CTA
+          </span>
+        </Field>
+        <Field label="Scroll cue">
+          <input type="checkbox" checked={draft.scrollCue ?? true} onChange={(e) => set('scrollCue', e.target.checked)} />
+        </Field>
         <Field label="Loop continuously">
           <input type="checkbox" checked={draft.loop ?? true} onChange={(e) => set('loop', e.target.checked)} />
         </Field>

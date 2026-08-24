@@ -46,6 +46,8 @@ export function PreviewBackgroundVideo({ block, isFirst }: { block: Record<strin
   const overlayCopy = block.overlayCopy !== false
   const scrim = block.scrim !== false
   const hasCopy = Boolean(block.eyebrow || block.heading || block.subhead || block.primaryCta || block.secondaryCta)
+  const minimal = block.overlayPreset === 'Minimal'
+  const showCue = block.scrollCue !== false
 
   return (
     <section
@@ -116,13 +118,13 @@ export function PreviewBackgroundVideo({ block, isFirst }: { block: Record<strin
       {overlayCopy && scrim && <div className={styles.scrim} />}
       {overlayCopy && hasCopy && (
         <div className={styles.overlay}>
-          {block.eyebrow && <span className={styles.eyebrow}>{block.eyebrow}</span>}
+          {!minimal && block.eyebrow && <span className={styles.eyebrow}>{block.eyebrow}</span>}
           {block.heading && <h2 className={styles.heading}>{block.heading}</h2>}
-          {block.subhead && <p className={styles.subhead}>{block.subhead}</p>}
-          {(block.primaryCta || block.secondaryCta) && (
+          {!minimal && block.subhead && <p className={styles.subhead}>{block.subhead}</p>}
+          {(block.primaryCta || (!minimal && block.secondaryCta)) && (
             <div className={styles.ctas}>
               {block.primaryCta && <PreviewInertCta label={block.primaryCta} className={styles.primaryCta} />}
-              {block.secondaryCta && <PreviewInertCta label={block.secondaryCta} className={styles.secondaryCta} />}
+              {!minimal && block.secondaryCta && <PreviewInertCta label={block.secondaryCta} className={styles.secondaryCta} />}
             </div>
           )}
         </div>
@@ -140,6 +142,7 @@ export function PreviewBackgroundVideo({ block, isFirst }: { block: Record<strin
           )}
         </div>
       )}
+      {showCue && <span className={styles.cue}>↓</span>}
     </section>
   )
 }

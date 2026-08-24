@@ -14,6 +14,9 @@ export function BackgroundVideo({
   const overlayCopy = block.overlayCopy !== false
   const scrim = block.scrim !== false
   const hasCopy = Boolean(block.eyebrow || block.heading || block.subhead || block.primaryCta || block.secondaryCta)
+  // Minimal keeps the headline and one CTA — less to read over moving footage.
+  const minimal = block.overlayPreset === 'Minimal'
+  const showCue = block.scrollCue !== false
 
   return (
     <section
@@ -32,13 +35,13 @@ export function BackgroundVideo({
       {overlayCopy && scrim && <div className={styles.scrim} />}
       {overlayCopy && hasCopy && (
         <div className={styles.overlay}>
-          {block.eyebrow && <span className={styles.eyebrow}>{block.eyebrow}</span>}
+          {!minimal && block.eyebrow && <span className={styles.eyebrow}>{block.eyebrow}</span>}
           {block.heading && <h2 className={styles.heading}>{block.heading}</h2>}
-          {block.subhead && <p className={styles.subhead}>{block.subhead}</p>}
-          {(block.primaryCta || block.secondaryCta) && (
+          {!minimal && block.subhead && <p className={styles.subhead}>{block.subhead}</p>}
+          {(block.primaryCta || (!minimal && block.secondaryCta)) && (
             <div className={styles.ctas}>
               {block.primaryCta && renderPrimaryCta(block.primaryCta, styles.primaryCta)}
-              {block.secondaryCta && renderSecondaryCta(block.secondaryCta, styles.secondaryCta)}
+              {!minimal && block.secondaryCta && renderSecondaryCta(block.secondaryCta, styles.secondaryCta)}
             </div>
           )}
         </div>
@@ -56,6 +59,7 @@ export function BackgroundVideo({
           )}
         </div>
       )}
+      {showCue && <span className={styles.cue}>↓</span>}
     </section>
   )
 }
