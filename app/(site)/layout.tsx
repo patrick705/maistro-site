@@ -5,7 +5,6 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { ThemeVars } from '@/components/ThemeVars'
 import { DemoModalProvider } from '@/lib/demo-modal-context'
-import { HeaderOverlayProvider } from '@/lib/header-overlay-context'
 import { getPagesForNav, getSiteSettings } from '@/lib/sanity/fetch'
 
 export default async function SiteLayout({ children }: { children: ReactNode }) {
@@ -15,16 +14,14 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
   return (
     <ThemeVars theme={siteSettings.theme}>
       <DemoModalProvider>
-        <HeaderOverlayProvider>
-          <SiteHeader
-            siteName={siteSettings.siteName}
-            logo={siteSettings.logo}
-            navItems={navItems}
-            primaryCta={siteSettings.primaryCta}
-            stickyNav={siteSettings.stickyNav}
-          />
-          {children}
-        </HeaderOverlayProvider>
+        <SiteHeader
+          siteName={siteSettings.siteName}
+          logo={siteSettings.logo}
+          navItems={navItems}
+          primaryCta={siteSettings.primaryCta}
+          stickyNav={siteSettings.stickyNav}
+        />
+        {children}
         <SiteFooter
           siteName={siteSettings.siteName}
           footerText={siteSettings.footerText}

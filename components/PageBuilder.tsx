@@ -1,6 +1,5 @@
 import type { PageBlock } from '@/lib/content/types'
 import { BookDemoButton } from './BookDemoButton'
-import { HeaderOverlayRequest } from './HeaderOverlayRequest'
 import { HeroCarousel } from './blocks/HeroCarousel'
 import { TextBlock } from './blocks/TextBlock'
 import { SideBySide } from './blocks/SideBySide'
@@ -30,7 +29,7 @@ export function PageBuilder({ blocks }: { blocks: PageBlock[] }) {
 
   return (
     <>
-      <HeaderOverlayRequest enabled={wantsHeaderOverlay} />
+      {wantsHeaderOverlay && <div data-header-overlay="true" aria-hidden="true" style={{ display: 'none' }} />}
       {blocks.map((block) => {
         switch (block._type) {
           case 'heroCarouselBlock':
