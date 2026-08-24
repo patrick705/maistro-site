@@ -1,5 +1,6 @@
 import type { PageBlock } from '@/lib/content/types'
 import { BookDemoButton } from './BookDemoButton'
+import { HeaderOverlayRequest } from './HeaderOverlayRequest'
 import { HeroCarousel } from './blocks/HeroCarousel'
 import { TextBlock } from './blocks/TextBlock'
 import { SideBySide } from './blocks/SideBySide'
@@ -24,8 +25,12 @@ import { TestimonialGridBlockView } from './blocks/TestimonialGridBlockView'
 import { NewsGridBlockView } from './blocks/NewsGridBlockView'
 
 export function PageBuilder({ blocks }: { blocks: PageBlock[] }) {
+  const leading = blocks[0]
+  const wantsHeaderOverlay = leading?._type === 'backgroundVideoBlock' && leading.menuOverlay !== false
+
   return (
     <>
+      <HeaderOverlayRequest enabled={wantsHeaderOverlay} />
       {blocks.map((block) => {
         switch (block._type) {
           case 'heroCarouselBlock':

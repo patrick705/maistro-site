@@ -141,7 +141,16 @@ export function emptyBlock(type: string): Record<string, any> {
     case 'liveVideoBlock':
       return { _type: type, _key, offlineMessage: 'Stream is currently offline' }
     case 'backgroundVideoBlock':
-      return { _type: type, _key, loop: true, muted: true, videoHeight: 'Full screen', overlayCopy: true, scrim: true }
+      return {
+        _type: type,
+        _key,
+        loop: true,
+        muted: true,
+        videoHeight: 'Full screen',
+        overlayCopy: true,
+        scrim: true,
+        menuOverlay: true,
+      }
     case 'logoStripBlock':
       return { _type: type, _key, logos: [] }
     case 'ctaBannerBlock':

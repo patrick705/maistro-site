@@ -1,7 +1,10 @@
+'use client'
+
 import { BookDemoButton } from './BookDemoButton'
 import { Logo } from './Logo'
 import { SiteNav } from './SiteNav'
 import styles from './SiteHeader.module.css'
+import { useHeaderOverlay } from '@/lib/header-overlay-context'
 import type { NavItem, PrimaryCta, SeoImage } from '@/lib/content/types'
 
 export function SiteHeader({
@@ -17,8 +20,13 @@ export function SiteHeader({
   primaryCta: PrimaryCta
   stickyNav?: boolean
 }) {
+  const { overlay } = useHeaderOverlay()
+  const className = [styles.header, stickyNav && styles.sticky, overlay && styles.transparent]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <header className={stickyNav ? `${styles.header} ${styles.sticky}` : styles.header}>
+    <header className={className}>
       <div className={styles.logoWrap}>
         <Logo siteName={siteName} variant="header" logo={logo} />
       </div>

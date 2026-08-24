@@ -104,7 +104,7 @@ export const pageBySlugQuery = groq`
         eyebrow, heading, subhead, primaryCta, secondaryCta,
         "video": video.asset->url,
         "posterImage": posterImage{"url": asset->url, alt},
-        loop, muted, videoHeight, overlayCopy, scrim
+        loop, muted, videoHeight, overlayCopy, scrim, menuOverlay
       },
       _type == "logoStripBlock" => {
         heading,

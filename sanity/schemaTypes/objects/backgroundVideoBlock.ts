@@ -43,6 +43,13 @@ export const backgroundVideoBlock = defineType({
       initialValue: 'Full screen',
     }),
     defineField({
+      name: 'menuOverlay',
+      title: 'Top menu over the video',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Draws the site nav transparently over the footage instead of a solid bar above it. Off starts the video below a solid nav.',
+    }),
+    defineField({
       name: 'overlayCopy',
       title: 'Text overlay',
       type: 'boolean',

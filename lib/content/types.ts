@@ -335,6 +335,7 @@ export interface BackgroundVideoBlock {
   videoHeight?: 'Full screen' | 'Three-quarter'
   overlayCopy?: boolean
   scrim?: boolean
+  menuOverlay?: boolean
 }
 
 export interface LogoStripBlock {
