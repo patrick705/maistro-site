@@ -22,6 +22,7 @@ const SETTINGS_SECTION_LABEL: Record<string, string> = {
 interface PageLikeDoc {
   slug?: { current?: string }
   archived?: boolean
+  showInMenu?: boolean
 }
 
 function ghostButtonStyle(disabled: boolean): React.CSSProperties {
@@ -48,12 +49,13 @@ function DocPublishControls({ id, type }: { id: string; type: string }) {
 
   const doc = (editState.draft ?? editState.published) as PageLikeDoc | null
   const isPage = type === 'page'
-  // The Home page owns the site's root URL and siteSettings is the one
-  // singleton every page depends on — unpublishing either would take the
-  // whole site (or its theme/nav) down, so both are excluded here.
   const isHomePage = isPage && doc?.slug?.current === 'home'
   const isArchived = isPage && Boolean(doc?.archived)
-  const canUnpublish = type !== 'siteSettings' && !isHomePage && ops.unpublish.disabled === false
+  // "Unpublish" here means take it out of the top menu, not take the page
+  // offline — the page keeps rendering fine at its URL, it just stops being
+  // linked from the nav. Taking a page fully offline (404) is what Archive
+  // is for.
+  const canUnpublish = isPage && Boolean(doc?.showInMenu)
 
   function toggleArchive() {
     if (isHomePage) return
@@ -63,8 +65,7 @@ function DocPublishControls({ id, type }: { id: string; type: string }) {
   }
 
   function unpublish() {
-    if (!confirm('Take this page offline? Its live URL will 404 until you publish it again.')) return
-    ops.unpublish.execute()
+    patch({ showInMenu: false })
   }
 
   return (
