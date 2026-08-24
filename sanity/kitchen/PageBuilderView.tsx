@@ -53,7 +53,7 @@ export function PageBuilderView({
   onOpenDemoModalSettings: () => void
   onOpenThemeSettings: () => void
 }) {
-  const { doc, patch } = useKitchenPatch(pageId, 'page')
+  const { doc, patch, rawPatch } = useKitchenPatch(pageId, 'page')
   // Previews default to expanded (matching the mockup) — this tracks which
   // blocks have been manually collapsed, not which ones are expanded.
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
@@ -63,25 +63,32 @@ export function PageBuilderView({
 
   const page = doc as PageDoc | null
   const blocks = page?.blocks ?? []
+  // Reordering is the one operation that genuinely needs the whole array (the
+  // new order can't be expressed as a single keyed patch) — add/remove/edit
+  // below deliberately avoid this, see the comment on `updateBlock`.
   const { dragHandlers } = useDragReorder(blocks as { _key: string }[], (next) => patch({ blocks: next }))
 
   if (!page) return <div style={{ padding: 24, color: kitchen.textFaint }}>Loading…</div>
 
-  function setBlocks(next: Record<string, any>[]) {
-    patch({ blocks: next })
-  }
-
   function addBlock(type: string) {
-    setBlocks([...blocks, emptyBlock(type)])
+    rawPatch((p) => p.setIfMissing({ blocks: [] }).insert('after', 'blocks[-1]', [emptyBlock(type)]))
     setAddMenuOpen(false)
   }
 
   function removeBlock(key: string) {
-    setBlocks(blocks.filter((b) => b._key !== key))
+    rawPatch((p) => p.unset([`blocks[_key=="${key}"]`]))
   }
 
   function updateBlock(key: string, fields: Record<string, unknown>) {
-    setBlocks(blocks.map((b) => (b._key === key ? { ...b, ...fields } : b)))
+    // Deliberately a keyed set on just this one block, not `patch({ blocks: [...] })`
+    // with the whole array re-sent from this tab's local copy — that pattern
+    // silently deleted every OTHER block on this page when this tab's copy of
+    // `blocks` was stale (e.g. edited in another tab/session in the meantime).
+    // A keyed set only ever touches the one block named here.
+    const current = blocks.find((b) => b._key === key)
+    if (current) {
+      rawPatch((p) => p.set({ [`blocks[_key=="${key}"]`]: { ...current, ...fields } }))
+    }
     setEditing(null)
   }
 
