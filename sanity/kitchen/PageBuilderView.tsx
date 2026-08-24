@@ -9,6 +9,15 @@ import { BLOCK_TYPES, blockCountBadge, emptyBlock, pascalTag } from './blockType
 import { kitchen } from './theme'
 import { useDragReorder } from './useDragReorder'
 import { useKitchenPatch } from './useKitchenPatch'
+import { RESERVED_SLUGS } from '../schemaTypes/page'
+
+function slugify(input: string): string {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
 
 interface PageDoc {
   _id: string
@@ -92,9 +101,25 @@ export function PageBuilderView({
   return (
     <div style={{ maxWidth: 780, margin: '0 auto', padding: '26px 24px 72px' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 6 }}>
-        <h1 style={{ margin: 0, fontFamily: kitchen.fontDisplay, fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>
-          {page.title || 'Untitled page'}
-        </h1>
+        <input
+          value={page.title ?? ''}
+          onChange={(e) => patch({ title: e.target.value })}
+          placeholder="Untitled page"
+          style={{
+            flex: '1 1 auto',
+            minWidth: 0,
+            margin: 0,
+            padding: 0,
+            border: 'none',
+            outline: 'none',
+            background: 'transparent',
+            fontFamily: kitchen.fontDisplay,
+            fontSize: 26,
+            fontWeight: 700,
+            letterSpacing: '-0.02em',
+            color: kitchen.ink,
+          }}
+        />
         <div style={{ display: 'flex', gap: 8, flex: '0 0 auto' }}>
           <button
             type="button"
@@ -133,8 +158,38 @@ export function PageBuilderView({
           </button>
         </div>
       </div>
-      <div style={{ display: 'flex', gap: 14, fontSize: 11, color: kitchen.textMuted, fontFamily: kitchen.fontMono, marginBottom: 22 }}>
-        <span>/{page.slug?.current ?? '(no slug yet)'}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 11, color: kitchen.textMuted, fontFamily: kitchen.fontMono, marginBottom: 4 }}>
+        {isHome ? (
+          <span title="The Home page's slug can't change — it would take your root URL offline.">/{page.slug?.current}</span>
+        ) : (
+          <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <span>/</span>
+            <input
+              value={page.slug?.current ?? ''}
+              onChange={(e) => patch({ slug: { _type: 'slug', current: slugify(e.target.value) } })}
+              placeholder="page-slug"
+              style={{
+                width: Math.max(70, ((page.slug?.current ?? 'page-slug').length + 1) * 6.5),
+                border: 'none',
+                outline: 'none',
+                background: 'transparent',
+                font: 'inherit',
+                fontFamily: kitchen.fontMono,
+                fontSize: 11,
+                color: page.slug?.current ? kitchen.textMuted : kitchen.textFaint,
+              }}
+            />
+            {!page.slug?.current && page.title && (
+              <button
+                type="button"
+                onClick={() => patch({ slug: { _type: 'slug', current: slugify(page.title!) } })}
+                style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer', color: kitchen.accent, font: 'inherit', fontFamily: kitchen.fontMono, fontSize: 11, textDecoration: 'underline' }}
+              >
+                generate from title
+              </button>
+            )}
+          </span>
+        )}
         <span>{blocks.length} block(s)</span>
         <button
           type="button"
@@ -158,6 +213,13 @@ export function PageBuilderView({
         </button>
         {relativeTime(page._updatedAt) && <span>edited {relativeTime(page._updatedAt)}</span>}
         {isArchived && <span style={{ color: '#9c6a1c', fontWeight: 700 }}>archived</span>}
+      </div>
+      <div style={{ marginBottom: 22 }}>
+        {!isHome && page.slug?.current && RESERVED_SLUGS.includes(page.slug.current) && (
+          <div style={{ fontSize: 11, color: kitchen.danger, marginTop: 4 }}>
+            “/{page.slug.current}” is reserved for an existing page — choose a different slug so this one doesn't collide with it.
+          </div>
+        )}
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>

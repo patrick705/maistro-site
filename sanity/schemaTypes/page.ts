@@ -1,6 +1,6 @@
 import { defineField, defineType } from 'sanity'
 
-const RESERVED_SLUGS = ['', 'home', 'studio', 'api']
+export const RESERVED_SLUGS = ['', 'home', 'studio', 'api']
 
 export const page = defineType({
   name: 'page',
