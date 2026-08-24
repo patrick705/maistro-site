@@ -15,10 +15,21 @@ export interface NavItem {
   href: string
 }
 
+export type TypePairing =
+  | 'Bricolage / Space Grotesk'
+  | 'Instrument Serif / Work Sans'
+  | 'Sora / DM Sans'
+  | 'Playfair / Manrope'
+
+export type TypeScale = 'Compact' | 'Default' | 'Large'
+
 export interface SiteTheme {
   palette: BrandPalette
   playful: boolean
   showResults: boolean
+  pairing: TypePairing
+  typeScale: TypeScale
+  chromeFont: boolean
 }
 
 export interface SocialLink {

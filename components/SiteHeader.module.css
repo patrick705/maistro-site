@@ -26,7 +26,7 @@
 .nav {
   display: flex;
   gap: 32px;
-  font-size: 15px;
+  font-size: calc(15px * var(--type-scale));
   font-weight: 600;
   font-family: var(--font-body);
 }
@@ -42,7 +42,7 @@
 .cta {
   background: var(--brand);
   color: var(--warm);
-  font-size: 14px;
+  font-size: calc(14px * var(--type-scale));
   font-weight: 700;
   padding: 13px 26px;
   border: none;
@@ -67,7 +67,7 @@
     width: 100%;
     flex-direction: column;
     gap: 16px;
-    font-size: 13px;
+    font-size: calc(13px * var(--type-scale));
     padding-top: 8px;
   }
 
@@ -80,7 +80,7 @@
     align-items: center;
     order: 3;
     cursor: pointer;
-    font-size: 26px;
+    font-size: calc(26px * var(--type-scale));
     line-height: 1;
     color: var(--brand);
   }

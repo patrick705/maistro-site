@@ -40,7 +40,7 @@
   font-family: var(--font-display);
   font-weight: 800;
   color: var(--warm);
-  font-size: 17px;
+  font-size: calc(17px * var(--type-scale));
 }
 
 .dashTitle {
@@ -51,7 +51,7 @@
 }
 
 .dashSubtitle {
-  font-size: 11px;
+  font-size: calc(11px * var(--type-scale));
   color: #8a8f9c;
 }
 
@@ -63,7 +63,7 @@
 
 .dashDate {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   color: #5b6172;
   background: #f5f7fc;
   padding: 8px 14px;
@@ -86,7 +86,7 @@
 
 .tab {
   cursor: pointer;
-  font-size: 13px;
+  font-size: calc(13px * var(--type-scale));
   font-weight: 600;
   color: #5b6172;
   background: #f5f7fc;
@@ -120,20 +120,20 @@
 }
 
 .kpiLabel {
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   color: #8a8f9c;
   margin-bottom: 8px;
 }
 
 .kpiValue {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: calc(28px * var(--type-scale));
   font-weight: 800;
   color: var(--brand);
 }
 
 .kpiValueSmall {
-  font-size: 26px;
+  font-size: calc(26px * var(--type-scale));
 }
 
 .kpiValueAccent {
@@ -141,7 +141,7 @@
 }
 
 .kpiDelta {
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   margin-top: 4px;
   color: #8a8f9c;
 }
@@ -173,14 +173,14 @@
 
 .panelCardTitle {
   font-weight: 700;
-  font-size: 14px;
+  font-size: calc(14px * var(--type-scale));
   color: var(--brand);
 }
 
 .legend {
   display: flex;
   gap: 14px;
-  font-size: 11px;
+  font-size: calc(11px * var(--type-scale));
   color: #8a8f9c;
 }
 
@@ -224,7 +224,7 @@
 }
 
 .barLabel {
-  font-size: 11px;
+  font-size: calc(11px * var(--type-scale));
   color: #8a8f9c;
 }
 
@@ -248,13 +248,13 @@
 }
 
 .personName {
-  font-size: 13px;
+  font-size: calc(13px * var(--type-scale));
   font-weight: 600;
   color: #2a2e38;
 }
 
 .personRole {
-  font-size: 11px;
+  font-size: calc(11px * var(--type-scale));
   color: #8a8f9c;
 }
 
@@ -267,7 +267,7 @@
 .progressHead {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   margin-bottom: 6px;
 }
 
@@ -304,7 +304,7 @@
 
 .rotaName {
   width: 80px;
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   color: #8a8f9c;
 }
 
@@ -326,7 +326,7 @@
 .rotaAxis {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: calc(11px * var(--type-scale));
   color: #b0b4bf;
   margin-top: 12px;
   padding-left: 91px;
@@ -345,13 +345,13 @@
 
 .reportBandTitle {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: calc(20px * var(--type-scale));
   font-weight: 800;
   color: #fff;
 }
 
 .reportBandSub {
-  font-size: 13px;
+  font-size: calc(13px * var(--type-scale));
   color: var(--brand-tint);
   margin-top: 4px;
 }
@@ -360,7 +360,7 @@
   background: var(--warm);
   color: var(--brand);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   font-weight: 600;
   padding: 8px 14px;
   border-radius: 999px;

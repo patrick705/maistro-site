@@ -1,5 +1,18 @@
 import type { Metadata } from 'next'
-import { Bricolage_Grotesque, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
+import {
+  Bricolage_Grotesque,
+  DM_Mono,
+  DM_Sans,
+  IBM_Plex_Mono,
+  Instrument_Serif,
+  JetBrains_Mono,
+  Manrope,
+  Playfair_Display,
+  Sora,
+  Space_Grotesk,
+  Space_Mono,
+  Work_Sans,
+} from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { getSiteSettings } from '@/lib/sanity/fetch'
@@ -22,6 +35,37 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ['400', '500'],
 })
 
+// Alternate type pairings, offered in Site Settings → Theme → Type pairing.
+// next/font only serves the woff2 files a rendered element actually needs, so
+// loading all of these costs nothing unless an editor switches away from the
+// default Bricolage / Space Grotesk pairing.
+const instrumentSerif = Instrument_Serif({ variable: '--font-instrument-serif', subsets: ['latin'], weight: ['400'] })
+const workSans = Work_Sans({ variable: '--font-work-sans', subsets: ['latin'], weight: ['400', '500', '600', '700'] })
+const ibmPlexMono = IBM_Plex_Mono({ variable: '--font-ibm-plex-mono', subsets: ['latin'], weight: ['400', '500'] })
+const sora = Sora({ variable: '--font-sora', subsets: ['latin'], weight: ['400', '600', '700', '800'] })
+const dmSans = DM_Sans({ variable: '--font-dm-sans', subsets: ['latin'], weight: ['400', '500', '700'] })
+const dmMono = DM_Mono({ variable: '--font-dm-mono', subsets: ['latin'], weight: ['400', '500'] })
+const playfairDisplay = Playfair_Display({ variable: '--font-playfair-display', subsets: ['latin'], weight: ['600', '700', '800'] })
+const manrope = Manrope({ variable: '--font-manrope', subsets: ['latin'], weight: ['400', '500', '600', '700'] })
+const spaceMono = Space_Mono({ variable: '--font-space-mono', subsets: ['latin'], weight: ['400', '700'] })
+
+const fontVariables = [
+  bricolageGrotesque,
+  spaceGrotesk,
+  jetbrainsMono,
+  instrumentSerif,
+  workSans,
+  ibmPlexMono,
+  sora,
+  dmSans,
+  dmMono,
+  playfairDisplay,
+  manrope,
+  spaceMono,
+]
+  .map((f) => f.variable)
+  .join(' ')
+
 export const metadata: Metadata = {
   title: 'Maistro — Run your whole operation with one AI',
   description:
@@ -33,10 +77,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const gtmId = siteSettings.gtmContainerId
 
   return (
-    <html
-      lang="en"
-      className={`${bricolageGrotesque.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
-    >
+    <html lang="en" className={fontVariables}>
       {gtmId && (
         <Script id="gtm-script" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

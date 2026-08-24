@@ -30,7 +30,7 @@
 
 .groupLabel {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: calc(10px * var(--type-scale));
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--brand-tint);
@@ -56,11 +56,11 @@
 }
 
 .tileIcon {
-  font-size: 22px;
+  font-size: calc(22px * var(--type-scale));
 }
 
 .tileLabel {
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   font-weight: 600;
   color: #fff;
 }
@@ -79,19 +79,19 @@
 }
 
 .coreIcon {
-  font-size: 34px;
+  font-size: calc(34px * var(--type-scale));
   animation: floaty 3.4s ease-in-out infinite;
 }
 
 .coreTitle {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: calc(22px * var(--type-scale));
   font-weight: 800;
   margin-top: 4px;
 }
 
 .coreSub {
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   font-weight: 600;
   margin-top: 2px;
 }

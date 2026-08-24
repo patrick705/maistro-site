@@ -32,6 +32,9 @@ export const defaultSiteSettings: SiteSettings = {
     },
     playful: false,
     showResults: true,
+    pairing: 'Bricolage / Space Grotesk',
+    typeScale: 'Default',
+    chromeFont: false,
   },
   seoDefaults: {
     metaTitleSuffix: '— Maistro',

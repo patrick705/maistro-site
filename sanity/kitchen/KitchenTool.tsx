@@ -12,7 +12,7 @@ import { GeneralSettings } from './settings/General'
 import { NavigationSettings } from './settings/Navigation'
 import { SeoDefaultsSettings } from './settings/SeoDefaults'
 import { DemoModalSettings } from './settings/DemoModal'
-import { googleFontsHref, kitchen } from './theme'
+import { PAIRING_FONTS, googleFontsHref, kitchen } from './theme'
 import { useLiveQuery } from './useLiveQuery'
 import { useIsMobile } from './useIsMobile'
 
@@ -33,6 +33,12 @@ export function KitchenTool() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const isMobile = useIsMobile()
   const { data: pages } = useLiveQuery<{ _id: string; slug?: string }[]>(DEFAULT_PAGE_QUERY)
+  const { data: chrome } = useLiveQuery<{ theme?: { pairing?: string; chromeFont?: boolean } }>(
+    `*[_id == "siteSettings"][0]{theme{pairing, chromeFont}}`,
+  )
+  const chromeFontBody = chrome?.theme?.chromeFont
+    ? (PAIRING_FONTS[chrome.theme.pairing ?? 'Bricolage / Space Grotesk'] ?? PAIRING_FONTS['Bricolage / Space Grotesk']).body
+    : undefined
 
   // On mobile the sidebar is an off-canvas panel — close it the moment something is picked,
   // same as any mobile nav drawer. On desktop it's always visible, so this is a no-op there.
@@ -70,6 +76,7 @@ export function KitchenTool() {
         fontSize: 13,
         fontFamily: kitchen.fontBody,
         color: kitchen.ink,
+        ...(chromeFontBody ? { ['--kitchen-font-body' as string]: chromeFontBody } : {}),
       }}
     >
       <Sidebar view={view} onSelect={setView} isMobile={isMobile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />

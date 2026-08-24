@@ -8,7 +8,7 @@ export function ThemeVars({ theme, children }: { theme: SiteTheme; children: Rea
     width: '100%',
     background: 'var(--surface)',
     fontFamily: 'var(--font-body)',
-    ...(paletteToCssVars(theme.palette, theme.playful, theme.showResults) as CSSProperties),
+    ...(paletteToCssVars(theme) as CSSProperties),
   }
 
   return <div style={style}>{children}</div>

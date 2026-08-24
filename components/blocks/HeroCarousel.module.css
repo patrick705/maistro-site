@@ -37,7 +37,7 @@
 
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: calc(13px * var(--type-scale));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.85;
@@ -52,7 +52,7 @@
 
 .subhead {
   max-width: 560px;
-  font-size: 17px;
+  font-size: calc(17px * var(--type-scale));
   opacity: 0.92;
 }
 

@@ -28,7 +28,7 @@
   background: #e0263e;
   color: #fff;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   font-weight: 700;
   letter-spacing: 0.05em;
   padding: 4px 10px;
@@ -57,7 +57,7 @@
 
 .offlineMessage {
   color: #fff;
-  font-size: 16px;
+  font-size: calc(16px * var(--type-scale));
   font-weight: 600;
   text-align: center;
   padding: 12px 24px;
@@ -66,6 +66,6 @@
 .caption {
   margin-top: 12px;
   text-align: center;
-  font-size: 14px;
+  font-size: calc(14px * var(--type-scale));
   color: #555;
 }

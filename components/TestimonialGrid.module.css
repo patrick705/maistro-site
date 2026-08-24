@@ -10,7 +10,7 @@
 
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--warm-deep);
@@ -44,13 +44,13 @@
 
 .stars {
   color: var(--warm);
-  font-size: 16px;
+  font-size: calc(16px * var(--type-scale));
   letter-spacing: 2px;
   margin-bottom: 16px;
 }
 
 .quote {
-  font-size: 16px;
+  font-size: calc(16px * var(--type-scale));
   line-height: 1.65;
   color: #2a2e38;
   flex: 1;
@@ -59,13 +59,13 @@
 .author {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 16px;
+  font-size: calc(16px * var(--type-scale));
   color: var(--brand);
   margin-top: 22px;
 }
 
 .role {
-  font-size: 13px;
+  font-size: calc(13px * var(--type-scale));
   color: #8a8f9c;
 }
 
@@ -75,6 +75,6 @@
   }
 
   .headline {
-    font-size: clamp(28px, 8vw, 48px);
+    font-size: clamp(calc(28px * var(--type-scale)), 8vw, calc(48px * var(--type-scale)));
   }
 }

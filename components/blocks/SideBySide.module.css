@@ -36,7 +36,7 @@
 }
 
 .body {
-  font-size: 16px;
+  font-size: calc(16px * var(--type-scale));
   line-height: 1.7;
   color: var(--block-ink, #333);
 }

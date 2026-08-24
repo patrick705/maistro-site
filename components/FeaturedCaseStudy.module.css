@@ -16,7 +16,7 @@
 
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--warm);
@@ -33,7 +33,7 @@
 }
 
 .body {
-  font-size: 17px;
+  font-size: calc(17px * var(--type-scale));
   line-height: 1.7;
   color: var(--brand-tint);
   margin-top: 20px;
@@ -51,14 +51,14 @@
 }
 
 .quoteText {
-  font-size: 14px;
+  font-size: calc(14px * var(--type-scale));
   color: #fff;
   font-style: italic;
   line-height: 1.5;
 }
 
 .author {
-  font-size: 13px;
+  font-size: calc(13px * var(--type-scale));
   color: var(--warm);
   font-weight: 600;
   margin-top: 12px;
@@ -78,14 +78,14 @@
 
 .heroStatValue {
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: calc(54px * var(--type-scale));
   font-weight: 800;
   line-height: 0.9;
   color: var(--brand);
 }
 
 .heroStatLabel {
-  font-size: 14px;
+  font-size: calc(14px * var(--type-scale));
   color: var(--warm-deep);
   font-weight: 600;
   margin-top: 6px;
@@ -106,13 +106,13 @@
 
 .statValue {
   font-family: var(--font-display);
-  font-size: 38px;
+  font-size: calc(38px * var(--type-scale));
   font-weight: 800;
   color: #fff;
 }
 
 .statLabel {
-  font-size: 13px;
+  font-size: calc(13px * var(--type-scale));
   color: var(--brand-tint);
   margin-top: 4px;
 }

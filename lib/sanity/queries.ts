@@ -23,7 +23,10 @@ export const siteSettingsQuery = groq`
     theme{
       "palette": palette->{name, brandHex, accentHex, warmHex, posHex},
       playful,
-      showResults
+      showResults,
+      pairing,
+      typeScale,
+      chromeFont
     },
     seoDefaults{
       metaTitleSuffix,

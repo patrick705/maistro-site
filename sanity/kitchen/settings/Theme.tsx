@@ -1,4 +1,5 @@
 import { PaletteLibrary } from './PaletteLibrary'
+import { TypePairing } from './TypePairing'
 import { Toggle } from '../Toggle'
 import { kitchen } from '../theme'
 import { useKitchenPatch } from '../useKitchenPatch'
@@ -9,6 +10,9 @@ interface SiteSettingsDoc {
     palette?: { _ref?: string }
     playful?: boolean
     showResults?: boolean
+    pairing?: string
+    typeScale?: string
+    chromeFont?: boolean
   }
 }
 
@@ -44,6 +48,15 @@ export function ThemeSettings() {
             onChange={(v) => patch({ theme: { ...theme, showResults: v } })}
           />
         </div>
+
+        <TypePairing
+          pairing={theme.pairing ?? 'Bricolage / Space Grotesk'}
+          typeScale={theme.typeScale ?? 'Default'}
+          chromeFont={Boolean(theme.chromeFont)}
+          onApplyPairing={(name) => patch({ theme: { ...theme, pairing: name } })}
+          onSetScale={(scale) => patch({ theme: { ...theme, typeScale: scale } })}
+          onSetChromeFont={(v) => patch({ theme: { ...theme, chromeFont: v } })}
+        />
       </div>
     </div>
   )

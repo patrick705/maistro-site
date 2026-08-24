@@ -11,7 +11,7 @@
   background: var(--brand);
   color: var(--warm);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: calc(12px * var(--type-scale));
   padding: 9px 18px;
   border-radius: 999px;
   letter-spacing: 0.1em;
@@ -37,7 +37,7 @@
 }
 
 .subhead {
-  font-size: 20px;
+  font-size: calc(20px * var(--type-scale));
   line-height: 1.55;
   color: var(--block-ink, #4a4636);
   max-width: 620px;
