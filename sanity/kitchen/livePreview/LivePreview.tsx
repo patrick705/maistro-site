@@ -35,14 +35,14 @@ import type { PageBlock } from '../../../lib/content/types'
  * for why (no next/image server here, and a preview must never be able to
  * open the real demo modal or submit a real lead).
  */
-export function LivePreview({ block }: { block: Record<string, any> }) {
+export function LivePreview({ block, isFirst }: { block: Record<string, any>; isFirst?: boolean }) {
   // Kitchen's in-memory blocks come straight off a Sanity document fetch, not
   // validated against `PageBlock` — this is the one boundary cast, after which
   // switching on `_type` narrows correctly for every case below.
-  return <PreviewTheme>{renderBlock(block as PageBlock)}</PreviewTheme>
+  return <PreviewTheme>{renderBlock(block as PageBlock, isFirst)}</PreviewTheme>
 }
 
-function renderBlock(block: PageBlock) {
+function renderBlock(block: PageBlock, isFirst?: boolean) {
   switch (block._type) {
     case 'heroCarouselBlock':
       return <PreviewHeroCarousel block={block} />
@@ -57,7 +57,7 @@ function renderBlock(block: PageBlock) {
     case 'liveVideoBlock':
       return <PreviewLiveVideo block={block} />
     case 'backgroundVideoBlock':
-      return <PreviewBackgroundVideo block={block} />
+      return <PreviewBackgroundVideo block={block} isFirst={isFirst} />
     case 'logoStripBlock':
       return <PreviewLogoStrip block={block} />
     case 'ctaBannerBlock':

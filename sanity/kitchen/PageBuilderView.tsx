@@ -223,7 +223,7 @@ export function PageBuilderView({
           </div>
         )}
 
-        {blocks.map((block) => {
+        {blocks.map((block, index) => {
           const meta = BLOCK_TYPES.find((t) => t.type === block._type)
           const isExpanded = !collapsed.has(block._key)
           const isConditional = block._type === 'statsBandBlock'
@@ -274,7 +274,7 @@ export function PageBuilderView({
               {isExpanded && (
                 <div style={{ borderTop: `1px solid ${kitchen.borderSoft}`, borderRadius: '0 0 9px 9px', overflow: 'hidden' }}>
                   <KitchenErrorBoundary label="Preview">
-                    <LivePreview block={block} />
+                    <LivePreview block={block} isFirst={index === 0} />
                   </KitchenErrorBoundary>
                 </div>
               )}

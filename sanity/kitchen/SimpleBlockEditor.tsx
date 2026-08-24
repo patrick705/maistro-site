@@ -451,6 +451,9 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             <option value="Three-quarter">Three-quarter</option>
           </select>
         </Field>
+        <Field label="Top menu over the video (off starts the video below a solid nav)">
+          <input type="checkbox" checked={draft.menuOverlay ?? true} onChange={(e) => set('menuOverlay', e.target.checked)} />
+        </Field>
         <Field label="Text overlay (off puts the copy beneath the video)">
           <input type="checkbox" checked={draft.overlayCopy ?? true} onChange={(e) => set('overlayCopy', e.target.checked)} />
         </Field>
@@ -462,9 +465,6 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
         </Field>
         <Field label="Muted (required for autoplay)">
           <input type="checkbox" checked={draft.muted ?? true} onChange={(e) => set('muted', e.target.checked)} />
-        </Field>
-        <Field label="Top menu over the video (off starts the video below a solid nav)">
-          <input type="checkbox" checked={draft.menuOverlay ?? true} onChange={(e) => set('menuOverlay', e.target.checked)} />
         </Field>
       </>
     ),
