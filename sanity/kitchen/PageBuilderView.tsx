@@ -87,16 +87,6 @@ export function PageBuilderView({
 
   const isHome = page.slug?.current === 'home'
   const isArchived = page.archived === true
-  const pageTitle = page.title || 'this page'
-
-  function toggleArchived() {
-    if (isHome) return
-    const next = !isArchived
-    if (next && !confirm(`Archive "${pageTitle}"? Once published, its URL will 404 and it drops out of the top menu. You can restore it any time from here.`)) {
-      return
-    }
-    patch({ archived: next })
-  }
 
   return (
     <div style={{ maxWidth: 780, margin: '0 auto', padding: '26px 24px 72px' }}>
@@ -136,25 +126,6 @@ export function PageBuilderView({
             }}
           >
             SEO &amp; metadata
-          </button>
-          <button
-            type="button"
-            onClick={toggleArchived}
-            disabled={isHome}
-            title={isHome ? 'The Home page can’t be archived — that would take your whole site offline.' : undefined}
-            style={{
-              padding: '6px 12px',
-              border: `1px solid ${isArchived ? kitchen.accent : kitchen.borderInput}`,
-              borderRadius: 7,
-              background: isArchived ? kitchen.accent : '#fff',
-              color: isHome ? kitchen.textFaint : isArchived ? '#fff' : kitchen.textBody,
-              fontWeight: 600,
-              fontSize: 11.5,
-              cursor: isHome ? 'not-allowed' : 'pointer',
-              opacity: isHome ? 0.5 : 1,
-            }}
-          >
-            {isArchived ? 'Restore page' : 'Archive page'}
           </button>
         </div>
       </div>

@@ -74,9 +74,30 @@ export function Sidebar({
   const { data: pages, refetch } = useLiveQuery<PageRow[]>(PAGES_QUERY)
   const { data: counts } = useLiveQuery<{ newsArticle: number; lead: number; media: number }>(COUNTS_QUERY)
   const [showArchived, setShowArchived] = useState(false)
+  const [dragId, setDragId] = useState<string | null>(null)
+  const [overId, setOverId] = useState<string | null>(null)
 
   const activePages = (pages ?? []).filter((p) => !p.archived)
   const archivedPages = (pages ?? []).filter((p) => p.archived)
+
+  // Reordering is a structural/organizational change (like a palette's "default for new
+  // sites" flag) rather than page content, so it writes straight to the published
+  // documents instead of going through drafts — a drag-to-reorder gesture shouldn't leave
+  // you needing to publish half a dozen pages just to see the new order take effect.
+  async function dropPage(targetId: string) {
+    const fromId = dragId
+    setDragId(null)
+    setOverId(null)
+    if (!fromId || fromId === targetId) return
+    const list = activePages.slice()
+    const fromIndex = list.findIndex((p) => p._id === fromId)
+    if (fromIndex < 0) return
+    const [moved] = list.splice(fromIndex, 1)
+    const toIndex = list.findIndex((p) => p._id === targetId)
+    list.splice(toIndex < 0 ? list.length : toIndex, 0, moved)
+    await Promise.all(list.map((p, i) => client.patch(p._id).set({ menuOrder: i + 1 }).commit()))
+    refetch()
+  }
 
   async function addPage() {
     const created = await client.create({
@@ -192,7 +213,33 @@ export function Sidebar({
         </button>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: archivedPages.length > 0 ? 6 : 18 }}>
           {activePages.map((p) => (
-            <div key={p._id} onClick={() => onSelect({ kind: 'page', id: p._id })} style={rowStyle(view?.kind === 'page' && view.id === p._id)}>
+            <div
+              key={p._id}
+              onClick={() => onSelect({ kind: 'page', id: p._id })}
+              draggable
+              onDragStart={(e) => {
+                e.dataTransfer.effectAllowed = 'move'
+                setDragId(p._id)
+              }}
+              onDragOver={(e) => {
+                e.preventDefault()
+                if (overId !== p._id) setOverId(p._id)
+              }}
+              onDragEnd={() => {
+                setDragId(null)
+                setOverId(null)
+              }}
+              onDrop={(e) => {
+                e.preventDefault()
+                dropPage(p._id)
+              }}
+              style={{
+                ...rowStyle(view?.kind === 'page' && view.id === p._id),
+                opacity: dragId === p._id ? 0.45 : 1,
+                boxShadow: overId === p._id && dragId !== p._id ? `inset 0 2px 0 ${kitchen.accent}` : 'none',
+              }}
+            >
+              <span style={{ width: 9, textAlign: 'center', fontSize: 11, color: kitchen.borderDashed, cursor: 'grab', letterSpacing: '-2px' }}>⠿</span>
               <span style={{ width: 14, textAlign: 'center', fontSize: 11, color: kitchen.textFaint }}>▤</span>
               <span style={{ flex: '1 1 auto', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {p.title}

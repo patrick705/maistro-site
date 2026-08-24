@@ -2,6 +2,7 @@ import { useDocumentOperation, useEditState } from 'sanity'
 
 import type { KitchenView } from './KitchenTool'
 import { kitchen } from './theme'
+import { useKitchenPatch } from './useKitchenPatch'
 
 const BREADCRUMB_LABEL: Record<string, string> = {
   page: 'Pages',
@@ -18,12 +19,53 @@ const SETTINGS_SECTION_LABEL: Record<string, string> = {
   demoModal: 'Demo modal',
 }
 
+interface PageLikeDoc {
+  slug?: { current?: string }
+  archived?: boolean
+}
+
+function ghostButtonStyle(disabled: boolean): React.CSSProperties {
+  return {
+    padding: '5px 11px',
+    border: `1px solid ${kitchen.borderInput}`,
+    borderRadius: 7,
+    background: '#fff',
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    font: 'inherit',
+    fontSize: 12,
+    color: kitchen.textBody,
+    opacity: disabled ? 0.5 : 1,
+  }
+}
+
 function DocPublishControls({ id, type }: { id: string; type: string }) {
   const ops = useDocumentOperation(id, type)
   const editState = useEditState(id, type)
+  const { patch } = useKitchenPatch(id, type)
 
   const hasDraft = Boolean(editState.draft)
   const status = hasDraft ? 'Unpublished changes' : editState.published ? 'Published' : 'Draft'
+
+  const doc = (editState.draft ?? editState.published) as PageLikeDoc | null
+  const isPage = type === 'page'
+  // The Home page owns the site's root URL and siteSettings is the one
+  // singleton every page depends on — unpublishing either would take the
+  // whole site (or its theme/nav) down, so both are excluded here.
+  const isHomePage = isPage && doc?.slug?.current === 'home'
+  const isArchived = isPage && Boolean(doc?.archived)
+  const canUnpublish = type !== 'siteSettings' && !isHomePage && ops.unpublish.disabled === false
+
+  function toggleArchive() {
+    if (isHomePage) return
+    const next = !isArchived
+    if (next && !confirm('Archive this page? Its URL will 404 and it drops out of the top menu until restored.')) return
+    patch(next ? { archived: true, showInMenu: false } : { archived: false })
+  }
+
+  function unpublish() {
+    if (!confirm('Take this page offline? Its live URL will 404 until you publish it again.')) return
+    ops.unpublish.execute()
+  }
 
   return (
     <>
@@ -44,20 +86,29 @@ function DocPublishControls({ id, type }: { id: string; type: string }) {
           type="button"
           disabled={ops.discardChanges.disabled !== false}
           onClick={() => ops.discardChanges.execute()}
-          style={{
-            padding: '5px 11px',
-            border: `1px solid ${kitchen.borderInput}`,
-            borderRadius: 7,
-            background: '#fff',
-            cursor: ops.discardChanges.disabled ? 'not-allowed' : 'pointer',
-            font: 'inherit',
-            fontSize: 12,
-            color: kitchen.textBody,
-            opacity: ops.discardChanges.disabled ? 0.5 : 1,
-          }}
+          style={ghostButtonStyle(ops.discardChanges.disabled !== false)}
         >
           Discard changes
         </button>
+        {canUnpublish && (
+          <button type="button" onClick={unpublish} style={ghostButtonStyle(false)}>
+            Unpublish
+          </button>
+        )}
+        {isPage && (
+          <button
+            type="button"
+            onClick={toggleArchive}
+            disabled={isHomePage}
+            title={isHomePage ? 'The Home page can’t be archived — that would take your whole site offline.' : undefined}
+            style={{
+              ...ghostButtonStyle(isHomePage),
+              ...(isArchived ? { borderColor: kitchen.accent, color: kitchen.accent } : {}),
+            }}
+          >
+            {isArchived ? 'Restore' : 'Archive'}
+          </button>
+        )}
         <button
           type="button"
           disabled={ops.publish.disabled !== false}
