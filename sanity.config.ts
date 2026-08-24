@@ -1,4 +1,5 @@
 import { defineConfig } from 'sanity'
+import type { ToolMenuProps } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 
@@ -28,6 +29,18 @@ export default defineConfig({
 
   // Kitchen CMS is the primary editing surface; the default structure tool
   // stays registered as a fallback escape hatch for anything the bespoke
-  // Kitchen views don't cover yet (see docs/page-builder-spec.md follow-up).
+  // Kitchen views don't cover yet (see docs/page-builder-spec.md follow-up) —
+  // reachable via the "Default Studio view" link in Kitchen's own sidebar,
+  // at /studio/structure, even though it's hidden from the tool switcher below.
   tools: (prev) => [{ name: 'kitchen', title: 'Kitchen CMS', component: KitchenTool }, ...prev],
+
+  // Kitchen is a full replacement UI with its own header — the native
+  // tool-switcher row is dead weight above it. Sanity collapses the tool menu
+  // to nothing once only one tool remains, so this shrinks the navbar down to
+  // its minimum instead of just hiding buttons.
+  studio: {
+    components: {
+      toolMenu: (props: ToolMenuProps) => props.renderDefault({ ...props, tools: props.tools.filter((t) => t.name === 'kitchen') }),
+    },
+  },
 })
