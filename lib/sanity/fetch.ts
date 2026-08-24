@@ -74,7 +74,10 @@ export async function getPagesForNav(): Promise<NavItem[]> {
     const data = await client.fetch<
       { title: string; navLabel?: string; slug: string; menuOrder?: number }[] | null
     >(pagesForNavQuery, {}, { next: { revalidate: REVALIDATE_SECONDS } })
-    return (data ?? []).map((page) => ({ label: page.navLabel || page.title, href: `/${page.slug}` }))
+    return (data ?? []).map((page) => ({
+      label: page.navLabel || page.title,
+      href: page.slug === 'home' ? '/' : `/${page.slug}`,
+    }))
   } catch (err) {
     console.warn('[sanity] failed to fetch pages for nav:', err)
     return []
