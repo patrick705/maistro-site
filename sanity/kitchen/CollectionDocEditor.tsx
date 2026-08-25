@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { ImageUploadField, type SanityImageValue } from './ImageUploadField'
 import { kitchen } from './theme'
 import { useKitchenPatch } from './useKitchenPatch'
 
@@ -33,6 +34,8 @@ interface NewsArticleDoc {
   category?: string
   icon?: string
   variant?: string
+  heroImage?: SanityImageValue
+  author?: string
   publishedAt?: string
   body?: { _key: string; children?: { text?: string }[] }[]
 }
@@ -87,7 +90,17 @@ export function CollectionDocEditor({ id, onBack }: { id: string; onBack: () => 
           />
         </label>
 
+        <label style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+          <span style={labelStyle()}>Hero image · shown at the top when the article is opened</span>
+          <ImageUploadField value={article.heroImage} onChange={(v) => patch({ heroImage: v })} width={140} height={90} />
+        </label>
+
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            <span style={labelStyle()}>Author</span>
+            <input style={{ ...inputStyle, width: 180 }} value={article.author ?? ''} onChange={(e) => patch({ author: e.target.value })} />
+          </label>
+
           <label style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
             <span style={labelStyle()}>Category</span>
             <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>

@@ -13,10 +13,26 @@
   margin-bottom: 32px;
 }
 
+.heroImageWrap {
+  display: block;
+  margin-bottom: 32px;
+}
+
+.heroImage {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+
 .metaRow {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.author {
+  font-size: calc(13px * var(--type-scale));
+  color: #8a8f9c;
 }
 
 .iconBadge {

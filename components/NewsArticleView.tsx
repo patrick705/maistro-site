@@ -39,12 +39,26 @@ export function NewsArticleView({ article }: { article: NewsArticle }) {
         ← All news
       </Link>
 
+      {article.heroImage?.url && (
+        <span className={styles.heroImageWrap}>
+          <Image
+            src={article.heroImage.url}
+            alt={article.heroImage.alt || article.title}
+            width={1120}
+            height={630}
+            priority
+            className={styles.heroImage}
+          />
+        </span>
+      )}
+
       <div className={styles.metaRow}>
         <span className={styles.iconBadge} data-variant={article.variant}>
           {article.icon}
         </span>
         <span className={styles.category}>{article.category}</span>
         <span className={styles.date}>{formatDate(article.publishedAt)}</span>
+        {article.author && <span className={styles.author}>By {article.author}</span>}
       </div>
 
       <h1 className={styles.title}>{article.title}</h1>

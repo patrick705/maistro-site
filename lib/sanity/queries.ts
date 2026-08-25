@@ -212,8 +212,9 @@ export const pageBySlugQuery = groq`
 
 export const newsArticleBySlugQuery = groq`
   *[_type == "newsArticle" && slug.current == $slug][0]{
-    title, excerpt, category, icon, variant, publishedAt,
+    title, excerpt, category, icon, variant, author, publishedAt,
     "slug": slug.current,
+    "heroImage": heroImage{"url": asset->url, alt},
     body[]{
       ...,
       _type == "image" => {

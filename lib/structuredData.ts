@@ -46,6 +46,7 @@ export function clientsJsonLd(clients: ClientLogo[]) {
 
 export function newsArticleJsonLd(article: NewsArticle) {
   const seo = article.seo
+  const image = seo?.ogImage?.url || article.heroImage?.url
   return {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
@@ -53,6 +54,7 @@ export function newsArticleJsonLd(article: NewsArticle) {
     description: seo?.metaDescription || article.excerpt,
     datePublished: article.publishedAt,
     url: `${SITE_URL}/news/${article.slug}`,
-    ...(seo?.ogImage?.url ? { image: [seo.ogImage.url] } : {}),
+    ...(image ? { image: [image] } : {}),
+    ...(article.author ? { author: { '@type': 'Person', name: article.author } } : {}),
   }
 }

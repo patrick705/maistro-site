@@ -39,6 +39,16 @@ export const newsArticle = defineType({
       validation: (r) => r.required(),
     }),
     colorVariantField,
+    defineField({
+      name: 'heroImage',
+      title: 'Hero image',
+      description: 'Shown at the top of the article when opened.',
+      type: 'image',
+      options: { hotspot: true },
+      validation: (r) => r.required(),
+      fields: [defineField({ name: 'alt', title: 'Alternative text', type: 'string', validation: (r) => r.required() })],
+    }),
+    defineField({ name: 'author', title: 'Author', type: 'string' }),
     defineField({ name: 'publishedAt', title: 'Published at', type: 'datetime', validation: (r) => r.required() }),
     defineField({
       name: 'archived',

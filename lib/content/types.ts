@@ -155,6 +155,8 @@ export interface NewsArticle {
   category: string
   icon: string
   variant: ColorVariant
+  heroImage?: SeoImage
+  author?: string
   publishedAt: string
   body?: PortableTextBlock[]
   seo?: Seo
