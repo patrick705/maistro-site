@@ -1,5 +1,10 @@
+'use client'
+
+import { useState } from 'react'
+
 import { BookDemoButton } from './BookDemoButton'
 import { Logo } from './Logo'
+import { MobileNavDrawer } from './MobileNavDrawer'
 import { SiteNav } from './SiteNav'
 import styles from './SiteHeader.module.css'
 import type { NavItem, PrimaryCta, SeoImage } from '@/lib/content/types'
@@ -17,20 +22,23 @@ export function SiteHeader({
   primaryCta: PrimaryCta
   stickyNav?: boolean
 }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+
   return (
     <header className={stickyNav ? `${styles.header} ${styles.sticky}` : styles.header}>
       <div className={styles.logoWrap}>
         <Logo siteName={siteName} variant="header" logo={logo} />
       </div>
 
-      <input type="checkbox" id="navtoggle" className={styles.navToggle} />
       <SiteNav navItems={navItems} />
 
       <BookDemoButton label={primaryCta.label} href={primaryCta.href} className={styles.cta} />
 
-      <label htmlFor="navtoggle" className={styles.burger} aria-label="Open menu">
+      <button type="button" className={styles.burger} onClick={() => setMenuOpen(true)} aria-label="Open menu">
         ☰
-      </label>
+      </button>
+
+      <MobileNavDrawer open={menuOpen} onClose={() => setMenuOpen(false)} navItems={navItems} primaryCta={primaryCta} />
     </header>
   )
 }

@@ -53,10 +53,6 @@ body:has([data-header-overlay='true']) .burger {
   gap: 11px;
 }
 
-.navToggle {
-  display: none;
-}
-
 .nav {
   display: flex;
   gap: 32px;
@@ -98,15 +94,6 @@ body:has([data-header-overlay='true']) .burger {
 
   .nav {
     display: none;
-    width: 100%;
-    flex-direction: column;
-    gap: 16px;
-    font-size: calc(13px * var(--type-scale));
-    padding-top: 8px;
-  }
-
-  .navToggle:checked ~ .nav {
-    display: flex;
   }
 
   .burger {
