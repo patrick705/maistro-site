@@ -32,11 +32,13 @@ export function SiteHeader({
 
       <SiteNav navItems={navItems} />
 
-      <BookDemoButton label={primaryCta.label} href={primaryCta.href} className={styles.cta} />
+      <div className={styles.headerActions}>
+        <BookDemoButton label={primaryCta.label} href={primaryCta.href} className={styles.cta} />
 
-      <button type="button" className={styles.burger} onClick={() => setMenuOpen(true)} aria-label="Open menu">
-        ☰
-      </button>
+        <button type="button" className={styles.burger} onClick={() => setMenuOpen(true)} aria-label="Open menu">
+          ☰
+        </button>
+      </div>
 
       <MobileNavDrawer open={menuOpen} onClose={() => setMenuOpen(false)} navItems={navItems} primaryCta={primaryCta} />
     </header>
