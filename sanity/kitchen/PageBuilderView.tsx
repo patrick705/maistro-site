@@ -208,39 +208,45 @@ export function PageBuilderView({
         {blocks.length > 1 && <span style={{ fontSize: 10.5, color: kitchen.textFaint }}>drag to reorder</span>}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {blocks.length === 0 && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 6,
-              padding: '34px 20px',
-              border: `1px dashed ${kitchen.borderInput}`,
-              borderRadius: 10,
-              background: '#fff',
-              textAlign: 'center',
-            }}
-          >
-            <span style={{ fontFamily: kitchen.fontDisplay, fontSize: 15, fontWeight: 700 }}>No sections yet</span>
-            <span style={{ fontSize: 12, color: kitchen.textMuted, maxWidth: 340 }}>
-              Add a block below to start building this page.
-            </span>
-          </div>
-        )}
+      {blocks.length === 0 && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 6,
+            padding: '34px 20px',
+            border: `1px dashed ${kitchen.borderInput}`,
+            borderRadius: 10,
+            background: '#fff',
+            textAlign: 'center',
+          }}
+        >
+          <span style={{ fontFamily: kitchen.fontDisplay, fontSize: 15, fontWeight: 700 }}>No sections yet</span>
+          <span style={{ fontSize: 12, color: kitchen.textMuted, maxWidth: 340 }}>
+            Add a block below to start building this page.
+          </span>
+        </div>
+      )}
 
-        {blocks.map((block, index) => {
-          const meta = BLOCK_TYPES.find((t) => t.type === block._type)
-          const isExpanded = !collapsed.has(block._key)
-          const isConditional = block._type === 'statsBandBlock'
-          const countBadge = blockCountBadge(block)
-          return (
-            <div
-              key={block._key}
-              {...dragHandlers(block._key)}
-              style={{ border: `1px solid ${kitchen.borderSoft}`, borderRadius: 10, background: '#fff' }}
-            >
+      {blocks.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 14, background: '#F1EDF9', borderRadius: 16 }}>
+          {blocks.map((block, index) => {
+            const meta = BLOCK_TYPES.find((t) => t.type === block._type)
+            const isExpanded = !collapsed.has(block._key)
+            const isConditional = block._type === 'statsBandBlock'
+            const countBadge = blockCountBadge(block)
+            return (
+              <div
+                key={block._key}
+                {...dragHandlers(block._key)}
+                style={{
+                  border: `1px solid ${kitchen.borderSoft}`,
+                  borderRadius: 14,
+                  background: '#fff',
+                  boxShadow: '0 2px 10px rgba(58, 42, 102, 0.06)',
+                }}
+              >
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px' }}>
                 <span style={{ color: kitchen.borderDashed, fontSize: 13, cursor: 'grab', letterSpacing: '-2px' }}>⠿</span>
                 <span style={{ fontSize: 15 }}>{meta?.icon ?? '▢'}</span>
@@ -288,7 +294,8 @@ export function PageBuilderView({
             </div>
           )
         })}
-      </div>
+        </div>
+      )}
 
       {editing &&
         (() => {
