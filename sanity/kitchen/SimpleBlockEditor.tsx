@@ -540,11 +540,11 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
         <Field label="Show voice AI automation savings">
           <input type="checkbox" checked={draft.voiceEnabled ?? true} onChange={(e) => set('voiceEnabled', e.target.checked)} />
         </Field>
-        <Field label="Benchmark comparison table">
-          <input type="checkbox" checked={draft.showBenchmarkTable ?? true} onChange={(e) => set('showBenchmarkTable', e.target.checked)} />
+        <Field label="Consultation banner heading">
+          <input style={inputStyle} value={draft.consultationHeading ?? 'Get a free consultation'} onChange={(e) => set('consultationHeading', e.target.value)} />
         </Field>
-        <Field label="Export button label">
-          <input style={inputStyle} value={draft.exportLabel ?? 'Export Analysis'} onChange={(e) => set('exportLabel', e.target.value)} />
+        <Field label="Consultation button label">
+          <input style={inputStyle} value={draft.exportLabel ?? 'Get consultation'} onChange={(e) => set('exportLabel', e.target.value)} />
         </Field>
         <Field label="Disclaimer">
           <textarea style={textareaStyle} value={draft.disclaimer ?? ''} onChange={(e) => set('disclaimer', e.target.value)} />

@@ -29,7 +29,8 @@ export const roiCalculatorBlock = defineType({
     defineField({
       name: 'benchmarks',
       title: 'Benchmark bands',
-      description: 'Shown in the Current / With Maistro / Best Target comparison table — informational only, not part of the calculation.',
+      description:
+        'The first entry shows as the "target" hint under the stock slider, the second under the staff slider. Informational only, not part of the calculation.',
       type: 'array',
       of: [
         {
@@ -50,13 +51,12 @@ export const roiCalculatorBlock = defineType({
       initialValue: true,
     }),
     defineField({
-      name: 'showBenchmarkTable',
-      title: 'Benchmark comparison table',
-      type: 'boolean',
-      initialValue: true,
-      description: 'Off hides the Current / With Maistro / Best Target table.',
+      name: 'consultationHeading',
+      title: 'Consultation banner heading',
+      type: 'string',
+      initialValue: 'Get a free consultation',
     }),
-    defineField({ name: 'exportLabel', title: 'Export button label', type: 'string', initialValue: 'Export Analysis' }),
+    defineField({ name: 'exportLabel', title: 'Consultation button label', type: 'string', initialValue: 'Get consultation' }),
     defineField({
       name: 'disclaimer',
       title: 'Disclaimer',

@@ -111,7 +111,7 @@ export const pageBySlugQuery = groq`
         eyebrow, heading, subhead, currency,
         defaultMonthlySales, defaultStockPct, defaultStaffPct, defaultOnlinePct, defaultPhoneCalls,
         benchmarks[]{_key, label, range},
-        voiceEnabled, showBenchmarkTable, exportLabel, disclaimer
+        voiceEnabled, consultationHeading, exportLabel, disclaimer
       },
       _type == "logoStripBlock" => {
         heading,

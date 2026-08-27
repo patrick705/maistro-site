@@ -1,5 +1,5 @@
 export interface LeadPayload {
-  name: string
+  name?: string
   email: string
   company?: string
   venues?: string

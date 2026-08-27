@@ -363,7 +363,7 @@ export interface RoiCalculatorBlock {
   defaultPhoneCalls?: number
   benchmarks?: RoiBenchmarkBand[]
   voiceEnabled?: boolean
-  showBenchmarkTable?: boolean
+  consultationHeading?: string
   exportLabel?: string
   disclaimer?: string
 }

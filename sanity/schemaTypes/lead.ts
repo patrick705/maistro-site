@@ -6,7 +6,12 @@ export const lead = defineType({
   title: 'Lead',
   type: 'document',
   fields: [
-    defineField({ name: 'name', title: 'Name', type: 'string', validation: (r) => r.required() }),
+    defineField({
+      name: 'name',
+      title: 'Name',
+      type: 'string',
+      description: 'Not collected by the ROI calculator export — email-only there.',
+    }),
     defineField({ name: 'email', title: 'Email', type: 'string', validation: (r) => r.required() }),
     defineField({ name: 'company', title: 'Company', type: 'string' }),
     defineField({ name: 'venues', title: 'Venues', type: 'string' }),
@@ -30,5 +35,8 @@ export const lead = defineType({
   ],
   preview: {
     select: { title: 'name', subtitle: 'email' },
+    prepare({ title, subtitle }) {
+      return { title: title || subtitle || 'Untitled lead', subtitle: title ? subtitle : undefined }
+    },
   },
 })

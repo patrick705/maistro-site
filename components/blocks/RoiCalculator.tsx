@@ -19,8 +19,18 @@ function currencySymbol(currency: string | undefined) {
   return '€'
 }
 
+function centsLabel(symbol: string) {
+  if (symbol === '£') return '75p'
+  if (symbol === '$') return '75¢'
+  return '75c'
+}
+
 function formatMoney(value: number, symbol: string) {
   return `${symbol}${Math.round(value).toLocaleString('en-IE')}`
+}
+
+function formatPct(value: number) {
+  return `${value.toFixed(1)}%`
 }
 
 interface Inputs {
@@ -40,10 +50,10 @@ function calculate(inputs: Inputs, voiceEnabled: boolean) {
   const staffSave = (staffCost * (inputs.staffPct - staffAfterPct)) / 100
   const voiceSave = voiceEnabled ? inputs.phoneCalls * VOICE_SAVE_RATE : 0
   const totalMonthly = stockSave + staffSave + voiceSave
-  return { stockCost, staffCost, stockAfterPct, staffAfterPct, stockSave, staffSave, voiceSave, totalMonthly, annual: totalMonthly * 12 }
+  return { stockCost, staffCost, stockAfterPct, staffAfterPct, stockSave, staffSave, voiceSave, totalMonthly }
 }
 
-type ExportStatus = 'idle' | 'open' | 'submitting' | 'success' | 'error'
+type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error'
 
 export function RoiCalculator({
   block,
@@ -55,7 +65,6 @@ export function RoiCalculator({
 }) {
   const symbol = currencySymbol(block.currency)
   const voiceEnabled = block.voiceEnabled !== false
-  const showBenchmarkTable = block.showBenchmarkTable !== false
 
   const [inputs, setInputs] = useState<Inputs>({
     monthlySales: block.defaultMonthlySales ?? 50000,
@@ -66,28 +75,35 @@ export function RoiCalculator({
   })
 
   const result = useMemo(() => calculate(inputs, voiceEnabled), [inputs, voiceEnabled])
+  const [status, setStatus] = useState<SubmitStatus>('idle')
 
-  const [exportStatus, setExportStatus] = useState<ExportStatus>('idle')
+  const onlineRevenue = (inputs.monthlySales * inputs.onlinePct) / 100
+  const stockTarget = block.benchmarks?.[0]?.range
+  const staffTarget = block.benchmarks?.[1]?.range
+
+  const description = voiceEnabled
+    ? `Modelled at ${centsLabel(symbol)} savings and upsell per call, and a ${FOOD_TARGET_PCT}% stock / ${LABOUR_TARGET_PCT}% staff benchmark target`
+    : `Modelled at a ${FOOD_TARGET_PCT}% stock / ${LABOUR_TARGET_PCT}% staff benchmark target`
 
   function setInput(key: keyof Inputs) {
     return (e: React.ChangeEvent<HTMLInputElement>) => setInputs((prev) => ({ ...prev, [key]: Number(e.target.value) }))
   }
 
-  async function handleExportSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
-    setExportStatus('submitting')
-    const summary = `ROI Calculator — monthly sales ${formatMoney(inputs.monthlySales, symbol)}, stock ${inputs.stockPct}%, staff ${inputs.staffPct}%, ${inputs.phoneCalls} calls/mo. Estimated savings: ${formatMoney(result.stockSave, symbol)} stock, ${formatMoney(result.staffSave, symbol)} staff, ${formatMoney(result.voiceSave, symbol)} voice AI. Total ${formatMoney(result.totalMonthly, symbol)}/mo (${formatMoney(result.annual, symbol)}/yr).`
+    setStatus('submitting')
+    const summary = `ROI Calculator — monthly sales ${formatMoney(inputs.monthlySales, symbol)}, stock ${formatPct(inputs.stockPct)}, staff ${formatPct(inputs.staffPct)}, ${inputs.phoneCalls} calls/mo. Estimated savings: ${formatMoney(result.stockSave, symbol)} stock, ${formatMoney(result.staffSave, symbol)} staff, ${formatMoney(result.voiceSave, symbol)} voice AI. Total ${formatMoney(result.totalMonthly, symbol)}/mo.`
     try {
       await onExport({
-        name: String(data.get('name') || ''),
+        name: '',
         email: String(data.get('email') || ''),
-        company: String(data.get('company') || ''),
+        company: '',
         message: summary,
       })
-      setExportStatus('success')
+      setStatus('success')
     } catch {
-      setExportStatus('error')
+      setStatus('error')
     }
   }
 
@@ -100,12 +116,12 @@ export function RoiCalculator({
 
         <div className={styles.wrap}>
           <div className={styles.inputsCard}>
-            <span className={styles.cardLabel}>Store &amp; cost inputs</span>
+            <span className={styles.cardLabel}>Sales &amp; operating costs</span>
 
             <label className={styles.row}>
               <span className={styles.rowLabelLine}>
                 <span className={styles.rowLabel}>Monthly sales</span>
-                <span className={styles.rowValue}>{formatMoney(inputs.monthlySales, symbol)}</span>
+                <span className={styles.rowValue}>{formatMoney(inputs.monthlySales, symbol)} / mo</span>
               </span>
               <input
                 type="range"
@@ -121,7 +137,9 @@ export function RoiCalculator({
             <label className={styles.row}>
               <span className={styles.rowLabelLine}>
                 <span className={styles.rowLabel}>Monthly stock costs</span>
-                <span className={styles.rowValue}>{inputs.stockPct}%</span>
+                <span className={styles.rowValue}>
+                  {formatMoney(result.stockCost, symbol)} ({formatPct(inputs.stockPct)})
+                </span>
               </span>
               <input
                 type="range"
@@ -132,12 +150,15 @@ export function RoiCalculator({
                 onChange={setInput('stockPct')}
                 className={styles.slider}
               />
+              {stockTarget && <span className={styles.targetHint}>target {stockTarget}</span>}
             </label>
 
             <label className={styles.row}>
               <span className={styles.rowLabelLine}>
                 <span className={styles.rowLabel}>Monthly staff costs</span>
-                <span className={styles.rowValue}>{inputs.staffPct}%</span>
+                <span className={styles.rowValue}>
+                  {formatMoney(result.staffCost, symbol)} ({formatPct(inputs.staffPct)})
+                </span>
               </span>
               <input
                 type="range"
@@ -148,12 +169,13 @@ export function RoiCalculator({
                 onChange={setInput('staffPct')}
                 className={styles.slider}
               />
+              {staffTarget && <span className={styles.targetHint}>target {staffTarget}</span>}
             </label>
 
             <label className={styles.row}>
               <span className={styles.rowLabelLine}>
                 <span className={styles.rowLabel}>Online sales</span>
-                <span className={styles.rowValue}>{inputs.onlinePct}%</span>
+                <span className={styles.rowValue}>{formatPct(inputs.onlinePct)}</span>
               </span>
               <input
                 type="range"
@@ -164,6 +186,7 @@ export function RoiCalculator({
                 onChange={setInput('onlinePct')}
                 className={styles.slider}
               />
+              <span className={styles.subHint}>{formatMoney(onlineRevenue, symbol)} / mo</span>
             </label>
 
             <label className={styles.row}>
@@ -184,70 +207,56 @@ export function RoiCalculator({
           </div>
 
           <div className={styles.resultCard}>
-            <span className={styles.resultKicker}>Total monthly savings</span>
+            <span className={styles.resultKicker}>Monthly net savings unlocked</span>
             <span className={styles.resultBig}>{formatMoney(result.totalMonthly, symbol)}</span>
-            <span className={styles.resultAnnual}>{formatMoney(result.annual, symbol)} / year</span>
-            <div className={styles.resultStrip}>
-              <div className={styles.resultCell}>
-                <span className={styles.resultCellCaption}>Stock savings</span>
-                <span className={styles.resultCellValue}>{formatMoney(result.stockSave, symbol)}</span>
+            <p className={styles.resultDescription}>{description}</p>
+            <span className={styles.resultBenchmark}>
+              Benchmark: {FOOD_TARGET_PCT}% stock · {LABOUR_TARGET_PCT}% staff
+            </span>
+
+            <div className={styles.resultRows}>
+              <div className={styles.resultRow}>
+                <span className={styles.resultBullet} data-tone="stock" />
+                <span className={styles.resultRowLabel}>Maistro stock savings</span>
+                <span className={styles.resultRowValue}>{formatMoney(result.stockSave, symbol)}</span>
               </div>
-              <div className={styles.resultCell}>
-                <span className={styles.resultCellCaption}>Staff savings</span>
-                <span className={styles.resultCellValue}>{formatMoney(result.staffSave, symbol)}</span>
+              <div className={styles.resultRow}>
+                <span className={styles.resultBullet} data-tone="staff" />
+                <span className={styles.resultRowLabel}>Maistro staff savings</span>
+                <span className={styles.resultRowValue}>{formatMoney(result.staffSave, symbol)}</span>
               </div>
               {voiceEnabled && (
-                <div className={styles.resultCell}>
-                  <span className={styles.resultCellCaption}>Voice AI savings</span>
-                  <span className={styles.resultCellValue}>{formatMoney(result.voiceSave, symbol)}</span>
+                <div className={styles.resultRow}>
+                  <span className={styles.resultBullet} data-tone="voice" />
+                  <span className={styles.resultRowLabel}>Maistro voice AI savings</span>
+                  <span className={styles.resultRowValue}>{formatMoney(result.voiceSave, symbol)}</span>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {showBenchmarkTable && block.benchmarks && block.benchmarks.length > 0 && (
-          <div className={styles.benchmarkTable}>
-            <div className={styles.benchmarkHeadRow}>
-              <span />
-              <span>Current</span>
-              <span>With Maistro</span>
-              <span>Best target</span>
-            </div>
-            {block.benchmarks.map((b) => (
-              <div key={b._key} className={styles.benchmarkRow}>
-                <span className={styles.benchmarkLabel}>{b.label}</span>
-                <span>—</span>
-                <span>—</span>
-                <span>{b.range}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
         {block.disclaimer && <p className={styles.disclaimer}>{block.disclaimer}</p>}
 
-        <div className={styles.exportArea}>
-          {exportStatus === 'idle' && (
-            <button type="button" className={styles.exportBtn} onClick={() => setExportStatus('open')}>
-              {block.exportLabel || 'Export Analysis'}
-            </button>
-          )}
-
-          {exportStatus === 'open' && (
-            <form className={styles.exportForm} onSubmit={handleExportSubmit}>
-              <input name="name" placeholder="Name" required className={styles.exportInput} />
-              <input name="email" type="email" placeholder="Email" required className={styles.exportInput} />
-              <input name="company" placeholder="Company (optional)" className={styles.exportInput} />
-              <button type="submit" className={styles.exportBtn}>
-                Send my numbers
+        <div className={styles.consultBanner}>
+          <span className={styles.consultHeading}>{block.consultationHeading || 'Get a free consultation'}</span>
+          {status === 'success' ? (
+            <p className={styles.consultStatus}>Sent — we'll follow up with your numbers.</p>
+          ) : (
+            <form className={styles.consultForm} onSubmit={handleSubmit}>
+              <input
+                name="email"
+                type="email"
+                required
+                placeholder="you@company.com"
+                className={styles.consultInput}
+              />
+              <button type="submit" className={styles.consultBtn} disabled={status === 'submitting'}>
+                {status === 'submitting' ? 'Sending…' : block.exportLabel || 'Get consultation'}
               </button>
             </form>
           )}
-
-          {exportStatus === 'submitting' && <p className={styles.exportStatus}>Sending…</p>}
-          {exportStatus === 'success' && <p className={styles.exportStatus}>Sent — we'll follow up with your numbers.</p>}
-          {exportStatus === 'error' && <p className={styles.exportStatus}>Something went wrong — try again.</p>}
+          {status === 'error' && <p className={styles.consultStatus}>Something went wrong — try again.</p>}
         </div>
       </div>
     </section>

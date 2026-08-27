@@ -166,8 +166,8 @@ export function emptyBlock(type: string): Record<string, any> {
         defaultPhoneCalls: 200,
         benchmarks: [],
         voiceEnabled: true,
-        showBenchmarkTable: true,
-        exportLabel: 'Export Analysis',
+        consultationHeading: 'Get a free consultation',
+        exportLabel: 'Get consultation',
       }
     case 'logoStripBlock':
       return { _type: type, _key, logos: [] }

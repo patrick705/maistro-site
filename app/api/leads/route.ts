@@ -26,8 +26,8 @@ export async function POST(request: Request) {
   const source =
     rawSource === 'contact-form' ? 'contact-form' : rawSource === 'roi-calculator' ? 'roi-calculator' : 'demo-modal'
 
-  if (!name || !email) {
-    return NextResponse.json({ error: 'Name and email are required' }, { status: 400 })
+  if (!email) {
+    return NextResponse.json({ error: 'Email is required' }, { status: 400 })
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: 'Enter a valid email address' }, { status: 400 })
