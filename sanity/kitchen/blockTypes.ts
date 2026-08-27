@@ -69,6 +69,7 @@ export const BLOCK_TYPES: { type: string; label: string; icon: string; category:
 
   { type: 'newsGridBlock', label: 'News grid', icon: '📰', category: 'Editorial & conversion', description: 'Pulls from News Articles' },
   { type: 'contactFormBlock', label: 'Contact section', icon: '✉️', category: 'Editorial & conversion', description: 'Headline, subhead, lead form' },
+  { type: 'roiCalculatorBlock', label: 'ROI calculator', icon: '◱', category: 'Editorial & conversion', description: 'Stores, prime cost and voice AI — live savings' },
   { type: 'ctaBannerBlock', label: 'CTA band', icon: '📣', category: 'Editorial & conversion', description: 'Closing headline + button' },
 
   { type: 'textBlock', label: 'Text box', icon: '📝', category: 'Other', description: 'Freeform heading + paragraphs' },
@@ -152,6 +153,21 @@ export function emptyBlock(type: string): Record<string, any> {
         menuOverlay: true,
         overlayPreset: 'Full',
         scrollCue: true,
+      }
+    case 'roiCalculatorBlock':
+      return {
+        _type: type,
+        _key,
+        currency: 'EUR €',
+        defaultMonthlySales: 50000,
+        defaultStockPct: 30,
+        defaultStaffPct: 30,
+        defaultOnlinePct: 25,
+        defaultPhoneCalls: 200,
+        benchmarks: [],
+        voiceEnabled: true,
+        showBenchmarkTable: true,
+        exportLabel: 'Export Analysis',
       }
     case 'logoStripBlock':
       return { _type: type, _key, logos: [] }

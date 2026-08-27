@@ -343,6 +343,31 @@ export interface BackgroundVideoBlock {
   scrollCue?: boolean
 }
 
+export interface RoiBenchmarkBand {
+  _key: string
+  label?: string
+  range?: string
+}
+
+export interface RoiCalculatorBlock {
+  _type: 'roiCalculatorBlock'
+  _key: string
+  eyebrow?: string
+  heading?: string
+  subhead?: string
+  currency?: 'EUR €' | 'GBP £' | 'USD $'
+  defaultMonthlySales?: number
+  defaultStockPct?: number
+  defaultStaffPct?: number
+  defaultOnlinePct?: number
+  defaultPhoneCalls?: number
+  benchmarks?: RoiBenchmarkBand[]
+  voiceEnabled?: boolean
+  showBenchmarkTable?: boolean
+  exportLabel?: string
+  disclaimer?: string
+}
+
 export interface LogoStripBlock {
   _type: 'logoStripBlock'
   _key: string
@@ -499,6 +524,7 @@ export type PageBlock =
   | SocialLinksBlockData
   | LiveVideoBlock
   | BackgroundVideoBlock
+  | RoiCalculatorBlock
   | LogoStripBlock
   | CtaBannerBlock
   | RichHeroBlock

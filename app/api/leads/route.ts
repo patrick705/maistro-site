@@ -23,7 +23,8 @@ export async function POST(request: Request) {
   const venues = cleanField((body as Record<string, unknown>).venues)
   const message = cleanField((body as Record<string, unknown>).message)
   const rawSource = (body as Record<string, unknown>).source
-  const source = rawSource === 'contact-form' ? 'contact-form' : 'demo-modal'
+  const source =
+    rawSource === 'contact-form' ? 'contact-form' : rawSource === 'roi-calculator' ? 'roi-calculator' : 'demo-modal'
 
   if (!name || !email) {
     return NextResponse.json({ error: 'Name and email are required' }, { status: 400 })

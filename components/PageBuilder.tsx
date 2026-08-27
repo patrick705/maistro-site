@@ -7,6 +7,7 @@ import { ImageGallery } from './blocks/ImageGallery'
 import { SocialLinksBlock } from './blocks/SocialLinksBlock'
 import { LiveVideo } from './blocks/LiveVideo'
 import { BackgroundVideo } from './blocks/BackgroundVideo'
+import { RoiCalculator } from './blocks/RoiCalculator'
 import { LogoStrip } from './blocks/LogoStrip'
 import { CtaBanner } from './blocks/CtaBanner'
 import { RichHero } from './blocks/RichHero'
@@ -53,6 +54,8 @@ export function PageBuilder({ blocks }: { blocks: PageBlock[] }) {
                 renderSecondaryCta={(label, className) => <BookDemoButton label={label} className={className} />}
               />
             )
+          case 'roiCalculatorBlock':
+            return <RoiCalculator key={block._key} block={block} />
           case 'logoStripBlock':
             return <LogoStrip key={block._key} block={block} />
           case 'ctaBannerBlock':

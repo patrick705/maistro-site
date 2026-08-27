@@ -1,6 +1,7 @@
 import { Hero } from '../../../components/Hero'
 import { ContactSection } from '../../../components/ContactSection'
 import { CtaBanner } from '../../../components/blocks/CtaBanner'
+import { RoiCalculator } from '../../../components/blocks/RoiCalculator'
 import { TextBlock } from '../../../components/blocks/TextBlock'
 import { SocialLinksBlock } from '../../../components/blocks/SocialLinksBlock'
 import { SimpleHeroBlockView } from '../../../components/blocks/SimpleHeroBlock'
@@ -58,6 +59,11 @@ function renderBlock(block: PageBlock, isFirst?: boolean) {
       return <PreviewLiveVideo block={block} />
     case 'backgroundVideoBlock':
       return <PreviewBackgroundVideo block={block} isFirst={isFirst} />
+    case 'roiCalculatorBlock':
+      // Same real component as the live site — but a no-op export, same
+      // discipline as contactFormBlock below: a preview must never be able
+      // to submit a real lead.
+      return <RoiCalculator block={block} onExport={async () => {}} />
     case 'logoStripBlock':
       return <PreviewLogoStrip block={block} />
     case 'ctaBannerBlock':

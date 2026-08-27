@@ -1,6 +1,6 @@
 import { defineField, defineType } from 'sanity'
 
-/** Submissions from the "Book a demo" modal and the homepage contact form. */
+/** Submissions from the "Book a demo" modal, the contact form, and the ROI calculator's export. */
 export const lead = defineType({
   name: 'lead',
   title: 'Lead',
@@ -15,7 +15,13 @@ export const lead = defineType({
       name: 'source',
       title: 'Source',
       type: 'string',
-      options: { list: [{ title: 'Demo modal', value: 'demo-modal' }, { title: 'Contact form', value: 'contact-form' }] },
+      options: {
+        list: [
+          { title: 'Demo modal', value: 'demo-modal' },
+          { title: 'Contact form', value: 'contact-form' },
+          { title: 'ROI calculator', value: 'roi-calculator' },
+        ],
+      },
     }),
     defineField({ name: 'submittedAt', title: 'Submitted at', type: 'datetime' }),
   ],

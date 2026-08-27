@@ -32,6 +32,12 @@ interface LinkItem {
   url?: string
 }
 
+interface BenchmarkItem {
+  _key: string
+  label?: string
+  range?: string
+}
+
 interface LogoItem {
   _key: string
   name?: string
@@ -477,6 +483,71 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
         </Field>
         <Field label="Muted (required for autoplay)">
           <input type="checkbox" checked={draft.muted ?? true} onChange={(e) => set('muted', e.target.checked)} />
+        </Field>
+      </>
+    ),
+    roiCalculatorBlock: (
+      <>
+        <Field label="Eyebrow">
+          <input style={inputStyle} value={draft.eyebrow ?? ''} onChange={(e) => set('eyebrow', e.target.value)} />
+        </Field>
+        <Field label="Headline">
+          <input style={inputStyle} value={draft.heading ?? ''} onChange={(e) => set('heading', e.target.value)} />
+        </Field>
+        <Field label="Subhead">
+          <textarea style={textareaStyle} value={draft.subhead ?? ''} onChange={(e) => set('subhead', e.target.value)} />
+        </Field>
+        <Field label="Currency">
+          <select style={inputStyle} value={draft.currency ?? 'EUR €'} onChange={(e) => set('currency', e.target.value)}>
+            <option value="EUR €">EUR €</option>
+            <option value="GBP £">GBP £</option>
+            <option value="USD $">USD $</option>
+          </select>
+        </Field>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <Field label="Default monthly sales">
+            <input type="number" style={inputStyle} value={draft.defaultMonthlySales ?? 50000} onChange={(e) => set('defaultMonthlySales', Number(e.target.value))} />
+          </Field>
+          <Field label="Default stock cost (%)">
+            <input type="number" style={inputStyle} value={draft.defaultStockPct ?? 30} onChange={(e) => set('defaultStockPct', Number(e.target.value))} />
+          </Field>
+          <Field label="Default staff cost (%)">
+            <input type="number" style={inputStyle} value={draft.defaultStaffPct ?? 30} onChange={(e) => set('defaultStaffPct', Number(e.target.value))} />
+          </Field>
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <Field label="Default online sales (%)">
+            <input type="number" style={inputStyle} value={draft.defaultOnlinePct ?? 25} onChange={(e) => set('defaultOnlinePct', Number(e.target.value))} />
+          </Field>
+          <Field label="Default phone calls / month">
+            <input type="number" style={inputStyle} value={draft.defaultPhoneCalls ?? 200} onChange={(e) => set('defaultPhoneCalls', Number(e.target.value))} />
+          </Field>
+        </div>
+        <Field label="Benchmark bands (shown in the comparison table)">
+          <ArrayEditor<BenchmarkItem>
+            items={draft.benchmarks}
+            onChange={(next) => set('benchmarks', next)}
+            newItem={() => ({ _key: randomKey(), label: '', range: '' })}
+            addLabel="+ Add benchmark"
+            renderItem={(item, update) => (
+              <div style={{ display: 'flex', gap: 8, flexDirection: isMobile ? 'column' : 'row' }}>
+                <input style={{ ...inputStyle, flex: 1 }} placeholder="Food & packaging" value={item.label ?? ''} onChange={(e) => update({ label: e.target.value })} />
+                <input style={{ ...inputStyle, flex: '0 0 110px' }} placeholder="25–28%" value={item.range ?? ''} onChange={(e) => update({ range: e.target.value })} />
+              </div>
+            )}
+          />
+        </Field>
+        <Field label="Show voice AI automation savings">
+          <input type="checkbox" checked={draft.voiceEnabled ?? true} onChange={(e) => set('voiceEnabled', e.target.checked)} />
+        </Field>
+        <Field label="Benchmark comparison table">
+          <input type="checkbox" checked={draft.showBenchmarkTable ?? true} onChange={(e) => set('showBenchmarkTable', e.target.checked)} />
+        </Field>
+        <Field label="Export button label">
+          <input style={inputStyle} value={draft.exportLabel ?? 'Export Analysis'} onChange={(e) => set('exportLabel', e.target.value)} />
+        </Field>
+        <Field label="Disclaimer">
+          <textarea style={textareaStyle} value={draft.disclaimer ?? ''} onChange={(e) => set('disclaimer', e.target.value)} />
         </Field>
       </>
     ),

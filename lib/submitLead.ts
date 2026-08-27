@@ -4,7 +4,7 @@ export interface LeadPayload {
   company?: string
   venues?: string
   message?: string
-  source: 'demo-modal' | 'contact-form'
+  source: 'demo-modal' | 'contact-form' | 'roi-calculator'
 }
 
 export async function submitLead(payload: LeadPayload): Promise<void> {

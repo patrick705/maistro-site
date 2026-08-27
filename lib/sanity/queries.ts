@@ -107,6 +107,12 @@ export const pageBySlugQuery = groq`
         "posterImage": posterImage{"url": asset->url, alt},
         loop, muted, videoHeight, overlayCopy, scrim, menuOverlay, overlayPreset, scrollCue
       },
+      _type == "roiCalculatorBlock" => {
+        eyebrow, heading, subhead, currency,
+        defaultMonthlySales, defaultStockPct, defaultStaffPct, defaultOnlinePct, defaultPhoneCalls,
+        benchmarks[]{_key, label, range},
+        voiceEnabled, showBenchmarkTable, exportLabel, disclaimer
+      },
       _type == "logoStripBlock" => {
         heading,
         logos[]{name, "logo": logo{"url": asset->url, alt}, description, website}

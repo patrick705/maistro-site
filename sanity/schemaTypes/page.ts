@@ -43,6 +43,7 @@ export const page = defineType({
         { type: 'socialLinksBlock' },
         { type: 'liveVideoBlock' },
         { type: 'backgroundVideoBlock' },
+        { type: 'roiCalculatorBlock' },
         { type: 'logoStripBlock' },
         { type: 'ctaBannerBlock' },
         { type: 'richHeroBlock' },
