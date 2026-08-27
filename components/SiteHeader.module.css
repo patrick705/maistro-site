@@ -79,6 +79,8 @@ body:has([data-header-overlay='true']) .burger {
   border-radius: 10px;
   font-family: var(--font-body);
   cursor: pointer;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .burger {
