@@ -109,7 +109,7 @@ export function RoiCalculator({
 
   return (
     <section className={styles.section}>
-      <div className={styles.inner}>
+      <div className={styles.card}>
         {block.eyebrow && <span className={styles.eyebrow}>{block.eyebrow}</span>}
         {block.heading && <h2 className={styles.heading}>{block.heading}</h2>}
         {block.subhead && <p className={styles.subhead}>{block.subhead}</p>}
