@@ -405,6 +405,8 @@ export function PageBuilderView({
           onDeletePermanently={deletePagePermanently}
           navLabel={page.navLabel}
           onPatchNavLabel={(value) => patch({ navLabel: value })}
+          title={page.title}
+          onPatchTitle={(value) => patch({ title: value })}
         />
       )}
 

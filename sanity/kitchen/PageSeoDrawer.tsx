@@ -54,6 +54,8 @@ export function PageSeoDrawer({
   onDeletePermanently,
   navLabel,
   onPatchNavLabel,
+  title,
+  onPatchTitle,
 }: {
   seo: PageSeo | undefined
   onPatchSeo: (fields: Record<string, unknown>) => void
@@ -65,6 +67,8 @@ export function PageSeoDrawer({
   onDeletePermanently: () => Promise<void>
   navLabel?: string
   onPatchNavLabel: (value: string) => void
+  title?: string
+  onPatchTitle: (value: string) => void
 }) {
   const s = seo ?? {}
   const [addingSubpage, setAddingSubpage] = useState(false)
@@ -137,6 +141,10 @@ export function PageSeoDrawer({
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: 14, display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <Field label="Page title">
+          <input style={inputStyle} value={title ?? ''} onChange={(e) => onPatchTitle(e.target.value)} placeholder="Untitled page" />
+        </Field>
+
         <div style={{ fontSize: 11, color: kitchen.textMuted }}>
           Leave any of these empty to fall back to the sitewide SEO defaults.
         </div>
