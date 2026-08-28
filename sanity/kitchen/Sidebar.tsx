@@ -2,17 +2,19 @@ import { useState } from 'react'
 import { useClient } from 'sanity'
 
 import type { KitchenView, SettingsSection } from './KitchenTool'
+import { groupPages } from './pageRows'
 import { useLiveQuery } from './useLiveQuery'
 import { kitchen } from './theme'
 
 const API_VERSION = '2024-01-01'
 
-interface PageRow {
+interface RawPageRow {
   _id: string
   title: string
   slug?: string
   showInMenu?: boolean
   archived?: boolean
+  menuOrder?: number
   blockCount: number
 }
 
@@ -25,8 +27,8 @@ const SETTINGS_SECTIONS: { section: SettingsSection; label: string; glyph: strin
   { section: 'demoModal', label: 'Demo modal', glyph: '🔲' },
 ]
 
-const PAGES_QUERY = `*[_type == "page" && !(_id in path("drafts.**"))] | order(menuOrder asc, title asc){
-  _id, title, "slug": slug.current, showInMenu, archived, "blockCount": count(blocks)
+const PAGES_QUERY = `*[_type == "page"]{
+  _id, title, "slug": slug.current, showInMenu, archived, menuOrder, "blockCount": count(blocks)
 }`
 
 const COUNTS_QUERY = `{
@@ -72,14 +74,15 @@ export function Sidebar({
   onClose: () => void
 }) {
   const client = useClient({ apiVersion: API_VERSION })
-  const { data: pages, refetch } = useLiveQuery<PageRow[]>(PAGES_QUERY)
+  const { data: rawPages, refetch } = useLiveQuery<RawPageRow[]>(PAGES_QUERY)
   const { data: counts } = useLiveQuery<{ newsArticle: number; lead: number; media: number }>(COUNTS_QUERY)
   const [showArchived, setShowArchived] = useState(false)
   const [dragId, setDragId] = useState<string | null>(null)
   const [overId, setOverId] = useState<string | null>(null)
 
-  const activePages = (pages ?? []).filter((p) => !p.archived)
-  const archivedPages = (pages ?? []).filter((p) => p.archived)
+  const pages = groupPages(rawPages ?? []).sort((a, b) => (a.menuOrder ?? 0) - (b.menuOrder ?? 0) || a.title.localeCompare(b.title))
+  const activePages = pages.filter((p) => !p.archived)
+  const archivedPages = pages.filter((p) => p.archived)
 
   // Reordering is a structural/organizational change (like a palette's "default for new
   // sites" flag) rather than page content, so it writes straight to the published
@@ -91,12 +94,12 @@ export function Sidebar({
     setOverId(null)
     if (!fromId || fromId === targetId) return
     const list = activePages.slice()
-    const fromIndex = list.findIndex((p) => p._id === fromId)
+    const fromIndex = list.findIndex((p) => p.id === fromId)
     if (fromIndex < 0) return
     const [moved] = list.splice(fromIndex, 1)
-    const toIndex = list.findIndex((p) => p._id === targetId)
+    const toIndex = list.findIndex((p) => p.id === targetId)
     list.splice(toIndex < 0 ? list.length : toIndex, 0, moved)
-    await Promise.all(list.map((p, i) => client.patch(p._id).set({ menuOrder: i + 1 }).commit()))
+    await Promise.all(list.map((p, i) => client.patch(p.id).set({ menuOrder: i + 1 }).commit()))
     refetch()
   }
 
@@ -215,16 +218,16 @@ export function Sidebar({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: archivedPages.length > 0 ? 6 : 18 }}>
           {activePages.map((p) => (
             <div
-              key={p._id}
-              onClick={() => onSelect({ kind: 'page', id: p._id })}
+              key={p.id}
+              onClick={() => onSelect({ kind: 'page', id: p.id })}
               draggable
               onDragStart={(e) => {
                 e.dataTransfer.effectAllowed = 'move'
-                setDragId(p._id)
+                setDragId(p.id)
               }}
               onDragOver={(e) => {
                 e.preventDefault()
-                if (overId !== p._id) setOverId(p._id)
+                if (overId !== p.id) setOverId(p.id)
               }}
               onDragEnd={() => {
                 setDragId(null)
@@ -232,12 +235,12 @@ export function Sidebar({
               }}
               onDrop={(e) => {
                 e.preventDefault()
-                dropPage(p._id)
+                dropPage(p.id)
               }}
               style={{
-                ...rowStyle(view?.kind === 'page' && view.id === p._id),
-                opacity: dragId === p._id ? 0.45 : 1,
-                boxShadow: overId === p._id && dragId !== p._id ? `inset 0 2px 0 ${kitchen.accent}` : 'none',
+                ...rowStyle(view?.kind === 'page' && view.id === p.id),
+                opacity: dragId === p.id ? 0.45 : 1,
+                boxShadow: overId === p.id && dragId !== p.id ? `inset 0 2px 0 ${kitchen.accent}` : 'none',
               }}
             >
               <span style={{ width: 9, textAlign: 'center', fontSize: 11, color: kitchen.borderDashed, cursor: 'grab', letterSpacing: '-2px' }}>⠿</span>
@@ -285,9 +288,9 @@ export function Sidebar({
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 {archivedPages.map((p) => (
                   <div
-                    key={p._id}
-                    onClick={() => onSelect({ kind: 'page', id: p._id })}
-                    style={{ ...rowStyle(view?.kind === 'page' && view.id === p._id), opacity: 0.55 }}
+                    key={p.id}
+                    onClick={() => onSelect({ kind: 'page', id: p.id })}
+                    style={{ ...rowStyle(view?.kind === 'page' && view.id === p.id), opacity: 0.55 }}
                   >
                     <span style={{ width: 14, textAlign: 'center', fontSize: 11, color: kitchen.textFaint }}>▤</span>
                     <span style={{ flex: '1 1 auto', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

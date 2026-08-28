@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useClient } from 'sanity'
 
 import { ArrayEditor } from '../ArrayEditor'
+import { groupPages } from '../pageRows'
 import { Toggle } from '../Toggle'
 import { kitchen } from '../theme'
 import { useKitchenPatch } from '../useKitchenPatch'
@@ -45,33 +46,16 @@ const PAGES_QUERY = `*[_type == "page"]{
   _id, title, "slug": slug.current, showInMenu, archived, menuOrder
 }`
 
-// A page can exist as a published doc, a draft-only doc (never published), or
-// both at once (a published page with pending edits) — Sanity returns up to
-// two rows per page in that last case. Group down to one row, preferring the
-// published copy for display and as the write target, so a toggle/reorder
-// here affects what's actually live rather than an unpublished draft.
-function groupPages(rows: RawPageRow[]): PageRow[] {
-  const byBase = new Map<string, { published?: RawPageRow; draft?: RawPageRow }>()
-  for (const row of rows) {
-    const isDraft = row._id.startsWith('drafts.')
-    const baseId = isDraft ? row._id.slice('drafts.'.length) : row._id
-    const entry = byBase.get(baseId) ?? {}
-    if (isDraft) entry.draft = row
-    else entry.published = row
-    byBase.set(baseId, entry)
-  }
-  return Array.from(byBase.entries()).map(([baseId, { published, draft }]) => {
-    const src = published ?? draft!
-    return {
-      id: published ? baseId : `drafts.${baseId}`,
-      title: src.title || 'Untitled page',
-      slug: src.slug ?? '',
-      showInMenu: Boolean(src.showInMenu),
-      archived: Boolean(src.archived),
-      menuOrder: src.menuOrder ?? 0,
-      status: published ? 'Published' : 'Draft',
-    }
-  })
+function toPageRows(rows: RawPageRow[]): PageRow[] {
+  return groupPages(rows).map((p) => ({
+    id: p.id,
+    title: p.title || 'Untitled page',
+    slug: p.slug ?? '',
+    showInMenu: Boolean(p.showInMenu),
+    archived: Boolean(p.archived),
+    menuOrder: p.menuOrder ?? 0,
+    status: p.isDraft ? 'Draft' : 'Published',
+  }))
 }
 
 const inputStyle: React.CSSProperties = {
@@ -99,7 +83,7 @@ function PagesList() {
   const [dragId, setDragId] = useState<string | null>(null)
   const [overId, setOverId] = useState<string | null>(null)
 
-  const pages = groupPages(rawPages ?? []).sort((a, b) => a.menuOrder - b.menuOrder || a.title.localeCompare(b.title))
+  const pages = toPageRows(rawPages ?? []).sort((a, b) => a.menuOrder - b.menuOrder || a.title.localeCompare(b.title))
 
   async function toggleInMenu(row: PageRow) {
     await client.patch(row.id).set({ showInMenu: !row.showInMenu }).commit()
