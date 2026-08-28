@@ -1,13 +1,48 @@
 import { randomKey } from './blockTypes'
 
+// Generic placeholder assets uploaded for the gallery/banner block types —
+// brand-palette gradients with a plain label, safe to reuse across every
+// showcase card (and whatever a "Clone into page" carries over) until a real
+// photo replaces them. Includes both the real asset reference (so cloning
+// into a page saves a genuine Sanity image, correctly resolved by the site's
+// own GROQ queries) and a precomputed `url` (ignored by those queries, but
+// needed here since the showcase renders this in-memory object directly,
+// with no query round-trip to resolve the reference itself).
+const PLACEHOLDER_ASSETS = {
+  bannerHero: {
+    ref: 'image-add9ae8192de916c240e39e40a5211064f47de6c-1920x800-png',
+    url: 'https://cdn.sanity.io/images/u7g3hn1o/production/add9ae8192de916c240e39e40a5211064f47de6c-1920x800.png',
+  },
+  counterService: {
+    ref: 'image-496f63a79436831768bee1de028eebfc172ea61c-1600x1200-png',
+    url: 'https://cdn.sanity.io/images/u7g3hn1o/production/496f63a79436831768bee1de028eebfc172ea61c-1600x1200.png',
+  },
+  serviceVideoPoster: {
+    ref: 'image-eeed4beb5f6a43ec7d17abb8a68074183ec00dbe-1600x900-png',
+    url: 'https://cdn.sanity.io/images/u7g3hn1o/production/eeed4beb5f6a43ec7d17abb8a68074183ec00dbe-1600x900.png',
+  },
+  prepVideoPoster: {
+    ref: 'image-e21bbb775ad3028623a6f30cf5d601824a75d957-1600x900-png',
+    url: 'https://cdn.sanity.io/images/u7g3hn1o/production/e21bbb775ad3028623a6f30cf5d601824a75d957-1600x900.png',
+  },
+  walkthroughPoster: {
+    ref: 'image-cacfa7d371a385ddd89d6434ddc8dc93d8f950b5-1600x900-png',
+    url: 'https://cdn.sanity.io/images/u7g3hn1o/production/cacfa7d371a385ddd89d6434ddc8dc93d8f950b5-1600x900.png',
+  },
+}
+
+function placeholderImage(key: keyof typeof PLACEHOLDER_ASSETS, alt: string) {
+  const { ref, url } = PLACEHOLDER_ASSETS[key]
+  return { _type: 'image', asset: { _type: 'reference', _ref: ref }, url, alt }
+}
+
 /**
  * One fully-populated, unbranded example per block type — unlike emptyBlock()
  * (deliberately blank, for a freshly-added real section), these exist only to
- * be browsed and cloned from the Block Showcase. Image-type fields are left
- * unset: there's no generic placeholder asset to reference, and every
- * showcase entry renders inside the same KitchenErrorBoundary already used
- * for real page blocks, so a component that can't handle a missing image
- * degrades to a small error card instead of breaking the page.
+ * be browsed and cloned from the Block Showcase. Every showcase entry renders
+ * inside the same KitchenErrorBoundary already used for real page blocks, so
+ * a component that can't handle a missing image degrades to a small error
+ * card instead of breaking the page.
  */
 export function genericBlockContent(type: string): Record<string, any> {
   const _key = randomKey()
@@ -231,19 +266,61 @@ export function genericBlockContent(type: string): Record<string, any> {
       }
     case 'sideBySideBlock':
       return { _type: type, _key, imagePosition: 'left', heading: 'A side-by-side section heading', body: [{ _type: 'block', _key: randomKey(), style: 'normal', children: [{ _type: 'span', _key: randomKey(), text: 'A paragraph of copy sitting next to the image.' }] }] }
-    // The four below need an uploaded image/video per tile to render anything
-    // at all (same "no placeholder asset" tradeoff as the image-only blocks
-    // above) — heading text is still filled in for when real media is added.
     case 'scrollGalleryBlock':
-      return { _type: type, _key, heading: 'Scroll gallery heading', tiles: [] }
+      return {
+        _type: type,
+        _key,
+        heading: 'Scroll gallery heading',
+        tiles: [
+          { _key: randomKey(), type: 'image', image: placeholderImage('counterService', 'Counter service'), captionMode: 'title', title: 'Counter service' },
+          { _key: randomKey(), type: 'video', poster: placeholderImage('serviceVideoPoster', 'Friday service'), captionMode: 'title', title: 'Friday service' },
+          { _key: randomKey(), type: 'video', poster: placeholderImage('prepVideoPoster', 'Morning prep'), captionMode: 'title', title: 'Morning prep' },
+        ],
+      }
     case 'mediaMosaicBlock':
-      return { _type: type, _key, heading: 'Media mosaic heading', tiles: [] }
+      return {
+        _type: type,
+        _key,
+        heading: 'Media mosaic heading',
+        tiles: [
+          { _key: randomKey(), type: 'image', image: placeholderImage('bannerHero', 'Featured image'), captionMode: 'title', title: 'Featured image' },
+          { _key: randomKey(), type: 'image', image: placeholderImage('counterService', 'Counter service'), captionMode: 'none' },
+          { _key: randomKey(), type: 'video', poster: placeholderImage('walkthroughPoster', 'Walkthrough'), captionMode: 'title', title: 'Walkthrough' },
+        ],
+      }
     case 'mediaCardGridBlock':
-      return { _type: type, _key, heading: 'Media card grid heading', tiles: [] }
+      return {
+        _type: type,
+        _key,
+        heading: 'Media card grid heading',
+        tiles: [
+          { _key: randomKey(), type: 'image', image: placeholderImage('counterService', 'Counter service'), captionMode: 'none' },
+          { _key: randomKey(), type: 'video', poster: placeholderImage('serviceVideoPoster', 'Friday service'), captionMode: 'title', title: 'Friday service' },
+          { _key: randomKey(), type: 'video', poster: placeholderImage('prepVideoPoster', 'Morning prep'), captionMode: 'title', title: 'Morning prep' },
+          { _key: randomKey(), type: 'video', poster: placeholderImage('walkthroughPoster', 'Walkthrough'), captionMode: 'title', title: 'Walkthrough' },
+        ],
+      }
     case 'imageBannerBlock':
-      return { _type: type, _key, eyebrow: 'Eyebrow label', heading: 'An image banner headline', subhead: 'One line of supporting copy.', buttonLabel: 'Get started' }
+      return {
+        _type: type,
+        _key,
+        image: placeholderImage('bannerHero', 'Banner background'),
+        eyebrow: 'Eyebrow label',
+        heading: 'An image banner headline',
+        subhead: 'One line of supporting copy.',
+        buttonLabel: 'Get started',
+      }
     case 'multiImageBannerBlock':
-      return { _type: type, _key, eyebrow: 'Eyebrow label', heading: 'A multi-image banner headline', images: [] }
+      return {
+        _type: type,
+        _key,
+        eyebrow: 'Eyebrow label',
+        heading: 'A multi-image banner headline',
+        images: [
+          { _key: randomKey(), image: placeholderImage('bannerHero', 'Banner image one') },
+          { _key: randomKey(), image: placeholderImage('counterService', 'Banner image two') },
+        ],
+      }
     default:
       return { _type: type, _key }
   }
