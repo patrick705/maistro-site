@@ -1,3 +1,7 @@
+export function randomPageId() {
+  return 'page-' + Math.random().toString(36).slice(2, 10)
+}
+
 /**
  * A page can exist as a published doc, a draft-only doc (never published), or
  * both at once (a published page with pending edits) — Sanity returns up to

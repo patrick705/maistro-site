@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useClient } from 'sanity'
 
 import type { KitchenView, SettingsSection } from './KitchenTool'
-import { groupPages } from './pageRows'
+import { groupPages, randomPageId } from './pageRows'
 import { useLiveQuery } from './useLiveQuery'
 import { kitchen } from './theme'
 
@@ -15,6 +15,7 @@ interface RawPageRow {
   showInMenu?: boolean
   archived?: boolean
   menuOrder?: number
+  parentId?: string
   blockCount: number
 }
 
@@ -28,7 +29,7 @@ const SETTINGS_SECTIONS: { section: SettingsSection; label: string; glyph: strin
 ]
 
 const PAGES_QUERY = `*[_type == "page"]{
-  _id, title, "slug": slug.current, showInMenu, archived, menuOrder, "blockCount": count(blocks)
+  _id, title, "slug": slug.current, showInMenu, archived, menuOrder, parentId, "blockCount": count(blocks)
 }`
 
 const COUNTS_QUERY = `{
@@ -79,10 +80,14 @@ export function Sidebar({
   const [showArchived, setShowArchived] = useState(false)
   const [dragId, setDragId] = useState<string | null>(null)
   const [overId, setOverId] = useState<string | null>(null)
+  const [addPageOpen, setAddPageOpen] = useState(false)
+  const [addPageKind, setAddPageKind] = useState<'top' | 'sub'>('top')
+  const [addPageParent, setAddPageParent] = useState<string | null>(null)
 
   const pages = groupPages(rawPages ?? []).sort((a, b) => (a.menuOrder ?? 0) - (b.menuOrder ?? 0) || a.title.localeCompare(b.title))
   const activePages = pages.filter((p) => !p.archived)
   const archivedPages = pages.filter((p) => p.archived)
+  const topLevelPages = activePages.filter((p) => !p.parentId)
 
   // Reordering is a structural/organizational change (like a palette's "default for new
   // sites" flag) rather than page content, so it writes straight to the published
@@ -103,15 +108,33 @@ export function Sidebar({
     refetch()
   }
 
-  async function addPage() {
-    const created = await client.create({
-      _type: 'page',
-      title: 'Untitled page',
-      showInMenu: false,
-      blocks: [],
-    })
-    refetch()
-    onSelect({ kind: 'page', id: created._id })
+  async function confirmAddPage() {
+    if (addPageKind === 'sub') {
+      if (!addPageParent) return
+      const id = randomPageId()
+      await client.create({
+        _id: `drafts.${id}`,
+        _type: 'page',
+        title: 'Untitled subpage',
+        parentId: addPageParent,
+        showInMenu: false,
+        blocks: [],
+      })
+      refetch()
+      onSelect({ kind: 'page', id })
+    } else {
+      const created = await client.create({
+        _type: 'page',
+        title: 'Untitled page',
+        showInMenu: false,
+        blocks: [],
+      })
+      refetch()
+      onSelect({ kind: 'page', id: created._id })
+    }
+    setAddPageOpen(false)
+    setAddPageKind('top')
+    setAddPageParent(null)
   }
 
   return (
@@ -194,14 +217,14 @@ export function Sidebar({
         </div>
         <button
           type="button"
-          onClick={addPage}
+          onClick={() => setAddPageOpen((v) => !v)}
           style={{
             width: '100%',
             display: 'flex',
             alignItems: 'center',
             gap: 7,
             padding: '6px 8px',
-            marginBottom: 3,
+            marginBottom: addPageOpen ? 6 : 3,
             border: `1px dashed ${kitchen.borderDashed}`,
             borderRadius: 7,
             background: 'transparent',
@@ -215,6 +238,99 @@ export function Sidebar({
           <span style={{ fontSize: 14, lineHeight: 1 }}>+</span>
           <span>Add new page</span>
         </button>
+
+        {addPageOpen && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 6,
+              padding: 8,
+              marginBottom: 8,
+              border: `1px solid ${kitchen.borderInput}`,
+              borderRadius: 9,
+              background: '#faf8fd',
+            }}
+          >
+            <div style={{ display: 'flex', border: `1px solid ${kitchen.borderInput}`, borderRadius: 7, overflow: 'hidden', background: '#fff' }}>
+              {(['top', 'sub'] as const).map((kind) => (
+                <button
+                  key={kind}
+                  type="button"
+                  onClick={() => {
+                    setAddPageKind(kind)
+                    setAddPageParent(null)
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: '6px 8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    font: 'inherit',
+                    fontSize: 11.5,
+                    fontWeight: 600,
+                    background: addPageKind === kind ? '#EEE9F8' : '#fff',
+                    color: addPageKind === kind ? kitchen.accent : kitchen.textBody,
+                  }}
+                >
+                  {kind === 'top' ? 'Top-level' : 'Subpage'}
+                </button>
+              ))}
+            </div>
+
+            {addPageKind === 'sub' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <span style={{ fontSize: 10.5, color: kitchen.textMuted }}>Subpage of</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2, maxHeight: 140, overflowY: 'auto' }}>
+                  {topLevelPages.length === 0 && (
+                    <span style={{ fontSize: 11, color: kitchen.textFaint, padding: '4px 6px' }}>No top-level pages yet.</span>
+                  )}
+                  {topLevelPages.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setAddPageParent(p.id)}
+                      style={{
+                        textAlign: 'left',
+                        padding: '6px 8px',
+                        border: 'none',
+                        borderRadius: 6,
+                        cursor: 'pointer',
+                        font: 'inherit',
+                        fontSize: 11.5,
+                        background: addPageParent === p.id ? '#EEE9F8' : 'transparent',
+                        color: addPageParent === p.id ? kitchen.accent : kitchen.textBody,
+                      }}
+                    >
+                      {p.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={confirmAddPage}
+              disabled={addPageKind === 'sub' && !addPageParent}
+              style={{
+                padding: '6px 10px',
+                border: `1px solid ${kitchen.accent}`,
+                borderRadius: 7,
+                background: kitchen.accent,
+                color: '#fff',
+                cursor: addPageKind === 'sub' && !addPageParent ? 'default' : 'pointer',
+                opacity: addPageKind === 'sub' && !addPageParent ? 0.5 : 1,
+                font: 'inherit',
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            >
+              {addPageKind === 'sub' ? (addPageParent ? 'Create subpage' : 'Choose a parent') : 'Create page'}
+            </button>
+          </div>
+        )}
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: archivedPages.length > 0 ? 6 : 18 }}>
           {activePages.map((p) => (
             <div

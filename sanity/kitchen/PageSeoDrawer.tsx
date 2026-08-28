@@ -52,6 +52,8 @@ export function PageSeoDrawer({
   hasParent,
   onAddSubpage,
   onDeletePermanently,
+  navLabel,
+  onPatchNavLabel,
 }: {
   seo: PageSeo | undefined
   onPatchSeo: (fields: Record<string, unknown>) => void
@@ -61,6 +63,8 @@ export function PageSeoDrawer({
   hasParent: boolean
   onAddSubpage: () => Promise<void>
   onDeletePermanently: () => Promise<void>
+  navLabel?: string
+  onPatchNavLabel: (value: string) => void
 }) {
   const s = seo ?? {}
   const [addingSubpage, setAddingSubpage] = useState(false)
@@ -157,6 +161,10 @@ export function PageSeoDrawer({
           <input type="checkbox" checked={s.noIndex ?? false} onChange={(e) => patch({ noIndex: e.target.checked })} />
           Hide from search engines
         </label>
+
+        <Field label="Top-menu label" hint="Falls back to the page title if left empty.">
+          <input style={inputStyle} value={navLabel ?? ''} onChange={(e) => onPatchNavLabel(e.target.value)} />
+        </Field>
 
         <div style={{ borderTop: `1px solid ${kitchen.border}`, paddingTop: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12.5, color: kitchen.textBody }}>

@@ -10,6 +10,7 @@ import { BLOCK_TYPES, emptyBlock, pascalTag } from './blockTypes'
 import { kitchen } from './theme'
 import { useDragReorder } from './useDragReorder'
 import { useKitchenPatch } from './useKitchenPatch'
+import { randomPageId } from './pageRows'
 import { RESERVED_SLUGS } from '../schemaTypes/page'
 
 const API_VERSION = '2024-01-01'
@@ -20,10 +21,6 @@ function slugify(input: string): string {
     .trim()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
-}
-
-function randomPageId() {
-  return 'page-' + Math.random().toString(36).slice(2, 10)
 }
 
 interface PageDoc {
@@ -406,6 +403,8 @@ export function PageBuilderView({
           hasParent={Boolean(page.parentId)}
           onAddSubpage={addSubpage}
           onDeletePermanently={deletePagePermanently}
+          navLabel={page.navLabel}
+          onPatchNavLabel={(value) => patch({ navLabel: value })}
         />
       )}
 
