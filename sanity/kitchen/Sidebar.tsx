@@ -645,6 +645,10 @@ export function Sidebar({
               {counts?.media ?? 0}
             </span>
           </div>
+          <div onClick={() => onSelect({ kind: 'blockShowcase' })} style={rowStyle(view?.kind === 'blockShowcase')}>
+            <span style={{ width: 14, textAlign: 'center', fontSize: 11, color: kitchen.textFaint }}>◱</span>
+            <span style={{ flex: 1 }}>Block Showcase</span>
+          </div>
         </div>
       </div>
 
