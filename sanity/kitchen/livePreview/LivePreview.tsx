@@ -35,7 +35,7 @@ import { blockDesignStyle } from '../../../lib/content/blockDesignStyle'
 import type { MediaTile, PageBlock } from '../../../lib/content/types'
 
 function hasTiles(tiles: MediaTile[] | undefined) {
-  return (tiles ?? []).some((t) => (t.type === 'video' ? t.video?.url : t.image?.url))
+  return (tiles ?? []).some((t) => (t.type === 'video' ? (t.poster?.url || t.video?.url) : t.image?.url))
 }
 
 /**

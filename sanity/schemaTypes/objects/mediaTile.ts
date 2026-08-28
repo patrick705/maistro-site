@@ -22,8 +22,18 @@ export const mediaTile = defineType({
       fields: [defineField({ name: 'alt', title: 'Alternative text', type: 'string' })],
     }),
     defineField({
+      name: 'poster',
+      title: 'Poster image',
+      description: 'Shown as a static thumbnail with a play icon. Displays instead of the video file until one is uploaded.',
+      type: 'image',
+      options: { hotspot: true },
+      hidden: ({ parent }) => (parent as { type?: string } | undefined)?.type !== 'video',
+      fields: [defineField({ name: 'alt', title: 'Alternative text', type: 'string' })],
+    }),
+    defineField({
       name: 'video',
       title: 'Video file',
+      description: 'Optional — the tile shows the poster image above until a real video file is uploaded here.',
       type: 'file',
       options: { accept: 'video/*' },
       hidden: ({ parent }) => (parent as { type?: string } | undefined)?.type !== 'video',

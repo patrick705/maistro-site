@@ -541,6 +541,7 @@ export interface MediaTile {
   _key: string
   type: 'image' | 'video'
   image?: SeoImage
+  poster?: SeoImage
   video?: { url: string }
   captionMode?: 'none' | 'title' | 'full'
   title?: string

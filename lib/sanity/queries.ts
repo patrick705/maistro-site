@@ -218,6 +218,7 @@ export const pageBySlugQuery = groq`
         tiles[]{
           _key, type, captionMode, title, description,
           "image": image{"url": asset->url, alt},
+          "poster": poster{"url": asset->url, alt},
           "video": {"url": video.asset->url}
         }
       },

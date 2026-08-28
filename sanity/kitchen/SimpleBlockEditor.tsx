@@ -30,6 +30,7 @@ interface TileItem {
   _key: string
   type?: string
   image?: SanityImageValue
+  poster?: SanityImageValue
   video?: SanityFileValue
   captionMode?: string
   title?: string
@@ -330,7 +331,14 @@ function renderTileItem(item: TileItem, update: (fields: Partial<TileItem>) => v
         <option value="video">Video</option>
       </select>
       {type === 'video' ? (
-        <VideoUploadField value={item.video} onChange={(v) => update({ video: v })} />
+        <>
+          <Field label="Poster image">
+            <ImageUploadField value={item.poster} onChange={(v) => update({ poster: v })} />
+          </Field>
+          <Field label="Video file (optional — shows the poster above until uploaded)">
+            <VideoUploadField value={item.video} onChange={(v) => update({ video: v })} />
+          </Field>
+        </>
       ) : (
         <ImageUploadField value={item.image} onChange={(v) => update({ image: v })} />
       )}

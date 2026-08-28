@@ -14,13 +14,21 @@ type ImgComponentType = (props: { src: string; alt: string; fill?: boolean; clas
 export function MediaTileContent({ tile, ImgComponent }: { tile: MediaTileData; ImgComponent: ImgComponentType }) {
   const captionMode = tile.captionMode ?? 'none'
   const hasCaption = captionMode !== 'none' && Boolean(tile.title || tile.description)
+  // A poster image (static thumbnail) takes priority over the raw video file
+  // when both are set — same "swap in the real one later" pattern as the
+  // rest of the block's placeholder assets.
+  const showPoster = tile.type === 'video' && Boolean(tile.poster?.url)
+  const showRawVideo = tile.type === 'video' && !tile.poster?.url && Boolean(tile.video?.url)
+  const showImage = tile.type !== 'video' && Boolean(tile.image?.url)
 
   return (
     <>
-      {tile.type === 'video' && tile.video?.url ? (
-        <video className={styles.media} src={tile.video.url} muted loop playsInline />
-      ) : tile.image?.url ? (
-        <ImgComponent src={tile.image.url} alt={tile.image.alt || ''} fill className={styles.media} />
+      {showRawVideo ? (
+        <video className={styles.media} src={tile.video!.url} muted loop playsInline />
+      ) : showPoster ? (
+        <ImgComponent src={tile.poster!.url} alt={tile.poster!.alt || ''} fill className={styles.media} />
+      ) : showImage ? (
+        <ImgComponent src={tile.image!.url} alt={tile.image!.alt || ''} fill className={styles.media} />
       ) : null}
       {tile.type === 'video' && <span className={styles.playIcon}>▶</span>}
       {hasCaption && (

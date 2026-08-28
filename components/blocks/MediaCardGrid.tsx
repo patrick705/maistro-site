@@ -12,7 +12,7 @@ export function MediaCardGrid({
   block: MediaCardGridBlock
   ImgComponent?: (props: { src: string; alt: string; fill?: boolean; className?: string }) => React.ReactNode
 }) {
-  const tiles = (block.tiles ?? []).filter((t) => (t.type === 'video' ? t.video?.url : t.image?.url))
+  const tiles = (block.tiles ?? []).filter((t) => (t.type === 'video' ? (t.poster?.url || t.video?.url) : t.image?.url))
   if (!tiles.length) return null
 
   return (
