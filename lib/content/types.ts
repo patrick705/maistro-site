@@ -57,6 +57,24 @@ export interface SeoDefaults {
   twitterHandle?: string
 }
 
+export interface SiteAnalytics {
+  gtmId?: string
+  gtmOn?: boolean
+  ga4Id?: string
+  ga4On?: boolean
+  metaPixelId?: string
+  metaOn?: boolean
+  googleAdsId?: string
+  adsOn?: boolean
+}
+
+export interface AnalyticsOverride {
+  gtmId?: string
+  ga4Id?: string
+  metaPixelId?: string
+  googleAdsId?: string
+}
+
 export interface SiteSettings {
   siteName: string
   logo?: SeoImage
@@ -66,7 +84,7 @@ export interface SiteSettings {
   primaryCta: PrimaryCta
   socialLinks: SocialLink[]
   footerText: string
-  gtmContainerId?: string
+  analytics?: SiteAnalytics
   theme: SiteTheme
   seoDefaults: SeoDefaults
   demoModal: DemoModalContent
@@ -82,6 +100,8 @@ export interface Seo {
   metaDescription?: string
   ogImage?: SeoImage
   noIndex?: boolean
+  analyticsOverride?: boolean
+  analytics?: AnalyticsOverride
 }
 
 export interface ClientLogo {

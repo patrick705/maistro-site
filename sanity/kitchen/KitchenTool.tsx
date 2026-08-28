@@ -10,13 +10,14 @@ import { MediaLibraryView } from './MediaLibraryView'
 import { ThemeSettings } from './settings/Theme'
 import { GeneralSettings } from './settings/General'
 import { NavigationSettings } from './settings/Navigation'
+import { AnalyticsSettings } from './settings/Analytics'
 import { SeoDefaultsSettings } from './settings/SeoDefaults'
 import { DemoModalSettings } from './settings/DemoModal'
 import { PAIRING_FONTS, googleFontsHref, kitchen } from './theme'
 import { useLiveQuery } from './useLiveQuery'
 import { useIsMobile } from './useIsMobile'
 
-export type SettingsSection = 'theme' | 'general' | 'navigation' | 'seo' | 'demoModal'
+export type SettingsSection = 'theme' | 'general' | 'navigation' | 'analytics' | 'seo' | 'demoModal'
 
 export type KitchenView =
   | { kind: 'page'; id: string }
@@ -108,6 +109,7 @@ export function KitchenTool() {
           {view?.kind === 'settings' && view.section === 'theme' && <ThemeSettings />}
           {view?.kind === 'settings' && view.section === 'general' && <GeneralSettings />}
           {view?.kind === 'settings' && view.section === 'navigation' && <NavigationSettings />}
+          {view?.kind === 'settings' && view.section === 'analytics' && <AnalyticsSettings />}
           {view?.kind === 'settings' && view.section === 'seo' && <SeoDefaultsSettings />}
           {view?.kind === 'settings' && view.section === 'demoModal' && <DemoModalSettings />}
           {view?.kind === 'collection' && view.type === 'newsArticle' && (

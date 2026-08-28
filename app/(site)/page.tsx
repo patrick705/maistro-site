@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import { AnalyticsScripts } from '@/components/AnalyticsScripts'
 import { PageBuilder } from '@/components/PageBuilder'
+import { resolveAnalytics } from '@/lib/analytics'
 import { getPageBySlug, getSiteSettings } from '@/lib/sanity/fetch'
 import { buildMetadata } from '@/lib/seoMeta'
 import { jsonLdScript, organizationJsonLd } from '@/lib/structuredData'
@@ -24,6 +26,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <AnalyticsScripts {...resolveAnalytics(siteSettings.analytics, page.seo)} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

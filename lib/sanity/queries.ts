@@ -5,7 +5,9 @@ const seoProjection = groq`
     metaTitle,
     metaDescription,
     "ogImage": ogImage{"url": asset->url, alt},
-    noIndex
+    noIndex,
+    analyticsOverride,
+    analytics{gtmId, ga4Id, metaPixelId, googleAdsId}
   }
 `
 
@@ -19,7 +21,7 @@ export const siteSettingsQuery = groq`
     primaryCta{label, href},
     socialLinks[]{platform, url},
     footerText,
-    gtmContainerId,
+    analytics{gtmId, gtmOn, ga4Id, ga4On, metaPixelId, metaOn, googleAdsId, adsOn},
     theme{
       "palette": palette->{
         name, brandHex, accentHex, warmHex, posHex,

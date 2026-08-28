@@ -1,11 +1,20 @@
 import { ImageUploadField, type SanityImageValue } from './ImageUploadField'
 import { kitchen } from './theme'
 
+interface AnalyticsOverride {
+  gtmId?: string
+  ga4Id?: string
+  metaPixelId?: string
+  googleAdsId?: string
+}
+
 interface PageSeo {
   metaTitle?: string
   metaDescription?: string
   ogImage?: SanityImageValue
   noIndex?: boolean
+  analyticsOverride?: boolean
+  analytics?: AnalyticsOverride
 }
 
 const inputStyle: React.CSSProperties = {
@@ -103,6 +112,60 @@ export function PageSeoDrawer({
           <input type="checkbox" checked={s.noIndex ?? false} onChange={(e) => patch({ noIndex: e.target.checked })} />
           Hide from search engines
         </label>
+
+        <div style={{ borderTop: `1px solid ${kitchen.border}`, paddingTop: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12.5, color: kitchen.textBody }}>
+            <input
+              type="checkbox"
+              checked={s.analyticsOverride ?? false}
+              onChange={(e) => patch({ analyticsOverride: e.target.checked })}
+              style={{ marginTop: 2 }}
+            />
+            <span>
+              Override site-wide analytics for this page
+              <div style={{ fontSize: 11, color: kitchen.textMuted, fontWeight: 400 }}>
+                Off inherits GTM / GA4 / Meta Pixel / Google Ads from Site settings → Analytics & Tracking.
+              </div>
+            </span>
+          </label>
+
+          {s.analyticsOverride && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <Field label="GTM container (override)">
+                <input
+                  style={inputStyle}
+                  placeholder="GTM-XXXXXXX"
+                  value={s.analytics?.gtmId ?? ''}
+                  onChange={(e) => patch({ analytics: { ...s.analytics, gtmId: e.target.value } })}
+                />
+              </Field>
+              <Field label="GA4 measurement ID (override)">
+                <input
+                  style={inputStyle}
+                  placeholder="G-XXXXXXXXXX"
+                  value={s.analytics?.ga4Id ?? ''}
+                  onChange={(e) => patch({ analytics: { ...s.analytics, ga4Id: e.target.value } })}
+                />
+              </Field>
+              <Field label="Meta Pixel ID (override)">
+                <input
+                  style={inputStyle}
+                  placeholder="15–16 digit pixel ID"
+                  value={s.analytics?.metaPixelId ?? ''}
+                  onChange={(e) => patch({ analytics: { ...s.analytics, metaPixelId: e.target.value } })}
+                />
+              </Field>
+              <Field label="Google Ads conversion ID (override)">
+                <input
+                  style={inputStyle}
+                  placeholder="AW-XXXXXXXXX"
+                  value={s.analytics?.googleAdsId ?? ''}
+                  onChange={(e) => patch({ analytics: { ...s.analytics, googleAdsId: e.target.value } })}
+                />
+              </Field>
+            </div>
+          )}
+        </div>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '12px 16px', borderTop: `1px solid ${kitchen.border}` }}>

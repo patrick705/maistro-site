@@ -19,8 +19,9 @@ interface PageRow {
 const SETTINGS_SECTIONS: { section: SettingsSection; label: string; glyph: string }[] = [
   { section: 'general', label: 'General', glyph: '⚙' },
   { section: 'navigation', label: 'Navigation', glyph: '☰' },
-  { section: 'seo', label: 'SEO defaults', glyph: '◱' },
   { section: 'theme', label: 'Theme', glyph: '◐' },
+  { section: 'analytics', label: 'Analytics & Tracking', glyph: '◉' },
+  { section: 'seo', label: 'SEO defaults', glyph: '◱' },
   { section: 'demoModal', label: 'Demo modal', glyph: '🔲' },
 ]
 

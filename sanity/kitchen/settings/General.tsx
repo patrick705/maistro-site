@@ -8,7 +8,6 @@ interface SiteSettingsDoc {
   logo?: SanityImageValue
   logoDark?: SanityImageValue
   footerText?: string
-  gtmContainerId?: string
 }
 
 const inputStyle: React.CSSProperties = {
@@ -59,10 +58,6 @@ export function GeneralSettings() {
 
         <Field label="Footer text">
           <input style={inputStyle} value={settings.footerText ?? ''} onChange={(e) => patch({ footerText: e.target.value })} />
-        </Field>
-
-        <Field label="Google Tag Manager container ID" hint="e.g. GTM-XXXXXXX. Leave empty to disable GTM site-wide.">
-          <input style={inputStyle} value={settings.gtmContainerId ?? ''} onChange={(e) => patch({ gtmContainerId: e.target.value })} />
         </Field>
       </div>
     </div>
