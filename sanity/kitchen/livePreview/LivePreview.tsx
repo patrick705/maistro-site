@@ -25,13 +25,18 @@ import { PreviewSideBySide } from './PreviewSideBySide'
 import { PreviewLogoStrip } from './PreviewLogoStrip'
 import { PreviewNewsGrid } from './PreviewNewsGrid'
 import { PreviewImg } from './PreviewImg'
+import { PreviewEmptyBlock } from './PreviewEmptyBlock'
 import { ScrollGallery } from '../../../components/blocks/ScrollGallery'
 import { MediaMosaic } from '../../../components/blocks/MediaMosaic'
 import { MediaCardGrid } from '../../../components/blocks/MediaCardGrid'
 import { ImageBanner } from '../../../components/blocks/ImageBanner'
 import { MultiImageBanner } from '../../../components/blocks/MultiImageBanner'
 import { blockDesignStyle } from '../../../lib/content/blockDesignStyle'
-import type { PageBlock } from '../../../lib/content/types'
+import type { MediaTile, PageBlock } from '../../../lib/content/types'
+
+function hasTiles(tiles: MediaTile[] | undefined) {
+  return (tiles ?? []).some((t) => (t.type === 'video' ? t.video?.url : t.image?.url))
+}
 
 /**
  * Renders a block exactly as it appears on the live site, reusing the real
@@ -127,11 +132,23 @@ function renderBlock(block: PageBlock, isFirst?: boolean) {
     case 'newsGridBlock':
       return <PreviewNewsGrid />
     case 'scrollGalleryBlock':
-      return <ScrollGallery block={block} ImgComponent={PreviewImg} />
+      return hasTiles(block.tiles) ? (
+        <ScrollGallery block={block} ImgComponent={PreviewImg} />
+      ) : (
+        <PreviewEmptyBlock label="No tiles yet — click to add some" />
+      )
     case 'mediaMosaicBlock':
-      return <MediaMosaic block={block} ImgComponent={PreviewImg} />
+      return hasTiles(block.tiles) ? (
+        <MediaMosaic block={block} ImgComponent={PreviewImg} />
+      ) : (
+        <PreviewEmptyBlock label="No tiles yet — click to add some" />
+      )
     case 'mediaCardGridBlock':
-      return <MediaCardGrid block={block} ImgComponent={PreviewImg} />
+      return hasTiles(block.tiles) ? (
+        <MediaCardGrid block={block} ImgComponent={PreviewImg} />
+      ) : (
+        <PreviewEmptyBlock label="No tiles yet — click to add some" />
+      )
     case 'imageBannerBlock':
       return (
         <ImageBanner
@@ -140,7 +157,11 @@ function renderBlock(block: PageBlock, isFirst?: boolean) {
         />
       )
     case 'multiImageBannerBlock':
-      return <MultiImageBanner block={block} ImgComponent={PreviewImg} />
+      return (block.images ?? []).some((item) => item.image?.url) ? (
+        <MultiImageBanner block={block} ImgComponent={PreviewImg} />
+      ) : (
+        <PreviewEmptyBlock label="No images yet — click to add some" />
+      )
     default:
       return null
   }
