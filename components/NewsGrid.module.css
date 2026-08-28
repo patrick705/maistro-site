@@ -20,11 +20,16 @@
 }
 
 .thumb {
+  position: relative;
   width: 100%;
   height: 172px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.thumbImage {
+  object-fit: cover;
 }
 
 .thumb[data-variant='warm'] {

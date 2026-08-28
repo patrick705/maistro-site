@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import styles from './NewsGrid.module.css'
@@ -11,7 +12,11 @@ function Card({ article }: { article: NewsArticle }) {
   return (
     <Link href={`/news/${article.slug}`} className={styles.card}>
       <div className={styles.thumb} data-variant={article.variant}>
-        <span className={styles.thumbIcon}>{article.icon}</span>
+        {article.coverImage ? (
+          <Image src={article.coverImage.url} alt={article.coverImage.alt} fill sizes="(max-width: 700px) 100vw, 33vw" className={styles.thumbImage} />
+        ) : (
+          <span className={styles.thumbIcon}>{article.icon}</span>
+        )}
       </div>
       <div className={styles.body}>
         <div className={styles.metaRow}>

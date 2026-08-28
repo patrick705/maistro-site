@@ -46,6 +46,7 @@ export const siteSettingsQuery = groq`
 export const newsArticlesQuery = groq`
   *[_type == "newsArticle" && archived != true] | order(publishedAt desc){
     title, excerpt, category, icon, variant, publishedAt,
+    "coverImage": coverImage{"url": asset->url, alt},
     "slug": slug.current
   }
 `

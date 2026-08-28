@@ -40,6 +40,26 @@ export const newsArticle = defineType({
     }),
     colorVariantField,
     defineField({
+      name: 'coverImage',
+      title: 'Cover image',
+      description: 'Shown on the News grid tile in place of the icon placeholder. Optional — falls back to the emoji + colour tile if left empty.',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+          validation: (r) =>
+            r.custom((alt, context) => {
+              const parent = context.parent as { asset?: unknown } | undefined
+              if (parent?.asset && !alt) return 'Required when a cover image is uploaded'
+              return true
+            }),
+        }),
+      ],
+    }),
+    defineField({
       name: 'heroImage',
       title: 'Hero image',
       description: 'Shown at the top of the article when opened.',

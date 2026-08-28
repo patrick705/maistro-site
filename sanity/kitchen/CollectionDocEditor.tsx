@@ -27,6 +27,13 @@ const inputStyle: React.CSSProperties = {
   width: '100%',
 }
 
+interface NewsArticleSeo {
+  metaTitle?: string
+  metaDescription?: string
+  ogImage?: SanityImageValue
+  noIndex?: boolean
+}
+
 interface NewsArticleDoc {
   _id: string
   title?: string
@@ -34,31 +41,52 @@ interface NewsArticleDoc {
   category?: string
   icon?: string
   variant?: string
+  coverImage?: SanityImageValue
   heroImage?: SanityImageValue
   author?: string
   publishedAt?: string
-  body?: { _key: string; children?: { text?: string }[] }[]
+  body?: Record<string, any>[]
+  seo?: NewsArticleSeo
+}
+
+type BodyItem =
+  | { _key: string; kind: 'text'; text: string }
+  | { _key: string; kind: 'image'; image?: SanityImageValue }
+
+function toBodyItems(blocks: Record<string, any>[]): BodyItem[] {
+  return blocks.map((b) => {
+    if (b._type === 'image') {
+      return { _key: b._key, kind: 'image', image: { _type: 'image', asset: b.asset, alt: b.alt } }
+    }
+    return { _key: b._key, kind: 'text', text: ((b.children ?? []) as { text?: string }[]).map((c) => c.text ?? '').join('') }
+  })
+}
+
+function fromBodyItems(items: BodyItem[]): Record<string, any>[] {
+  return items.map((it) =>
+    it.kind === 'image'
+      ? { _type: 'image', _key: it._key, asset: it.image?.asset, alt: it.image?.alt }
+      : { _type: 'block', _key: it._key, style: 'normal', children: [{ _type: 'span', _key: randomKey(), text: it.text }] },
+  )
 }
 
 export function CollectionDocEditor({ id, onBack }: { id: string; onBack: () => void }) {
   const { doc, patch } = useKitchenPatch(id, 'newsArticle')
   const article = doc as NewsArticleDoc | null
-  const [paragraphs, setParagraphs] = useState<{ _key: string; text: string }[] | null>(null)
+  const [bodyOverride, setBodyOverride] = useState<BodyItem[] | null>(null)
 
   if (!article) return <div style={{ padding: 24, color: kitchen.textFaint }}>Loading…</div>
 
-  const body = paragraphs ?? (article.body ?? []).map((b) => ({ _key: b._key, text: (b.children ?? []).map((c) => c.text ?? '').join('') }))
+  const body = bodyOverride ?? toBodyItems(article.body ?? [])
+  const seo = article.seo ?? {}
 
-  function saveBody(next: { _key: string; text: string }[]) {
-    setParagraphs(next)
-    patch({
-      body: next.map((p) => ({
-        _type: 'block',
-        _key: p._key,
-        style: 'normal',
-        children: [{ _type: 'span', _key: randomKey(), text: p.text }],
-      })),
-    })
+  function saveBody(next: BodyItem[]) {
+    setBodyOverride(next)
+    patch({ body: fromBodyItems(next) })
+  }
+
+  function patchSeo(fields: Partial<NewsArticleSeo>) {
+    patch({ seo: { ...seo, ...fields } })
   }
 
   return (
@@ -88,6 +116,11 @@ export function CollectionDocEditor({ id, onBack }: { id: string; onBack: () => 
             value={article.excerpt ?? ''}
             onChange={(e) => patch({ excerpt: e.target.value })}
           />
+        </label>
+
+        <label style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+          <span style={labelStyle()}>Cover image · shown on the News grid tile (falls back to the icon below if left empty)</span>
+          <ImageUploadField value={article.coverImage} onChange={(v) => patch({ coverImage: v })} width={140} height={90} />
         </label>
 
         <label style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
@@ -144,18 +177,32 @@ export function CollectionDocEditor({ id, onBack }: { id: string; onBack: () => 
             <span style={labelStyle()}>Article body</span>
             <div style={{ flex: 1, height: 1, background: kitchen.border }} />
           </div>
-          {body.map((p, i) => (
-            <div key={p._key} style={{ display: 'flex', gap: 8, alignItems: 'flex-start', padding: '10px 11px', border: `1px solid ${kitchen.borderSoft}`, borderRadius: 9, background: '#fff' }}>
+          {body.map((item, i) => (
+            <div key={item._key} style={{ display: 'flex', gap: 8, alignItems: 'flex-start', padding: '10px 11px', border: `1px solid ${kitchen.borderSoft}`, borderRadius: 9, background: '#fff' }}>
               <span style={{ color: kitchen.borderDashed, fontSize: 13, letterSpacing: '-2px', paddingTop: 4 }}>⠿</span>
-              <textarea
-                style={{ flex: 1, border: 'none', outline: 'none', resize: 'vertical', font: 'inherit', fontSize: 13, lineHeight: 1.6, background: 'transparent' }}
-                rows={3}
-                value={p.text}
-                onChange={(e) => {
-                  const next = body.map((b, j) => (j === i ? { ...b, text: e.target.value } : b))
-                  saveBody(next)
-                }}
-              />
+              {item.kind === 'text' ? (
+                <textarea
+                  style={{ flex: 1, border: 'none', outline: 'none', resize: 'vertical', font: 'inherit', fontSize: 13, lineHeight: 1.6, background: 'transparent' }}
+                  rows={3}
+                  value={item.text}
+                  onChange={(e) => {
+                    const next = body.map((b, j) => (j === i ? { ...b, text: e.target.value } : b))
+                    saveBody(next)
+                  }}
+                />
+              ) : (
+                <div style={{ flex: 1 }}>
+                  <ImageUploadField
+                    value={item.image}
+                    onChange={(v) => {
+                      const next = body.map((b, j) => (j === i ? { ...b, image: v } : b))
+                      saveBody(next)
+                    }}
+                    width={140}
+                    height={90}
+                  />
+                </div>
+              )}
               <button
                 type="button"
                 onClick={() => saveBody(body.filter((_, j) => j !== i))}
@@ -166,13 +213,53 @@ export function CollectionDocEditor({ id, onBack }: { id: string; onBack: () => 
               </button>
             </div>
           ))}
-          <button
-            type="button"
-            onClick={() => saveBody([...body, { _key: randomKey(), text: '' }])}
-            style={{ alignSelf: 'flex-start', padding: '6px 11px', border: `1px dashed ${kitchen.borderDashed}`, borderRadius: 7, background: '#fff', cursor: 'pointer', fontSize: 11.5, fontWeight: 600, color: kitchen.textSubtle }}
-          >
-            + Paragraph
-          </button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              type="button"
+              onClick={() => saveBody([...body, { _key: randomKey(), kind: 'text', text: '' }])}
+              style={{ alignSelf: 'flex-start', padding: '6px 11px', border: `1px dashed ${kitchen.borderDashed}`, borderRadius: 7, background: '#fff', cursor: 'pointer', fontSize: 11.5, fontWeight: 600, color: kitchen.textSubtle }}
+            >
+              + Paragraph
+            </button>
+            <button
+              type="button"
+              onClick={() => saveBody([...body, { _key: randomKey(), kind: 'image' }])}
+              style={{ alignSelf: 'flex-start', padding: '6px 11px', border: `1px dashed ${kitchen.borderDashed}`, borderRadius: 7, background: '#fff', cursor: 'pointer', fontSize: 11.5, fontWeight: 600, color: kitchen.textSubtle }}
+            >
+              + Image
+            </button>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, borderTop: `1px solid ${kitchen.border}`, paddingTop: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={labelStyle()}>SEO &amp; metadata</span>
+            <div style={{ flex: 1, height: 1, background: kitchen.border }} />
+          </div>
+
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            <span style={labelStyle()}>Meta title</span>
+            <input style={inputStyle} value={seo.metaTitle ?? ''} onChange={(e) => patchSeo({ metaTitle: e.target.value })} />
+          </label>
+
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            <span style={labelStyle()}>Meta description</span>
+            <textarea
+              style={{ ...inputStyle, minHeight: 60, resize: 'vertical' }}
+              value={seo.metaDescription ?? ''}
+              onChange={(e) => patchSeo({ metaDescription: e.target.value })}
+            />
+          </label>
+
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            <span style={labelStyle()}>Social share image</span>
+            <ImageUploadField value={seo.ogImage} onChange={(v) => patchSeo({ ogImage: v })} />
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: kitchen.textBody }}>
+            <input type="checkbox" checked={seo.noIndex ?? false} onChange={(e) => patchSeo({ noIndex: e.target.checked })} />
+            Hide from search engines
+          </label>
         </div>
       </div>
     </div>
