@@ -1,0 +1,27 @@
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: clamp(calc(24px * var(--type-scale)), 3vw, calc(32px * var(--type-scale)));
+  margin: 0 0 24px;
+  color: var(--brand, #111);
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.tile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f1eef7;
+}

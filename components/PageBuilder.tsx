@@ -23,6 +23,11 @@ import { IntegrationsBlockView } from './blocks/IntegrationsBlockView'
 import { FeaturedCaseStudyBlockView } from './blocks/FeaturedCaseStudyBlockView'
 import { TestimonialGridBlockView } from './blocks/TestimonialGridBlockView'
 import { NewsGridBlockView } from './blocks/NewsGridBlockView'
+import { ScrollGallery } from './blocks/ScrollGallery'
+import { MediaMosaic } from './blocks/MediaMosaic'
+import { MediaCardGrid } from './blocks/MediaCardGrid'
+import { ImageBanner } from './blocks/ImageBanner'
+import { MultiImageBanner } from './blocks/MultiImageBanner'
 
 export function PageBuilder({ blocks }: { blocks: PageBlock[] }) {
   const leading = blocks[0]
@@ -92,6 +97,22 @@ export function PageBuilder({ blocks }: { blocks: PageBlock[] }) {
             return <TestimonialGridBlockView key={block._key} block={block} />
           case 'newsGridBlock':
             return <NewsGridBlockView key={block._key} />
+          case 'scrollGalleryBlock':
+            return <ScrollGallery key={block._key} block={block} />
+          case 'mediaMosaicBlock':
+            return <MediaMosaic key={block._key} block={block} />
+          case 'mediaCardGridBlock':
+            return <MediaCardGrid key={block._key} block={block} />
+          case 'imageBannerBlock':
+            return (
+              <ImageBanner
+                key={block._key}
+                block={block}
+                renderCta={(label, href, className) => <BookDemoButton label={label} href={href} className={className} />}
+              />
+            )
+          case 'multiImageBannerBlock':
+            return <MultiImageBanner key={block._key} block={block} />
           default:
             return null
         }

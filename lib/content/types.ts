@@ -537,6 +537,61 @@ export interface NewsGridBlock {
   _key: string
 }
 
+export interface MediaTile {
+  _key: string
+  type: 'image' | 'video'
+  image?: SeoImage
+  video?: { url: string }
+  captionMode?: 'none' | 'title' | 'full'
+  title?: string
+  description?: string
+}
+
+export interface ScrollGalleryBlock {
+  _type: 'scrollGalleryBlock'
+  _key: string
+  heading?: string
+  tiles?: MediaTile[]
+}
+
+export interface MediaMosaicBlock {
+  _type: 'mediaMosaicBlock'
+  _key: string
+  heading?: string
+  tiles?: MediaTile[]
+}
+
+export interface MediaCardGridBlock {
+  _type: 'mediaCardGridBlock'
+  _key: string
+  heading?: string
+  tiles?: MediaTile[]
+}
+
+export interface ImageBannerBlock {
+  _type: 'imageBannerBlock'
+  _key: string
+  image?: SeoImage
+  eyebrow?: string
+  heading?: string
+  subhead?: string
+  buttonLabel?: string
+  buttonHref?: string
+}
+
+export interface BannerImage {
+  _key: string
+  image?: SeoImage
+}
+
+export interface MultiImageBannerBlock {
+  _type: 'multiImageBannerBlock'
+  _key: string
+  images?: BannerImage[]
+  eyebrow?: string
+  heading?: string
+}
+
 export type PageBlock =
   | HeroCarouselBlock
   | TextBlockData
@@ -561,6 +616,11 @@ export type PageBlock =
   | FeaturedCaseStudyBlock
   | TestimonialGridBlock
   | NewsGridBlock
+  | ScrollGalleryBlock
+  | MediaMosaicBlock
+  | MediaCardGridBlock
+  | ImageBannerBlock
+  | MultiImageBannerBlock
 
 export interface Page {
   title: string

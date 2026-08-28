@@ -231,6 +231,19 @@ export function genericBlockContent(type: string): Record<string, any> {
       }
     case 'sideBySideBlock':
       return { _type: type, _key, imagePosition: 'left', heading: 'A side-by-side section heading', body: [{ _type: 'block', _key: randomKey(), style: 'normal', children: [{ _type: 'span', _key: randomKey(), text: 'A paragraph of copy sitting next to the image.' }] }] }
+    // The four below need an uploaded image/video per tile to render anything
+    // at all (same "no placeholder asset" tradeoff as the image-only blocks
+    // above) — heading text is still filled in for when real media is added.
+    case 'scrollGalleryBlock':
+      return { _type: type, _key, heading: 'Scroll gallery heading', tiles: [] }
+    case 'mediaMosaicBlock':
+      return { _type: type, _key, heading: 'Media mosaic heading', tiles: [] }
+    case 'mediaCardGridBlock':
+      return { _type: type, _key, heading: 'Media card grid heading', tiles: [] }
+    case 'imageBannerBlock':
+      return { _type: type, _key, eyebrow: 'Eyebrow label', heading: 'An image banner headline', subhead: 'One line of supporting copy.', buttonLabel: 'Get started' }
+    case 'multiImageBannerBlock':
+      return { _type: type, _key, eyebrow: 'Eyebrow label', heading: 'A multi-image banner headline', images: [] }
     default:
       return { _type: type, _key }
   }

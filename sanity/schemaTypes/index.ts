@@ -44,6 +44,12 @@ import { integrationsBlock } from './objects/integrationsBlock'
 import { featuredCaseStudyBlock } from './objects/featuredCaseStudyBlock'
 import { testimonialGridBlock } from './objects/testimonialGridBlock'
 import { newsGridBlock } from './objects/newsGridBlock'
+import { mediaTile } from './objects/mediaTile'
+import { scrollGalleryBlock } from './objects/scrollGalleryBlock'
+import { mediaMosaicBlock } from './objects/mediaMosaicBlock'
+import { mediaCardGridBlock } from './objects/mediaCardGridBlock'
+import { imageBannerBlock } from './objects/imageBannerBlock'
+import { multiImageBannerBlock } from './objects/multiImageBannerBlock'
 
 import { siteSettings } from './siteSettings'
 import { newsArticle } from './newsArticle'
@@ -97,6 +103,12 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   featuredCaseStudyBlock,
   testimonialGridBlock,
   newsGridBlock,
+  mediaTile,
+  scrollGalleryBlock,
+  mediaMosaicBlock,
+  mediaCardGridBlock,
+  imageBannerBlock,
+  multiImageBannerBlock,
   // documents
   siteSettings,
   newsArticle,

@@ -212,6 +212,22 @@ export const pageBySlugQuery = groq`
       },
       _type == "newsGridBlock" => {
         _key
+      },
+      _type in ["scrollGalleryBlock", "mediaMosaicBlock", "mediaCardGridBlock"] => {
+        heading,
+        tiles[]{
+          _key, type, captionMode, title, description,
+          "image": image{"url": asset->url, alt},
+          "video": {"url": video.asset->url}
+        }
+      },
+      _type == "imageBannerBlock" => {
+        "image": image{"url": asset->url, alt},
+        eyebrow, heading, subhead, buttonLabel, buttonHref
+      },
+      _type == "multiImageBannerBlock" => {
+        images[]{_key, "image": image{"url": asset->url, alt}},
+        eyebrow, heading
       }
     },
 

@@ -24,6 +24,12 @@ import { PreviewBackgroundVideo } from './PreviewBackgroundVideo'
 import { PreviewSideBySide } from './PreviewSideBySide'
 import { PreviewLogoStrip } from './PreviewLogoStrip'
 import { PreviewNewsGrid } from './PreviewNewsGrid'
+import { PreviewImg } from './PreviewImg'
+import { ScrollGallery } from '../../../components/blocks/ScrollGallery'
+import { MediaMosaic } from '../../../components/blocks/MediaMosaic'
+import { MediaCardGrid } from '../../../components/blocks/MediaCardGrid'
+import { ImageBanner } from '../../../components/blocks/ImageBanner'
+import { MultiImageBanner } from '../../../components/blocks/MultiImageBanner'
 import { blockDesignStyle } from '../../../lib/content/blockDesignStyle'
 import type { PageBlock } from '../../../lib/content/types'
 
@@ -120,6 +126,21 @@ function renderBlock(block: PageBlock, isFirst?: boolean) {
       return <TestimonialGridBlockView block={block} />
     case 'newsGridBlock':
       return <PreviewNewsGrid />
+    case 'scrollGalleryBlock':
+      return <ScrollGallery block={block} ImgComponent={PreviewImg} />
+    case 'mediaMosaicBlock':
+      return <MediaMosaic block={block} ImgComponent={PreviewImg} />
+    case 'mediaCardGridBlock':
+      return <MediaCardGrid block={block} ImgComponent={PreviewImg} />
+    case 'imageBannerBlock':
+      return (
+        <ImageBanner
+          block={block}
+          renderCta={(label, _href, className) => <PreviewInertCta label={label} className={className} />}
+        />
+      )
+    case 'multiImageBannerBlock':
+      return <MultiImageBanner block={block} ImgComponent={PreviewImg} />
     default:
       return null
   }

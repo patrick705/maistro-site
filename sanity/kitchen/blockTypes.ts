@@ -50,6 +50,8 @@ export const BLOCK_TYPES: { type: string; label: string; icon: string; category:
   { type: 'simpleHeroBlock', label: 'Simple hero', icon: '✨', category: 'Heroes & headers', description: 'Headline + subhead, no CTA row' },
   { type: 'heroCarouselBlock', label: 'Page header', icon: '🖼️', category: 'Heroes & headers', description: 'Image or rotating images banner' },
   { type: 'backgroundVideoBlock', label: 'Background video', icon: '📽️', category: 'Heroes & headers', description: 'Full-bleed looping video, optional overlay' },
+  { type: 'imageBannerBlock', label: 'Image banner', icon: '🏔️', category: 'Heroes & headers', description: 'Full-bleed background image, scrim, centered copy + CTA' },
+  { type: 'multiImageBannerBlock', label: 'Multi-image banner', icon: '🎞️', category: 'Heroes & headers', description: 'Full-bleed row of images, scrim, centered copy' },
 
   { type: 'dashboardShowcaseBlock', label: 'Dashboard showcase', icon: '📊', category: 'Product & story', description: 'Overview / Forecast / Staff / Stock / Reports' },
   { type: 'aboutSectionBlock', label: 'About section', icon: '🧭', category: 'Product & story', description: 'Headline, body copy, pipeline diagram' },
@@ -66,6 +68,9 @@ export const BLOCK_TYPES: { type: string; label: string; icon: string; category:
   { type: 'imageGalleryBlock', label: 'Gallery', icon: '🗂️', category: 'Media & social', description: 'Grid of images with captions' },
   { type: 'liveVideoBlock', label: 'Video', icon: '🎥', category: 'Media & social', description: 'Embed URL with poster / offline fallback' },
   { type: 'socialLinksBlock', label: 'Social links', icon: '🔗', category: 'Media & social', description: 'Heading + a list of platform links' },
+  { type: 'scrollGalleryBlock', label: 'Scroll gallery', icon: '📜', category: 'Media & social', description: 'Full-bleed horizontal scrolling strip' },
+  { type: 'mediaMosaicBlock', label: 'Media mosaic', icon: '🖼️', category: 'Media & social', description: '3-col grid with a 2×2 featured tile' },
+  { type: 'mediaCardGridBlock', label: 'Media card grid', icon: '▦', category: 'Media & social', description: 'Uniform grid, no featured tile' },
 
   { type: 'newsGridBlock', label: 'News grid', icon: '📰', category: 'Editorial & conversion', description: 'Pulls from News Articles' },
   { type: 'contactFormBlock', label: 'Contact section', icon: '✉️', category: 'Editorial & conversion', description: 'Headline, subhead, lead form' },
@@ -117,6 +122,14 @@ export function emptyBlock(type: string): Record<string, any> {
         overlayPreset: 'Full',
         scrollCue: true,
       }
+    case 'imageBannerBlock':
+      return { _type: type, _key }
+    case 'multiImageBannerBlock':
+      return { _type: type, _key, images: [] }
+    case 'scrollGalleryBlock':
+    case 'mediaMosaicBlock':
+    case 'mediaCardGridBlock':
+      return { _type: type, _key, tiles: [] }
     case 'roiCalculatorBlock':
       return {
         _type: type,

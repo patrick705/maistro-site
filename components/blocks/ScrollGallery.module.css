@@ -1,0 +1,35 @@
+.section {
+  width: 100%;
+  padding: 40px 0;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: clamp(calc(22px * var(--type-scale)), 2.8vw, calc(30px * var(--type-scale)));
+  margin: 0 0 20px;
+  padding: 0 24px;
+  color: var(--brand, #111);
+  text-align: center;
+}
+
+.strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 0 24px 6px;
+}
+
+.tile {
+  position: relative;
+  flex: 0 0 130px;
+  height: 170px;
+  border-radius: 12px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  background: #f1eef7;
+}
+
+.tileLead {
+  flex-basis: 190px;
+}

@@ -26,6 +26,16 @@ interface ImageItem {
   caption?: string
 }
 
+interface TileItem {
+  _key: string
+  type?: string
+  image?: SanityImageValue
+  video?: SanityFileValue
+  captionMode?: string
+  title?: string
+  description?: string
+}
+
 interface LinkItem {
   _key: string
   platform?: string
@@ -309,6 +319,36 @@ function linesToArray(text: string): string[] {
     .filter(Boolean)
 }
 
+/** Shared per-tile editor for scrollGalleryBlock/mediaMosaicBlock/mediaCardGridBlock — a real sub-form (type, matching upload, caption controls) rather than a flat label/meta row. */
+function renderTileItem(item: TileItem, update: (fields: Partial<TileItem>) => void) {
+  const type = item.type ?? 'image'
+  const captionMode = item.captionMode ?? 'none'
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <select style={inputStyle} value={type} onChange={(e) => update({ type: e.target.value })}>
+        <option value="image">Image</option>
+        <option value="video">Video</option>
+      </select>
+      {type === 'video' ? (
+        <VideoUploadField value={item.video} onChange={(v) => update({ video: v })} />
+      ) : (
+        <ImageUploadField value={item.image} onChange={(v) => update({ image: v })} />
+      )}
+      <select style={inputStyle} value={captionMode} onChange={(e) => update({ captionMode: e.target.value })}>
+        <option value="none">No caption</option>
+        <option value="title">Title only</option>
+        <option value="full">Title + description</option>
+      </select>
+      {captionMode !== 'none' && (
+        <input style={inputStyle} placeholder="Title" value={item.title ?? ''} onChange={(e) => update({ title: e.target.value })} />
+      )}
+      {captionMode === 'full' && (
+        <textarea style={textareaStyle} placeholder="Description" value={item.description ?? ''} onChange={(e) => update({ description: e.target.value })} />
+      )}
+    </div>
+  )
+}
+
 export interface SimpleBlockEditorHandle {
   save: () => void
 }
@@ -325,6 +365,7 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
     bodyText: Array.isArray(block.body) ? portableBodyToText(block.body) : '',
     slides: block.slides ?? [],
     images: block.images ?? [],
+    tiles: block.tiles ?? [],
     links: block.links ?? [],
     logos: block.logos ?? [],
     heroStats: block.heroStats ?? [],
@@ -668,6 +709,100 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
                 <input style={inputStyle} placeholder="Website (optional)" value={item.website ?? ''} onChange={(e) => update({ website: e.target.value })} />
               </div>
             )}
+          />
+        </Field>
+      </>
+    ),
+    scrollGalleryBlock: (
+      <>
+        <Field label="Heading">
+          <input style={inputStyle} value={draft.heading ?? ''} onChange={(e) => set('heading', e.target.value)} />
+        </Field>
+        <Field label="Tiles">
+          <ArrayEditor<TileItem>
+            items={draft.tiles}
+            onChange={(next) => set('tiles', next)}
+            newItem={() => ({ _key: randomKey(), type: 'image', captionMode: 'none' })}
+            addLabel="+ Add tile"
+            renderItem={renderTileItem}
+          />
+        </Field>
+      </>
+    ),
+    mediaMosaicBlock: (
+      <>
+        <Field label="Heading">
+          <input style={inputStyle} value={draft.heading ?? ''} onChange={(e) => set('heading', e.target.value)} />
+        </Field>
+        <Field label="Tiles">
+          <ArrayEditor<TileItem>
+            items={draft.tiles}
+            onChange={(next) => set('tiles', next)}
+            newItem={() => ({ _key: randomKey(), type: 'image', captionMode: 'none' })}
+            addLabel="+ Add tile"
+            renderItem={renderTileItem}
+          />
+        </Field>
+      </>
+    ),
+    mediaCardGridBlock: (
+      <>
+        <Field label="Heading">
+          <input style={inputStyle} value={draft.heading ?? ''} onChange={(e) => set('heading', e.target.value)} />
+        </Field>
+        <Field label="Tiles">
+          <ArrayEditor<TileItem>
+            items={draft.tiles}
+            onChange={(next) => set('tiles', next)}
+            newItem={() => ({ _key: randomKey(), type: 'image', captionMode: 'none' })}
+            addLabel="+ Add tile"
+            renderItem={renderTileItem}
+          />
+        </Field>
+      </>
+    ),
+    imageBannerBlock: (
+      <>
+        <Field label="Background image">
+          <ImageUploadField value={draft.image} onChange={(v) => set('image', v)} />
+        </Field>
+        <Field label="Eyebrow">
+          <input style={inputStyle} value={draft.eyebrow ?? ''} onChange={(e) => set('eyebrow', e.target.value)} />
+        </Field>
+        <Field label="Headline">
+          <input style={inputStyle} value={draft.heading ?? ''} onChange={(e) => set('heading', e.target.value)} />
+        </Field>
+        <Field label="Subhead">
+          <textarea style={textareaStyle} value={draft.subhead ?? ''} onChange={(e) => set('subhead', e.target.value)} />
+        </Field>
+        <Field label="Button label">
+          <input style={inputStyle} value={draft.buttonLabel ?? ''} onChange={(e) => set('buttonLabel', e.target.value)} />
+        </Field>
+        <Field label="Button link">
+          <input
+            style={inputStyle}
+            value={draft.buttonHref ?? ''}
+            onChange={(e) => set('buttonHref', e.target.value)}
+            placeholder="Leave empty to open the book-a-demo modal"
+          />
+        </Field>
+      </>
+    ),
+    multiImageBannerBlock: (
+      <>
+        <Field label="Eyebrow">
+          <input style={inputStyle} value={draft.eyebrow ?? ''} onChange={(e) => set('eyebrow', e.target.value)} />
+        </Field>
+        <Field label="Headline">
+          <input style={inputStyle} value={draft.heading ?? ''} onChange={(e) => set('heading', e.target.value)} />
+        </Field>
+        <Field label="Images">
+          <ArrayEditor<ImageItem>
+            items={draft.images}
+            onChange={(next) => set('images', next)}
+            newItem={() => ({ _key: randomKey() })}
+            addLabel="+ Add image"
+            renderItem={(item, update) => <ImageUploadField value={item.image} onChange={(v) => update({ image: v })} />}
           />
         </Field>
       </>
