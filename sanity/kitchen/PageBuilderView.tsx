@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useClient } from 'sanity'
 
 import { AddBlockPicker } from './AddBlockPicker'
@@ -8,7 +8,6 @@ import { PageSeoDrawer } from './PageSeoDrawer'
 import { KitchenErrorBoundary } from './KitchenErrorBoundary'
 import { BLOCK_TYPES, emptyBlock, pascalTag } from './blockTypes'
 import { kitchen } from './theme'
-import { useDragReorder } from './useDragReorder'
 import { useKitchenPatch } from './useKitchenPatch'
 import { randomPageId } from './pageRows'
 import { RESERVED_SLUGS } from '../schemaTypes/page'
@@ -71,12 +70,43 @@ export function PageBuilderView({
 
   const page = doc as PageDoc | null
   const blocks = page?.blocks ?? []
-  // Reordering is the one operation that genuinely needs the whole array (the
-  // new order can't be expressed as a single keyed patch) — add/remove/edit
-  // below deliberately avoid this, see the comment on `updateBlock`.
-  const { dragHandlers } = useDragReorder(blocks as { _key: string }[], (next) => patch({ blocks: next }))
+  const dragBlockKey = useRef<string | null>(null)
 
   if (!page) return <div style={{ padding: 24, color: kitchen.textFaint }}>Loading…</div>
+
+  // Keyed unset + insert, resolved by Sanity against the live document at
+  // commit time — safe even if this tab's local copy of *other* blocks is
+  // stale. An earlier version of this sent the whole client-side array back
+  // as the new value of `blocks`, which silently deleted content this tab
+  // hadn't seen yet (e.g. edited from elsewhere) the moment anyone dragged a
+  // block here on a stale tab. Only the moved block's own data comes from
+  // local state, same trust boundary as any other in-flight edit.
+  function moveBlock(targetKey: string) {
+    const fromKey = dragBlockKey.current
+    dragBlockKey.current = null
+    if (!fromKey || fromKey === targetKey) return
+    const fromIndex = blocks.findIndex((b) => b._key === fromKey)
+    const toIndex = blocks.findIndex((b) => b._key === targetKey)
+    if (fromIndex < 0 || toIndex < 0) return
+    const moved = blocks[fromIndex]
+    const position = fromIndex < toIndex ? 'after' : 'before'
+    rawPatch((p) => p.unset([`blocks[_key=="${fromKey}"]`]).insert(position, `blocks[_key=="${targetKey}"]`, [moved]))
+  }
+
+  function blockDragHandlers(key: string) {
+    return {
+      draggable: true,
+      onDragStart: (e: React.DragEvent) => {
+        e.dataTransfer.effectAllowed = 'move'
+        dragBlockKey.current = key
+      },
+      onDragOver: (e: React.DragEvent) => e.preventDefault(),
+      onDrop: (e: React.DragEvent) => {
+        e.preventDefault()
+        moveBlock(key)
+      },
+    }
+  }
 
   function addBlock(type: string) {
     rawPatch((p) => p.setIfMissing({ blocks: [] }).insert('after', 'blocks[-1]', [emptyBlock(type)]))
@@ -275,7 +305,7 @@ export function PageBuilderView({
             return (
               <div
                 key={block._key}
-                {...dragHandlers(block._key)}
+                {...blockDragHandlers(block._key)}
                 onMouseEnter={() => setHoverBlock(block._key)}
                 onMouseLeave={() => setHoverBlock((v) => (v === block._key ? null : v))}
                 style={{
