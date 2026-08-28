@@ -5,7 +5,7 @@ import { LivePreview } from './livePreview/LivePreview'
 import { EditSectionDrawer } from './EditSectionDrawer'
 import { PageSeoDrawer } from './PageSeoDrawer'
 import { KitchenErrorBoundary } from './KitchenErrorBoundary'
-import { BLOCK_TYPES, blockCountBadge, emptyBlock, pascalTag } from './blockTypes'
+import { BLOCK_TYPES, emptyBlock, pascalTag } from './blockTypes'
 import { kitchen } from './theme'
 import { useDragReorder } from './useDragReorder'
 import { useKitchenPatch } from './useKitchenPatch'
@@ -54,9 +54,7 @@ export function PageBuilderView({
   onOpenThemeSettings: () => void
 }) {
   const { doc, patch, rawPatch } = useKitchenPatch(pageId, 'page')
-  // Previews default to expanded (matching the mockup) — this tracks which
-  // blocks have been manually collapsed, not which ones are expanded.
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
+  const [hoverBlock, setHoverBlock] = useState<string | null>(null)
   const [editing, setEditing] = useState<string | null>(null)
   const [addMenuOpen, setAddMenuOpen] = useState(false)
   const [seoOpen, setSeoOpen] = useState(false)
@@ -233,67 +231,103 @@ export function PageBuilderView({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 14, background: '#F1EDF9', borderRadius: 16 }}>
           {blocks.map((block, index) => {
             const meta = BLOCK_TYPES.find((t) => t.type === block._type)
-            const isExpanded = !collapsed.has(block._key)
-            const isConditional = block._type === 'statsBandBlock'
-            const countBadge = blockCountBadge(block)
+            const hovering = hoverBlock === block._key
             return (
               <div
                 key={block._key}
                 {...dragHandlers(block._key)}
+                onMouseEnter={() => setHoverBlock(block._key)}
+                onMouseLeave={() => setHoverBlock((v) => (v === block._key ? null : v))}
                 style={{
+                  position: 'relative',
                   border: `1px solid ${kitchen.borderSoft}`,
                   borderRadius: 14,
                   background: '#fff',
                   boxShadow: '0 2px 10px rgba(58, 42, 102, 0.06)',
+                  overflow: 'hidden',
                 }}
               >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px' }}>
-                <span style={{ color: kitchen.borderDashed, fontSize: 13, cursor: 'grab', letterSpacing: '-2px' }}>⠿</span>
-                <span style={{ fontSize: 15 }}>{meta?.icon ?? '▢'}</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 13, fontWeight: 600 }}>{meta?.label ?? block._type}</span>
-                    <span style={typeTagStyle()}>{pascalTag(meta?.label ?? block._type)}</span>
-                    {isConditional && <span style={conditionalTagStyle()}>Conditional</span>}
-                  </div>
-                  {meta?.description && (
-                    <div style={{ fontSize: 11, color: kitchen.textMuted, marginTop: 2 }}>
-                      {isConditional ? 'Hidden unless theme.showResults is on' : meta.description}
-                    </div>
-                  )}
-                </div>
-                {countBadge && <span style={{ fontSize: 11, color: kitchen.textFaint, fontFamily: kitchen.fontMono, whiteSpace: 'nowrap' }}>{countBadge}</span>}
-                <button type="button" onClick={() => setEditing(block._key)} style={smallBtnStyle()}>
-                  Edit
-                </button>
-                <button type="button" onClick={() => removeBlock(block._key)} title="Remove section" style={smallBtnStyle(true)}>
-                  ✕
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setCollapsed((prev) => {
-                      const next = new Set(prev)
-                      if (next.has(block._key)) next.delete(block._key)
-                      else next.add(block._key)
-                      return next
-                    })
-                  }
-                  style={smallBtnStyle()}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    left: 8,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    justifyContent: 'flex-end',
+                    zIndex: 2,
+                    opacity: hovering ? 1 : 0,
+                    pointerEvents: hovering ? 'auto' : 'none',
+                    transition: 'opacity 120ms ease',
+                  }}
                 >
-                  {isExpanded ? '▴' : '▾'}
-                </button>
-              </div>
-              {isExpanded && (
-                <div style={{ borderTop: `1px solid ${kitchen.borderSoft}`, borderRadius: '0 0 9px 9px', overflow: 'hidden' }}>
+                  <span
+                    title="Drag to reorder"
+                    style={{
+                      flex: '0 0 auto',
+                      color: '#a9a2bd',
+                      fontSize: 13,
+                      cursor: 'grab',
+                      lineHeight: 1,
+                      letterSpacing: '-2px',
+                      padding: '3px 4px',
+                      background: '#fff',
+                      borderRadius: 5,
+                      border: `1px solid ${kitchen.borderSoft}`,
+                    }}
+                  >
+                    ⠿
+                  </span>
+                  <span
+                    style={{
+                      flex: '0 1 auto',
+                      minWidth: 0,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      fontSize: 10.5,
+                      fontWeight: 600,
+                      padding: '3px 8px',
+                      borderRadius: 5,
+                      background: '#fff',
+                      border: `1px solid ${kitchen.borderSoft}`,
+                      color: kitchen.textBody,
+                      marginRight: 'auto',
+                    }}
+                  >
+                    {meta?.label ?? block._type}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeBlock(block._key)}
+                    title="Remove section"
+                    style={{
+                      flex: '0 0 auto',
+                      width: 22,
+                      height: 22,
+                      border: `1px solid ${kitchen.borderSoft}`,
+                      borderRadius: 5,
+                      background: '#fff',
+                      cursor: 'pointer',
+                      color: kitchen.textMuted,
+                      fontSize: 12,
+                      lineHeight: 1,
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div style={{ cursor: 'pointer' }} onClick={() => setEditing(block._key)}>
                   <KitchenErrorBoundary label="Preview">
                     <LivePreview block={block} isFirst={index === 0} />
                   </KitchenErrorBoundary>
                 </div>
-              )}
-            </div>
-          )
-        })}
+              </div>
+            )
+          })}
         </div>
       )}
 
@@ -352,39 +386,3 @@ export function PageBuilderView({
   )
 }
 
-function typeTagStyle(): React.CSSProperties {
-  return {
-    fontSize: 10.5,
-    fontFamily: kitchen.fontMono,
-    padding: '2px 8px',
-    borderRadius: 999,
-    background: kitchen.surface,
-    color: kitchen.textSubtle,
-    border: `1px solid ${kitchen.borderSoft}`,
-  }
-}
-
-function conditionalTagStyle(): React.CSSProperties {
-  return {
-    fontSize: 10.5,
-    fontWeight: 600,
-    padding: '2px 8px',
-    borderRadius: 999,
-    background: '#FCEFD8',
-    color: '#9c6a1c',
-    border: '1px solid #f0dcb0',
-  }
-}
-
-function smallBtnStyle(danger = false): React.CSSProperties {
-  return {
-    flex: '0 0 auto',
-    padding: '4px 9px',
-    border: `1px solid ${danger ? 'transparent' : kitchen.borderInput}`,
-    borderRadius: 6,
-    background: '#fff',
-    cursor: 'pointer',
-    fontSize: 11.5,
-    color: danger ? kitchen.textFaint : kitchen.textBody,
-  }
-}

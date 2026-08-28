@@ -89,43 +89,6 @@ export function pascalTag(label: string): string {
     .join('')
 }
 
-/** Contextual count badge shown in the block-row chrome (e.g. "5 cards", "3 stats"). Returns null when a count isn't meaningful for this block type. */
-export function blockCountBadge(block: Record<string, any>): string | null {
-  switch (block._type) {
-    case 'richHeroBlock':
-      return countLabel(block.heroStats, 'badge')
-    case 'heroCarouselBlock':
-      return countLabel(block.slides, 'slide')
-    case 'servicesGridBlock':
-      return countLabel(block.services, 'card')
-    case 'statsBandBlock':
-      return countLabel(block.stats, 'stat')
-    case 'featuredCaseStudyBlock':
-      return countLabel(block.stats, 'stat')
-    case 'moduleDeepDiveListBlock':
-      return countLabel(block.modules, 'module')
-    case 'testimonialGridBlock':
-      return countLabel(block.testimonials, 'testimonial')
-    case 'imageGalleryBlock':
-      return countLabel(block.images, 'image')
-    case 'logoStripBlock':
-      return countLabel(block.logos, 'logo')
-    case 'socialLinksBlock':
-      return countLabel(block.links, 'link')
-    case 'integrationsBlock':
-      return countLabel(block.integrations, 'integration')
-    case 'dashboardShowcaseBlock':
-      return '5 tabs'
-    default:
-      return null
-  }
-}
-
-function countLabel(items: unknown[] | undefined, noun: string): string {
-  const n = items?.length ?? 0
-  return `${n} ${noun}${n === 1 ? '' : 's'}`
-}
-
 export function emptyBlock(type: string): Record<string, any> {
   const _key = randomKey()
   switch (type) {
