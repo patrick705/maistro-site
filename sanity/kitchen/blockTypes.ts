@@ -43,7 +43,7 @@ export function hasFullBleedControl(type: string): boolean {
   return type === 'aboutSectionBlock' || type === 'integrationsBlock' || type === 'dashboardShowcaseBlock'
 }
 
-export const BLOCK_CATEGORIES =['Heroes & headers', 'Product & story', 'Proof', 'Media & social', 'Editorial & conversion', 'Other'] as const
+export const BLOCK_CATEGORIES =['Custom blocks', 'Heroes & headers', 'Product & story', 'Proof', 'Media & social', 'Editorial & conversion', 'Other'] as const
 
 export const BLOCK_TYPES: { type: string; label: string; icon: string; category: (typeof BLOCK_CATEGORIES)[number]; description: string }[] = [
   { type: 'richHeroBlock', label: 'Hero', icon: '🌟', category: 'Heroes & headers', description: 'Eyebrow, headline, CTAs, stat badges' },
@@ -69,7 +69,7 @@ export const BLOCK_TYPES: { type: string; label: string; icon: string; category:
 
   { type: 'newsGridBlock', label: 'News grid', icon: '📰', category: 'Editorial & conversion', description: 'Pulls from News Articles' },
   { type: 'contactFormBlock', label: 'Contact section', icon: '✉️', category: 'Editorial & conversion', description: 'Headline, subhead, lead form' },
-  { type: 'roiCalculatorBlock', label: 'ROI calculator', icon: '◱', category: 'Editorial & conversion', description: 'Stores, prime cost and voice AI — live savings' },
+  { type: 'roiCalculatorBlock', label: 'ROI calculator', icon: '◱', category: 'Custom blocks', description: 'Stores, prime cost and voice AI — live savings' },
   { type: 'ctaBannerBlock', label: 'CTA band', icon: '📣', category: 'Editorial & conversion', description: 'Closing headline + button' },
 
   { type: 'textBlock', label: 'Text box', icon: '📝', category: 'Other', description: 'Freeform heading + paragraphs' },
