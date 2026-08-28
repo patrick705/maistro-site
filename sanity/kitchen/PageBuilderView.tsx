@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useClient } from 'sanity'
 
 import { AddBlockPicker } from './AddBlockPicker'
 import { LivePreview } from './livePreview/LivePreview'
@@ -11,12 +12,18 @@ import { useDragReorder } from './useDragReorder'
 import { useKitchenPatch } from './useKitchenPatch'
 import { RESERVED_SLUGS } from '../schemaTypes/page'
 
+const API_VERSION = '2024-01-01'
+
 function slugify(input: string): string {
   return input
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
+}
+
+function randomPageId() {
+  return 'page-' + Math.random().toString(36).slice(2, 10)
 }
 
 interface PageDoc {
@@ -27,6 +34,7 @@ interface PageDoc {
   menuOrder?: number
   navLabel?: string
   archived?: boolean
+  parentId?: string
   seo?: Record<string, any>
   blocks?: Record<string, any>[]
   _updatedAt?: string
@@ -48,11 +56,16 @@ export function PageBuilderView({
   pageId,
   onOpenDemoModalSettings,
   onOpenThemeSettings,
+  onNavigateToPage,
+  onPageDeleted,
 }: {
   pageId: string
   onOpenDemoModalSettings: () => void
   onOpenThemeSettings: () => void
+  onNavigateToPage: (id: string) => void
+  onPageDeleted: () => void
 }) {
+  const client = useClient({ apiVersion: API_VERSION })
   const { doc, patch, rawPatch } = useKitchenPatch(pageId, 'page')
   const [hoverBlock, setHoverBlock] = useState<string | null>(null)
   const [editing, setEditing] = useState<string | null>(null)
@@ -71,6 +84,36 @@ export function PageBuilderView({
   function addBlock(type: string) {
     rawPatch((p) => p.setIfMissing({ blocks: [] }).insert('after', 'blocks[-1]', [emptyBlock(type)]))
     setAddMenuOpen(false)
+  }
+
+  // Subpages can't have their own subpages — kept deliberately flat (no
+  // collapsible tree in the sidebar) since the earlier attempt at a nested
+  // page tree caused a load-hanging bug. New subpages start as a draft.
+  async function addSubpage() {
+    const id = randomPageId()
+    await client.create({
+      _id: `drafts.${id}`,
+      _type: 'page',
+      title: 'Untitled subpage',
+      parentId: pageId,
+      showInMenu: false,
+      blocks: [],
+    })
+    onNavigateToPage(id)
+  }
+
+  // Subpages can't have subpages of their own, so a single non-recursive
+  // lookup covers every doc that needs to go with this one.
+  async function deletePagePermanently() {
+    const subpages = await client.fetch<{ _id: string }[]>(`*[_type == "page" && parentId == $id]{_id}`, { id: pageId })
+    const baseIds = new Set<string>([pageId])
+    for (const sp of subpages) {
+      baseIds.add(sp._id.startsWith('drafts.') ? sp._id.slice('drafts.'.length) : sp._id)
+    }
+    const tx = client.transaction()
+    for (const id of baseIds) tx.delete(id).delete(`drafts.${id}`)
+    await tx.commit()
+    onPageDeleted()
   }
 
   function removeBlock(key: string) {
@@ -354,7 +397,16 @@ export function PageBuilderView({
         })()}
 
       {seoOpen && (
-        <PageSeoDrawer seo={page.seo} onPatchSeo={(fields) => patch(fields)} onClose={() => setSeoOpen(false)} />
+        <PageSeoDrawer
+          seo={page.seo}
+          onPatchSeo={(fields) => patch(fields)}
+          onClose={() => setSeoOpen(false)}
+          pageTitle={page.title || 'Untitled page'}
+          isHome={page.slug?.current === 'home'}
+          hasParent={Boolean(page.parentId)}
+          onAddSubpage={addSubpage}
+          onDeletePermanently={deletePagePermanently}
+        />
       )}
 
       <div style={{ marginTop: 12 }}>

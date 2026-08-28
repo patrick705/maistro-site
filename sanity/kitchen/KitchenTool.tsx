@@ -104,6 +104,11 @@ export function KitchenTool() {
               pageId={view.id}
               onOpenDemoModalSettings={() => setView({ kind: 'settings', section: 'demoModal' })}
               onOpenThemeSettings={() => setView({ kind: 'settings', section: 'theme' })}
+              onNavigateToPage={(id) => setView({ kind: 'page', id })}
+              onPageDeleted={() => {
+                const home = pages?.find((p) => p.slug === 'home') ?? pages?.[0]
+                setView(home ? { kind: 'page', id: home._id } : null)
+              }}
             />
           )}
           {view?.kind === 'settings' && view.section === 'theme' && <ThemeSettings />}

@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { ImageUploadField, type SanityImageValue } from './ImageUploadField'
 import { kitchen } from './theme'
 
@@ -45,15 +47,58 @@ export function PageSeoDrawer({
   seo,
   onPatchSeo,
   onClose,
+  pageTitle,
+  isHome,
+  hasParent,
+  onAddSubpage,
+  onDeletePermanently,
 }: {
   seo: PageSeo | undefined
   onPatchSeo: (fields: Record<string, unknown>) => void
   onClose: () => void
+  pageTitle: string
+  isHome: boolean
+  hasParent: boolean
+  onAddSubpage: () => Promise<void>
+  onDeletePermanently: () => Promise<void>
 }) {
   const s = seo ?? {}
+  const [addingSubpage, setAddingSubpage] = useState(false)
+  const [deleteArmed, setDeleteArmed] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  // A stray second click much later shouldn't confirm a delete armed from an
+  // earlier, forgotten click.
+  useEffect(() => {
+    if (!deleteArmed) return
+    const t = setTimeout(() => setDeleteArmed(false), 4000)
+    return () => clearTimeout(t)
+  }, [deleteArmed])
 
   function patch(fields: Partial<PageSeo>) {
     onPatchSeo({ seo: { ...s, ...fields } })
+  }
+
+  async function handleAddSubpage() {
+    setAddingSubpage(true)
+    try {
+      await onAddSubpage()
+      onClose()
+    } finally {
+      setAddingSubpage(false)
+    }
+  }
+
+  function handleDeleteClick() {
+    if (!deleteArmed) {
+      setDeleteArmed(true)
+      return
+    }
+    setDeleting(true)
+    onDeletePermanently().catch(() => {
+      setDeleting(false)
+      setDeleteArmed(false)
+    })
   }
 
   return (
@@ -164,6 +209,61 @@ export function PageSeoDrawer({
                 />
               </Field>
             </div>
+          )}
+        </div>
+
+        {!hasParent && (
+          <div style={{ borderTop: `1px solid ${kitchen.border}`, paddingTop: 18 }}>
+            <button
+              type="button"
+              onClick={handleAddSubpage}
+              disabled={addingSubpage}
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                border: `1px dashed ${kitchen.borderDashed}`,
+                borderRadius: 9,
+                background: 'transparent',
+                color: kitchen.textSubtle,
+                fontWeight: 600,
+                fontSize: 12.5,
+                cursor: addingSubpage ? 'default' : 'pointer',
+                opacity: addingSubpage ? 0.6 : 1,
+              }}
+            >
+              {addingSubpage ? 'Creating…' : `+ Add subpage under ${pageTitle}`}
+            </button>
+          </div>
+        )}
+
+        <div style={{ borderTop: `1px solid ${kitchen.border}`, paddingTop: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', color: kitchen.textFaint }}>
+            Danger zone
+          </span>
+          {isHome ? (
+            <span style={{ fontSize: 11.5, color: kitchen.textMuted }}>Home is protected and can&rsquo;t be deleted.</span>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={handleDeleteClick}
+                disabled={deleting}
+                style={{
+                  padding: '9px 14px',
+                  border: `1px solid ${kitchen.danger}`,
+                  borderRadius: 8,
+                  background: deleteArmed ? kitchen.danger : '#fff',
+                  color: deleteArmed ? '#fff' : kitchen.danger,
+                  fontWeight: 600,
+                  fontSize: 12.5,
+                  cursor: deleting ? 'default' : 'pointer',
+                  opacity: deleting ? 0.6 : 1,
+                }}
+              >
+                {deleting ? 'Deleting…' : deleteArmed ? "Click again to confirm — can't be undone" : 'Delete page permanently'}
+              </button>
+              <span style={{ fontSize: 11, color: kitchen.textMuted }}>Also deletes any of its subpages.</span>
+            </>
           )}
         </div>
       </div>
