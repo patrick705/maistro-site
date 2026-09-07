@@ -31,6 +31,70 @@ const PLACEHOLDER_ASSETS = {
   },
 }
 
+// Points at the widget hosted at public/maistro-kitchen/index.html — must
+// stay same-origin with the page for the resize-observer script's
+// frame.contentDocument read to work (see that file's own README).
+const BEFORE_AFTER_EMBED_CODE = `<style>
+  .maistro-website-embed {
+    display: block;
+    width: 100%;
+    height: 760px;
+    border: 0;
+  }
+  @media (max-width: 720px) {
+    .maistro-website-embed { height: calc(56.28vw + 90px); }
+  }
+</style>
+<iframe
+  class="maistro-website-embed"
+  src="/maistro-kitchen/index.html"
+  title="Before and after Maistro: an interactive kitchen comparison"
+  loading="lazy"
+></iframe>
+<script>
+(() => {
+  document.querySelectorAll('.maistro-website-embed').forEach(frame => {
+    if (frame.dataset.maistroEmbedReady) return;
+    frame.dataset.maistroEmbedReady = 'true';
+    let observer;
+    let sceneBlock;
+    let pending;
+
+    const fit = () => {
+      if (!sceneBlock || pending) return;
+      pending = requestAnimationFrame(() => {
+        pending = null;
+        const height = Math.ceil(sceneBlock.getBoundingClientRect().height);
+        if (height > 0 && frame.style.height !== height + 'px') {
+          frame.style.height = height + 'px';
+        }
+      });
+    };
+
+    const connect = () => {
+      if (observer) observer.disconnect();
+      sceneBlock = null;
+      try {
+        sceneBlock = frame.contentDocument &&
+          frame.contentDocument.querySelector('.maistro-story');
+      } catch (_) {
+        return;
+      }
+      if (!sceneBlock) return;
+      fit();
+      if ('ResizeObserver' in window) {
+        observer = new ResizeObserver(fit);
+        observer.observe(sceneBlock);
+      }
+    };
+
+    frame.addEventListener('load', connect);
+    window.addEventListener('resize', fit, { passive: true });
+    connect();
+  });
+})();
+</script>`
+
 function placeholderImage(key: keyof typeof PLACEHOLDER_ASSETS, alt: string) {
   const { ref, url } = PLACEHOLDER_ASSETS[key]
   return { _type: 'image', asset: { _type: 'reference', _ref: ref }, url, alt }
@@ -322,12 +386,18 @@ export function genericBlockContent(type: string): Record<string, any> {
         ],
       }
     case 'customHtmlBlock':
+      // The real Before/After Maistro kitchen comparison embed (also live on
+      // Home) — kept here so it can be cloned onto any other page with one
+      // click instead of re-pasting the code by hand. Its resize-observer
+      // script needs to run in the page itself, hence sandboxed: false; the
+      // widget file it points at (public/maistro-kitchen/index.html) is
+      // same-origin static hosting, not a Sanity upload.
       return {
         _type: type,
         _key,
-        label: 'Example embed',
-        code: '<div style="padding:32px;text-align:center;font-family:sans-serif;">Example embed content</div>',
-        sandboxed: true,
+        label: 'Before/After Maistro kitchen comparison',
+        code: BEFORE_AFTER_EMBED_CODE,
+        sandboxed: false,
         fullWidth: false,
       }
     default:
