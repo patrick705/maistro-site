@@ -52,11 +52,12 @@ function DocPublishControls({ id, type }: { id: string; type: string }) {
   const isPage = type === 'page'
   const isHomePage = isPage && doc?.slug?.current === 'home'
   const isArchived = isPage && Boolean(doc?.archived)
-  // "Unpublish" here means take it out of the top menu, not take the page
-  // offline — the page keeps rendering fine at its URL, it just stops being
-  // linked from the nav. Taking a page fully offline (404) is what Archive
-  // is for.
-  const canUnpublish = isPage && Boolean(doc?.showInMenu)
+  // Removing from the menu just unlinks the page from the nav — it keeps
+  // rendering fine at its own URL. Taking a page fully offline (404) is what
+  // Archive is for. Deliberately not labeled "Unpublish": that name implies
+  // the page goes down, which it doesn't, and caused real confusion when it
+  // was called that.
+  const canRemoveFromMenu = isPage && Boolean(doc?.showInMenu)
 
   function toggleArchive() {
     if (isHomePage) return
@@ -65,10 +66,10 @@ function DocPublishControls({ id, type }: { id: string; type: string }) {
     patch(next ? { archived: true, showInMenu: false } : { archived: false })
   }
 
-  function unpublish() {
-    // A dedicated top-bar button named "Unpublish" reads as an immediate action, not
-    // a change to stage for later — so unlike every other field edit, this writes
-    // straight to the published document instead of going through the normal
+  function removeFromMenu() {
+    // A dedicated top-bar button reads as an immediate action, not a change to
+    // stage for later — so unlike every other field edit, this writes straight
+    // to the published document instead of going through the normal
     // patch → publish flow. Also patch the draft (if one exists) so a later Publish
     // of unrelated changes doesn't silently revert this back to shown-in-menu.
     client.patch(id).set({ showInMenu: false }).commit()
@@ -98,9 +99,14 @@ function DocPublishControls({ id, type }: { id: string; type: string }) {
         >
           Discard changes
         </button>
-        {canUnpublish && (
-          <button type="button" onClick={unpublish} style={ghostButtonStyle(false)}>
-            Unpublish
+        {canRemoveFromMenu && (
+          <button
+            type="button"
+            onClick={removeFromMenu}
+            title="Removes this page from the top menu only. The page itself stays live at its URL — it just won't be linked from the nav. To take it fully offline, use Archive."
+            style={ghostButtonStyle(false)}
+          >
+            Remove from menu
           </button>
         )}
         {isPage && (
