@@ -3,6 +3,7 @@ import { forwardRef, useImperativeHandle, useState } from 'react'
 import { ArrayEditor } from './ArrayEditor'
 import { ImageUploadField, type SanityImageValue } from './ImageUploadField'
 import { VideoUploadField, type SanityFileValue } from './VideoUploadField'
+import { HtmlFileUploadField } from './HtmlFileUploadField'
 import { portableBodyToText, randomKey, textToPortableBody } from './blockTypes'
 import { kitchen } from './theme'
 import { useIsMobile } from './useIsMobile'
@@ -813,6 +814,42 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
             renderItem={(item, update) => <ImageUploadField value={item.image} onChange={(v) => update({ image: v })} />}
           />
         </Field>
+      </>
+    ),
+    customHtmlBlock: (
+      <>
+        <Field label="Internal label">
+          <input
+            style={inputStyle}
+            value={draft.label ?? ''}
+            onChange={(e) => set('label', e.target.value)}
+            placeholder="Shown in the builder only, not on the page"
+          />
+        </Field>
+        <Field label="HTML file">
+          <HtmlFileUploadField value={draft.file as SanityFileValue | undefined} onChange={(v) => set('file', v)} />
+        </Field>
+        <Field label="Or paste HTML directly">
+          <textarea
+            style={{ ...textareaStyle, minHeight: 140, fontFamily: kitchen.fontMono, fontSize: 11.5 }}
+            value={draft.code ?? ''}
+            onChange={(e) => set('code', e.target.value)}
+            placeholder="<div>…</div>"
+          />
+        </Field>
+        <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12.5, color: kitchen.textBody }}>
+          <input type="checkbox" checked={draft.sandboxed ?? true} onChange={(e) => set('sandboxed', e.target.checked)} style={{ marginTop: 2 }} />
+          <span>
+            Render in a sandboxed iframe
+            <div style={{ fontSize: 11, color: kitchen.textMuted, fontWeight: 400 }}>
+              Off allows scripts to run directly in the page — only for trusted sources.
+            </div>
+          </span>
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: kitchen.textBody }}>
+          <input type="checkbox" checked={draft.fullWidth ?? false} onChange={(e) => set('fullWidth', e.target.checked)} />
+          Full width (ignore page margins)
+        </label>
       </>
     ),
     richHeroBlock: (

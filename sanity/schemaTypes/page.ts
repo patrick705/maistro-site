@@ -64,6 +64,7 @@ export const page = defineType({
         { type: 'mediaCardGridBlock' },
         { type: 'imageBannerBlock' },
         { type: 'multiImageBannerBlock' },
+        { type: 'customHtmlBlock' },
       ],
     }),
     defineField({ name: 'navLabel', title: 'Top-menu label', description: 'Falls back to Title if left empty.', type: 'string', group: 'nav' }),

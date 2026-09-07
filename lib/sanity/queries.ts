@@ -229,6 +229,11 @@ export const pageBySlugQuery = groq`
       _type == "multiImageBannerBlock" => {
         images[]{_key, "image": image{"url": asset->url, alt}},
         eyebrow, heading
+      },
+      _type == "customHtmlBlock" => {
+        label,
+        "file": file.asset->{"url": url},
+        code, sandboxed, fullWidth
       }
     },
 

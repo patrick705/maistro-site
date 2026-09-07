@@ -75,6 +75,7 @@ export const BLOCK_TYPES: { type: string; label: string; icon: string; category:
   { type: 'newsGridBlock', label: 'News grid', icon: '📰', category: 'Editorial & conversion', description: 'Pulls from News Articles' },
   { type: 'contactFormBlock', label: 'Contact section', icon: '✉️', category: 'Editorial & conversion', description: 'Headline, subhead, lead form' },
   { type: 'roiCalculatorBlock', label: 'ROI calculator', icon: '◱', category: 'Custom blocks', description: 'Stores, prime cost and voice AI — live savings' },
+  { type: 'customHtmlBlock', label: 'Custom HTML', icon: '</>', category: 'Custom blocks', description: 'Upload or paste raw HTML, embeds, scripts' },
   { type: 'ctaBannerBlock', label: 'CTA band', icon: '📣', category: 'Editorial & conversion', description: 'Closing headline + button' },
 
   { type: 'textBlock', label: 'Text box', icon: '📝', category: 'Other', description: 'Freeform heading + paragraphs' },
@@ -126,6 +127,8 @@ export function emptyBlock(type: string): Record<string, any> {
       return { _type: type, _key }
     case 'multiImageBannerBlock':
       return { _type: type, _key, images: [] }
+    case 'customHtmlBlock':
+      return { _type: type, _key, sandboxed: true, fullWidth: false }
     case 'scrollGalleryBlock':
     case 'mediaMosaicBlock':
     case 'mediaCardGridBlock':

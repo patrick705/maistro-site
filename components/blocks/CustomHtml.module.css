@@ -1,0 +1,16 @@
+.contained {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.iframe {
+  display: block;
+  width: 100%;
+  height: 600px;
+  border: 0;
+}

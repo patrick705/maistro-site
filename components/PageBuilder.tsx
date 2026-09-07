@@ -28,6 +28,7 @@ import { MediaMosaic } from './blocks/MediaMosaic'
 import { MediaCardGrid } from './blocks/MediaCardGrid'
 import { ImageBanner } from './blocks/ImageBanner'
 import { MultiImageBanner } from './blocks/MultiImageBanner'
+import { CustomHtmlBlockView } from './blocks/CustomHtml'
 
 export function PageBuilder({ blocks }: { blocks: PageBlock[] }) {
   const leading = blocks[0]
@@ -113,6 +114,8 @@ export function PageBuilder({ blocks }: { blocks: PageBlock[] }) {
             )
           case 'multiImageBannerBlock':
             return <MultiImageBanner key={block._key} block={block} />
+          case 'customHtmlBlock':
+            return <CustomHtmlBlockView key={block._key} block={block} />
           default:
             return null
         }

@@ -50,6 +50,7 @@ import { mediaMosaicBlock } from './objects/mediaMosaicBlock'
 import { mediaCardGridBlock } from './objects/mediaCardGridBlock'
 import { imageBannerBlock } from './objects/imageBannerBlock'
 import { multiImageBannerBlock } from './objects/multiImageBannerBlock'
+import { customHtmlBlock } from './objects/customHtmlBlock'
 
 import { siteSettings } from './siteSettings'
 import { newsArticle } from './newsArticle'
@@ -109,6 +110,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   mediaCardGridBlock,
   imageBannerBlock,
   multiImageBannerBlock,
+  customHtmlBlock,
   // documents
   siteSettings,
   newsArticle,

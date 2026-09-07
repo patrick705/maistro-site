@@ -593,6 +593,16 @@ export interface MultiImageBannerBlock {
   heading?: string
 }
 
+export interface CustomHtmlBlock {
+  _type: 'customHtmlBlock'
+  _key: string
+  label?: string
+  file?: { url: string }
+  code?: string
+  sandboxed?: boolean
+  fullWidth?: boolean
+}
+
 export type PageBlock =
   | HeroCarouselBlock
   | TextBlockData
@@ -622,6 +632,7 @@ export type PageBlock =
   | MediaCardGridBlock
   | ImageBannerBlock
   | MultiImageBannerBlock
+  | CustomHtmlBlock
 
 export interface Page {
   title: string

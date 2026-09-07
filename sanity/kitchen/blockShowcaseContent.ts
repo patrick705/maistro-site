@@ -321,6 +321,15 @@ export function genericBlockContent(type: string): Record<string, any> {
           { _key: randomKey(), image: placeholderImage('counterService', 'Banner image two') },
         ],
       }
+    case 'customHtmlBlock':
+      return {
+        _type: type,
+        _key,
+        label: 'Example embed',
+        code: '<div style="padding:32px;text-align:center;font-family:sans-serif;">Example embed content</div>',
+        sandboxed: true,
+        fullWidth: false,
+      }
     default:
       return { _type: type, _key }
   }

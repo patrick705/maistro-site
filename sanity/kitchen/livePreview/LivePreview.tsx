@@ -26,6 +26,7 @@ import { PreviewLogoStrip } from './PreviewLogoStrip'
 import { PreviewNewsGrid } from './PreviewNewsGrid'
 import { PreviewImg } from './PreviewImg'
 import { PreviewEmptyBlock } from './PreviewEmptyBlock'
+import { PreviewCustomHtml } from './PreviewCustomHtml'
 import { ScrollGallery } from '../../../components/blocks/ScrollGallery'
 import { MediaMosaic } from '../../../components/blocks/MediaMosaic'
 import { MediaCardGrid } from '../../../components/blocks/MediaCardGrid'
@@ -162,6 +163,8 @@ function renderBlock(block: PageBlock, isFirst?: boolean) {
       ) : (
         <PreviewEmptyBlock label="No images yet — click to add some" />
       )
+    case 'customHtmlBlock':
+      return <PreviewCustomHtml block={block} />
     default:
       return null
   }
