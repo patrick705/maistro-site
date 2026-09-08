@@ -38,29 +38,43 @@ export function PaletteLibrary({ currentPaletteId, onApply }: { currentPaletteId
   const { data: palettes, refetch } = useLiveQuery<PaletteDoc[]>(PALETTES_QUERY)
   const [formOpen, setFormOpen] = useState(false)
   const [form, setForm] = useState({ name: '', brandHex: '#3A2A66', accentHex: '#7B5BE6', warmHex: '#F0B84E', posHex: '#4F9E86' })
+  const [error, setError] = useState<string | null>(null)
 
+  // Both writes below used to have no try/catch — a failed commit (wrong
+  // permissions, network blip) silently did nothing, with no feedback that
+  // the palette hadn't actually been saved.
   async function makeDefault(id: string) {
-    await Promise.all(
-      (palettes ?? []).map((p) => client.patch(p._id).set({ isDefaultForNewSites: p._id === id }).commit()),
-    )
-    refetch()
+    try {
+      await Promise.all(
+        (palettes ?? []).map((p) => client.patch(p._id).set({ isDefaultForNewSites: p._id === id }).commit()),
+      )
+      setError(null)
+      refetch()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save — try again.')
+    }
   }
 
   async function saveNew() {
     if (!form.name.trim()) return
-    await client.create({
-      _id: randomId(),
-      _type: 'brandPalette',
-      name: form.name,
-      brandHex: form.brandHex,
-      accentHex: form.accentHex,
-      warmHex: form.warmHex,
-      posHex: form.posHex,
-      isDefaultForNewSites: false,
-    })
-    setForm({ name: '', brandHex: '#3A2A66', accentHex: '#7B5BE6', warmHex: '#F0B84E', posHex: '#4F9E86' })
-    setFormOpen(false)
-    refetch()
+    try {
+      await client.create({
+        _id: randomId(),
+        _type: 'brandPalette',
+        name: form.name,
+        brandHex: form.brandHex,
+        accentHex: form.accentHex,
+        warmHex: form.warmHex,
+        posHex: form.posHex,
+        isDefaultForNewSites: false,
+      })
+      setForm({ name: '', brandHex: '#3A2A66', accentHex: '#7B5BE6', warmHex: '#F0B84E', posHex: '#4F9E86' })
+      setFormOpen(false)
+      setError(null)
+      refetch()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save — try again.')
+    }
   }
 
   return (
@@ -70,6 +84,12 @@ export function PaletteLibrary({ currentPaletteId, onApply }: { currentPaletteId
         <div style={{ flex: 1, height: 1, background: kitchen.border }} />
         <span style={{ fontSize: 10, color: kitchen.textFaint, fontFamily: kitchen.fontMono }}>{palettes?.length ?? 0}</span>
       </div>
+
+      {error && (
+        <div style={{ marginBottom: 9, padding: '8px 11px', border: `1px solid ${kitchen.danger}`, borderRadius: 8, background: '#FDECEC', fontSize: 12, color: kitchen.danger }}>
+          {error}
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(228px, 1fr))', gap: 8 }}>
         {(palettes ?? []).map((p) => {

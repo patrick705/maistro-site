@@ -59,6 +59,7 @@ export function ColourRoles({ paletteId }: { paletteId?: string }) {
   const client = useClient({ apiVersion: API_VERSION })
   const { data: palette } = useLiveQuery<PaletteDoc | null>(PALETTE_QUERY, { id: paletteId ?? '' })
   const [drafts, setDrafts] = useState<Record<string, string>>({})
+  const [error, setError] = useState<string | null>(null)
 
   if (!paletteId) return null
   if (!palette) return <div style={{ padding: 24, color: kitchen.textFaint }}>Loading…</div>
@@ -66,10 +67,22 @@ export function ColourRoles({ paletteId }: { paletteId?: string }) {
   const derived = derivePaletteColors(palette)
   const overrideCount = ROLES.filter((r) => !r.base && Boolean(palette[r.field])).length
 
+  // client.patch().commit() had no .catch() here, so a failed write (wrong
+  // permissions, network blip) used to fail completely silently — the field
+  // looked "saved" in the UI but the document never actually changed.
+  function reportFailure(err: unknown) {
+    setError(err instanceof Error ? err.message : 'Failed to save — try again.')
+  }
+
   function handleChange(role: RoleRow, raw: string) {
     setDrafts((d) => ({ ...d, [role.key]: raw }))
     if (HEX_RE.test(raw)) {
-      client.patch(palette!._id).set({ [role.field]: raw }).commit()
+      client
+        .patch(palette!._id)
+        .set({ [role.field]: raw })
+        .commit()
+        .then(() => setError(null))
+        .catch(reportFailure)
     }
   }
 
@@ -79,7 +92,12 @@ export function ColourRoles({ paletteId }: { paletteId?: string }) {
       delete next[role.key]
       return next
     })
-    client.patch(palette!._id).unset([role.field]).commit()
+    client
+      .patch(palette!._id)
+      .unset([role.field])
+      .commit()
+      .then(() => setError(null))
+      .catch(reportFailure)
   }
 
   function resetAll() {
@@ -88,6 +106,8 @@ export function ColourRoles({ paletteId }: { paletteId?: string }) {
       .patch(palette!._id)
       .unset(ROLES.filter((r) => !r.base).map((r) => r.field as string))
       .commit()
+      .then(() => setError(null))
+      .catch(reportFailure)
   }
 
   return (
@@ -104,6 +124,12 @@ export function ColourRoles({ paletteId }: { paletteId?: string }) {
           </button>
         )}
       </div>
+
+      {error && (
+        <div style={{ marginBottom: 9, padding: '8px 11px', border: `1px solid ${kitchen.danger}`, borderRadius: 8, background: '#FDECEC', fontSize: 12, color: kitchen.danger }}>
+          {error}
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 8 }}>
         {ROLES.map((role) => {
