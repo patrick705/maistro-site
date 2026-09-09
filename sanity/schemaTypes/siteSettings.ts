@@ -98,6 +98,14 @@ export const siteSettings = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'transparentNav',
+      title: 'Transparent top nav',
+      description: 'When on, the top nav has no background fill on every page, with white nav text and logo — for sites with a full-bleed hero or video directly under the nav.',
+      type: 'boolean',
+      group: 'nav',
+      initialValue: false,
+    }),
+    defineField({
       name: 'primaryCta',
       title: 'Primary CTA button',
       type: 'object',

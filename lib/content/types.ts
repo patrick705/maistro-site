@@ -81,6 +81,7 @@ export interface SiteSettings {
   logoDark?: SeoImage
   navItems: NavItem[]
   stickyNav: boolean
+  transparentNav: boolean
   primaryCta: PrimaryCta
   socialLinks: SocialLink[]
   footerText: string

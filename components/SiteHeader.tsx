@@ -15,17 +15,23 @@ export function SiteHeader({
   navItems,
   primaryCta,
   stickyNav,
+  transparentNav,
 }: {
   siteName: string
   logo?: SeoImage
   navItems: NavItem[]
   primaryCta: PrimaryCta
   stickyNav?: boolean
+  transparentNav?: boolean
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const className = [styles.header, stickyNav && styles.sticky, transparentNav && styles.transparent]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <header className={stickyNav ? `${styles.header} ${styles.sticky}` : styles.header}>
+    <header className={className}>
       <div className={styles.logoWrap}>
         <Logo siteName={siteName} variant="header" logo={logo} />
       </div>

@@ -18,6 +18,7 @@ export const siteSettingsQuery = groq`
     "logoDark": logoDark{"url": asset->url, alt},
     navItems[]{label, href},
     stickyNav,
+    transparentNav,
     primaryCta{label, href},
     socialLinks[]{platform, url},
     footerText,

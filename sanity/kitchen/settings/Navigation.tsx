@@ -20,6 +20,7 @@ interface SiteSettingsDoc {
   _id: string
   navItems?: NavItem[]
   stickyNav?: boolean
+  transparentNav?: boolean
   primaryCta?: { label?: string; href?: string }
 }
 
@@ -254,6 +255,13 @@ export function NavigationSettings() {
           hint="Stays fixed at the top of the viewport while scrolling"
           value={Boolean(settings.stickyNav)}
           onChange={(v) => patch({ stickyNav: v })}
+        />
+
+        <Toggle
+          label="Transparent top nav"
+          hint="No background fill on every page, with white nav text and logo — for a full-bleed hero or video directly under the nav"
+          value={Boolean(settings.transparentNav)}
+          onChange={(v) => patch({ transparentNav: v })}
         />
       </div>
     </div>

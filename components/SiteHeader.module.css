@@ -14,6 +14,38 @@
 }
 
 /*
+ * Site Settings "Transparent top nav" — same floating-over-content look as
+ * the per-page overlay below, but applied unconditionally. Declared after
+ * .sticky so it wins position/box-shadow if a site somehow has both on.
+ */
+.transparent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: transparent;
+  box-shadow: none;
+}
+
+.transparent .navLink,
+.transparent .navLinkActive {
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+
+.transparent .cta {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: #fff;
+}
+
+.transparent .burger {
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+
+/*
  * A page's leading block can render a `[data-header-overlay="true"]` marker
  * (see PageBuilder) to ask for a transparent nav over its own hero — read
  * with :has() instead of React state so it's correct on the very first

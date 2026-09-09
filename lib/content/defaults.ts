@@ -19,6 +19,7 @@ export const defaultSiteSettings: SiteSettings = {
     { label: 'Contact', href: '/#contact' },
   ],
   stickyNav: false,
+  transparentNav: false,
   primaryCta: { label: 'Book a demo', href: '' },
   socialLinks: [],
   footerText: '© 2026 BossIT · São Paulo · London',

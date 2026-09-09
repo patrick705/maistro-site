@@ -20,6 +20,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
           navItems={navItems}
           primaryCta={siteSettings.primaryCta}
           stickyNav={siteSettings.stickyNav}
+          transparentNav={siteSettings.transparentNav}
         />
         {children}
         <SiteFooter
