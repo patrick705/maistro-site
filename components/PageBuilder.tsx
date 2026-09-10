@@ -30,13 +30,24 @@ import { ImageBanner } from './blocks/ImageBanner'
 import { MultiImageBanner } from './blocks/MultiImageBanner'
 import { CustomHtmlBlockView } from './blocks/CustomHtml'
 
-export function PageBuilder({ blocks }: { blocks: PageBlock[] }) {
+export function PageBuilder({
+  blocks,
+  navStyle = 'inherit',
+}: {
+  blocks: PageBlock[]
+  navStyle?: 'inherit' | 'transparent' | 'solid'
+}) {
   const leading = blocks[0]
-  const wantsHeaderOverlay = leading?._type === 'backgroundVideoBlock' && leading.menuOverlay !== false
+  const autoOverlay = leading?._type === 'backgroundVideoBlock' && leading.menuOverlay !== false
+  // An explicit per-page choice wins over the automatic hero-video overlay;
+  // "inherit" leaves that automatic behavior (and the site-wide default) alone.
+  const wantsHeaderOverlay = navStyle === 'inherit' ? autoOverlay : navStyle === 'transparent'
+  const wantsHeaderSolid = navStyle === 'solid'
 
   return (
     <>
       {wantsHeaderOverlay && <div data-header-overlay="true" aria-hidden="true" style={{ display: 'none' }} />}
+      {wantsHeaderSolid && <div data-header-solid="true" aria-hidden="true" style={{ display: 'none' }} />}
       {blocks.map((block) => {
         switch (block._type) {
           case 'heroCarouselBlock':

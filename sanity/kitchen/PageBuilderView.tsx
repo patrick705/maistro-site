@@ -29,6 +29,7 @@ interface PageDoc {
   showInMenu?: boolean
   menuOrder?: number
   navLabel?: string
+  navStyle?: string
   archived?: boolean
   parentId?: string
   seo?: Record<string, any>
@@ -435,6 +436,8 @@ export function PageBuilderView({
           onDeletePermanently={deletePagePermanently}
           navLabel={page.navLabel}
           onPatchNavLabel={(value) => patch({ navLabel: value })}
+          navStyle={page.navStyle}
+          onPatchNavStyle={(value) => patch({ navStyle: value })}
           title={page.title}
           onPatchTitle={(value) => patch({ title: value })}
         />

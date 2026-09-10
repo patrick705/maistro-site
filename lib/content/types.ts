@@ -639,6 +639,7 @@ export interface Page {
   title: string
   slug: string
   navLabel?: string
+  navStyle?: 'inherit' | 'transparent' | 'solid'
   showInMenu: boolean
   menuOrder?: number
   blocks: PageBlock[]

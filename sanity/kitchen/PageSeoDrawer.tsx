@@ -54,6 +54,8 @@ export function PageSeoDrawer({
   onDeletePermanently,
   navLabel,
   onPatchNavLabel,
+  navStyle,
+  onPatchNavStyle,
   title,
   onPatchTitle,
 }: {
@@ -67,6 +69,8 @@ export function PageSeoDrawer({
   onDeletePermanently: () => Promise<void>
   navLabel?: string
   onPatchNavLabel: (value: string) => void
+  navStyle?: string
+  onPatchNavStyle: (value: string) => void
   title?: string
   onPatchTitle: (value: string) => void
 }) {
@@ -172,6 +176,14 @@ export function PageSeoDrawer({
 
         <Field label="Top-menu label" hint="Falls back to the page title if left empty.">
           <input style={inputStyle} value={navLabel ?? ''} onChange={(e) => onPatchNavLabel(e.target.value)} />
+        </Field>
+
+        <Field label="Top nav style" hint="Overrides the site-wide Transparent top nav setting for this page only.">
+          <select style={inputStyle} value={navStyle ?? 'inherit'} onChange={(e) => onPatchNavStyle(e.target.value)}>
+            <option value="inherit">Use site default</option>
+            <option value="transparent">Transparent</option>
+            <option value="solid">Solid</option>
+          </select>
         </Field>
 
         <div style={{ borderTop: `1px solid ${kitchen.border}`, paddingTop: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>

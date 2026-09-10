@@ -36,7 +36,7 @@ export default async function CustomPage({ params }: { params: Promise<{ slug: s
           dangerouslySetInnerHTML={{ __html: jsonLdScript(clientsJsonLd(logoStrip.logos)) }}
         />
       )}
-      <PageBuilder blocks={page.blocks} />
+      <PageBuilder blocks={page.blocks} navStyle={page.navStyle} />
     </main>
   )
 }

@@ -68,6 +68,22 @@ export const page = defineType({
       ],
     }),
     defineField({ name: 'navLabel', title: 'Top-menu label', description: 'Falls back to Title if left empty.', type: 'string', group: 'nav' }),
+    defineField({
+      name: 'navStyle',
+      title: 'Top nav style',
+      description: 'Overrides the site-wide "Transparent top nav" setting for this page only.',
+      type: 'string',
+      group: 'nav',
+      options: {
+        list: [
+          { title: 'Use site default', value: 'inherit' },
+          { title: 'Transparent', value: 'transparent' },
+          { title: 'Solid', value: 'solid' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'inherit',
+    }),
     defineField({ name: 'showInMenu', title: 'Show in top menu', type: 'boolean', group: 'nav', initialValue: false }),
     defineField({ name: 'menuOrder', title: 'Menu order', description: 'Lower numbers appear first.', type: 'number', group: 'nav' }),
     defineField({

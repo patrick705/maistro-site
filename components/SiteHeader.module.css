@@ -79,6 +79,45 @@ body:has([data-header-overlay='true']) .burger {
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
 }
 
+/*
+ * Per-page "Solid" nav-style override (see PageBuilder's [data-header-solid]
+ * marker) — forces the header back to solid on this page even if Site
+ * Settings has "Transparent top nav" on, or the leading block would
+ * otherwise trigger the automatic hero overlay above. Needs !important
+ * since it must beat both of those independent mechanisms.
+ */
+body:has([data-header-solid='true']) .header {
+  position: static !important;
+  background: var(--surface) !important;
+  box-shadow: none !important;
+}
+
+body:has([data-header-solid='true']) .header.sticky {
+  position: sticky !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+}
+
+body:has([data-header-solid='true']) .navLink,
+body:has([data-header-solid='true']) .navLinkActive {
+  color: var(--brand) !important;
+  text-shadow: none !important;
+}
+
+body:has([data-header-solid='true']) .navLinkActive {
+  color: var(--accent) !important;
+}
+
+body:has([data-header-solid='true']) .cta {
+  background: var(--brand) !important;
+  border: none !important;
+  color: var(--warm) !important;
+}
+
+body:has([data-header-solid='true']) .burger {
+  color: var(--brand) !important;
+  text-shadow: none !important;
+}
+
 .logoWrap {
   display: flex;
   align-items: center;
