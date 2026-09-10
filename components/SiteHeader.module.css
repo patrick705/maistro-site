@@ -118,6 +118,74 @@ body:has([data-header-solid='true']) .burger {
   text-shadow: none !important;
 }
 
+/*
+ * Per-page "Transparent nav text colour" (see PageBuilder's
+ * [data-header-nav-color] marker) — swaps the white text/logo/burger used
+ * above for a different colour, for pages whose hero content doesn't read
+ * well against plain white. Only meaningful while the header is actually
+ * transparent, so every rule is scoped under both ways that can happen:
+ * the site-wide .transparent class, and the per-page overlay marker.
+ */
+body:has([data-header-nav-color='teal']) .transparent .navLink,
+body:has([data-header-nav-color='teal']) .transparent .navLinkActive,
+body:has([data-header-nav-color='teal']):has([data-header-overlay='true']) .navLink,
+body:has([data-header-nav-color='teal']):has([data-header-overlay='true']) .navLinkActive {
+  color: #68e8f7;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+
+body:has([data-header-nav-color='teal']) .transparent .cta,
+body:has([data-header-nav-color='teal']):has([data-header-overlay='true']) .cta {
+  border-color: rgba(104, 232, 247, 0.7);
+  color: #68e8f7;
+}
+
+body:has([data-header-nav-color='teal']) .transparent .burger,
+body:has([data-header-nav-color='teal']):has([data-header-overlay='true']) .burger {
+  color: #68e8f7;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+
+body:has([data-header-nav-color='brand']) .transparent .navLink,
+body:has([data-header-nav-color='brand']) .transparent .navLinkActive,
+body:has([data-header-nav-color='brand']):has([data-header-overlay='true']) .navLink,
+body:has([data-header-nav-color='brand']):has([data-header-overlay='true']) .navLinkActive {
+  color: var(--brand);
+  text-shadow: none;
+}
+
+body:has([data-header-nav-color='brand']) .transparent .cta,
+body:has([data-header-nav-color='brand']):has([data-header-overlay='true']) .cta {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+body:has([data-header-nav-color='brand']) .transparent .burger,
+body:has([data-header-nav-color='brand']):has([data-header-overlay='true']) .burger {
+  color: var(--brand);
+  text-shadow: none;
+}
+
+body:has([data-header-nav-color='accent']) .transparent .navLink,
+body:has([data-header-nav-color='accent']) .transparent .navLinkActive,
+body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .navLink,
+body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .navLinkActive {
+  color: var(--accent);
+  text-shadow: none;
+}
+
+body:has([data-header-nav-color='accent']) .transparent .cta,
+body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .cta {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+body:has([data-header-nav-color='accent']) .transparent .burger,
+body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .burger {
+  color: var(--accent);
+  text-shadow: none;
+}
+
 .logoWrap {
   display: flex;
   align-items: center;

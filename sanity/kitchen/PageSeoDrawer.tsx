@@ -56,6 +56,8 @@ export function PageSeoDrawer({
   onPatchNavLabel,
   navStyle,
   onPatchNavStyle,
+  navTransparentColor,
+  onPatchNavTransparentColor,
   title,
   onPatchTitle,
 }: {
@@ -71,6 +73,8 @@ export function PageSeoDrawer({
   onPatchNavLabel: (value: string) => void
   navStyle?: string
   onPatchNavStyle: (value: string) => void
+  navTransparentColor?: string
+  onPatchNavTransparentColor: (value: string) => void
   title?: string
   onPatchTitle: (value: string) => void
 }) {
@@ -183,6 +187,19 @@ export function PageSeoDrawer({
             <option value="inherit">Use site default</option>
             <option value="transparent">Transparent</option>
             <option value="solid">Solid</option>
+          </select>
+        </Field>
+
+        <Field label="Transparent nav text colour" hint="Only matters while this page's header is transparent (inherited or explicit).">
+          <select
+            style={inputStyle}
+            value={navTransparentColor ?? 'white'}
+            onChange={(e) => onPatchNavTransparentColor(e.target.value)}
+          >
+            <option value="white">White (default)</option>
+            <option value="teal">Teal</option>
+            <option value="brand">Brand colour</option>
+            <option value="accent">Accent colour</option>
           </select>
         </Field>
 

@@ -33,7 +33,7 @@ export default async function HomePage() {
           __html: jsonLdScript(organizationJsonLd(siteSettings, page.seo, heroSubhead(page))),
         }}
       />
-      <PageBuilder blocks={page.blocks} navStyle={page.navStyle} />
+      <PageBuilder blocks={page.blocks} navStyle={page.navStyle} navTransparentColor={page.navTransparentColor} />
     </main>
   )
 }

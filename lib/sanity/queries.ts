@@ -67,6 +67,7 @@ export const pageBySlugQuery = groq`
     "slug": slug.current,
     navLabel,
     navStyle,
+    navTransparentColor,
     showInMenu,
     menuOrder,
     blocks[]{

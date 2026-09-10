@@ -84,6 +84,23 @@ export const page = defineType({
       },
       initialValue: 'inherit',
     }),
+    defineField({
+      name: 'navTransparentColor',
+      title: 'Transparent nav text colour',
+      description: 'Only matters when this page\'s header ends up transparent (inherited or explicit). Nav links, logo and burger switch to this colour instead of the default white.',
+      type: 'string',
+      group: 'nav',
+      options: {
+        list: [
+          { title: 'White (default)', value: 'white' },
+          { title: 'Teal', value: 'teal' },
+          { title: 'Brand colour', value: 'brand' },
+          { title: 'Accent colour', value: 'accent' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'white',
+    }),
     defineField({ name: 'showInMenu', title: 'Show in top menu', type: 'boolean', group: 'nav', initialValue: false }),
     defineField({ name: 'menuOrder', title: 'Menu order', description: 'Lower numbers appear first.', type: 'number', group: 'nav' }),
     defineField({

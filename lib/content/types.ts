@@ -640,6 +640,7 @@ export interface Page {
   slug: string
   navLabel?: string
   navStyle?: 'inherit' | 'transparent' | 'solid'
+  navTransparentColor?: 'white' | 'teal' | 'brand' | 'accent'
   showInMenu: boolean
   menuOrder?: number
   blocks: PageBlock[]

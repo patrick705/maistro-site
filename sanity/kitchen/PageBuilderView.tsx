@@ -30,6 +30,7 @@ interface PageDoc {
   menuOrder?: number
   navLabel?: string
   navStyle?: string
+  navTransparentColor?: string
   archived?: boolean
   parentId?: string
   seo?: Record<string, any>
@@ -443,6 +444,8 @@ export function PageBuilderView({
           onPatchNavLabel={(value) => patch({ navLabel: value })}
           navStyle={page.navStyle}
           onPatchNavStyle={(value) => patch({ navStyle: value })}
+          navTransparentColor={page.navTransparentColor}
+          onPatchNavTransparentColor={(value) => patch({ navTransparentColor: value })}
           title={page.title}
           onPatchTitle={(value) => patch({ title: value })}
         />
