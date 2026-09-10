@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Maistro — One intelligence across your restaurant</title>
+  <meta name="description" content="Scroll through a restaurant operation connected by Maistro AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <section class="story" id="maistro-story" aria-label="A scroll journey through Maistro's connected restaurant operation">
+    <div class="stage">
+      <div class="world"><img src="restaurant.webp" width="768" height="2046" alt="An extended continuous restaurant: supplier vans, stock rooms, kitchen and ordering, a spacious dining room, then delivery riders" /></div>
+      <div class="shade"></div><div class="grain"></div><div class="scan"></div>
+      <article class="chapter active" data-chapter="0" style="--tone:var(--gold)">
+        <div class="hud stock-card"><span class="money">$<i>↓</i><i>↓</i></span><small>STOCK MANAGER</small><strong>We save you money.</strong><div class="stock-steps" aria-hidden="true"><i></i><i></i><i></i></div></div>
+        <div class="stock-list"><div class="stock-popup"><span>01 / PREDICT</span><strong>ADVANCED FORECASTING!</strong><p>Know what you need. Order with confidence.</p></div>
+        <div class="stock-popup"><span>02 / CONTROL</span><strong>PORTION MANAGEMENT</strong><p>Consistent portions. Less waste on every plate.</p></div>
+        <div class="stock-popup"><span>03 / PREPARE</span><strong>MANUFACTURING</strong><p>Connect ingredients, recipes and batch production.</p></div></div>
+        <div class="goods-flow" aria-hidden="true"><i style="--x:37%;--delay:0s"></i><i style="--x:38%;--delay:.8s"></i><i style="--x:56%;--delay:.3s"></i><i style="--x:57%;--delay:1.1s"></i><i style="--x:73%;--delay:.55s"></i><i style="--x:74%;--delay:1.35s"></i></div>
+      </article>
+      <article class="chapter" data-chapter="1" style="--tone:var(--violet)">
+        <div class="ops"><div class="hud menu-card"><span class="heart">♥</span><small>Menu Manager</small><strong>The heart of your operation</strong></div></div>
+        <div class="channel-popups">
+          <div class="channel-popup"><span>01 / 07</span><strong>Voice ordering</strong><p>Phone orders, connected.</p></div>
+          <div class="channel-popup"><span>02 / 07</span><strong>POS</strong><p>Your menu at every till.</p></div>
+          <div class="channel-popup"><span>03 / 07</span><strong>Kiosks</strong><p>Self-service, in sync.</p></div>
+          <div class="channel-popup"><span>04 / 07</span><strong>Digital signage</strong><p>Your offers, on display.</p></div>
+          <div class="channel-popup"><span>05 / 07</span><strong>Kitchen displays</strong><p>Every order reaches the kitchen.</p></div>
+          <div class="channel-popup"><span>06 / 07</span><strong>Direct online orders</strong><p>Your website. Your menu.</p></div>
+          <div class="channel-popup partner-group"><strong>Full partner integration</strong><div class="partner-logos"><img class="partner-logo" src="deliveroo.svg" alt="Deliveroo" width="230" height="58" /><img class="partner-logo uber-logo" src="uber-eats.svg" alt="Uber Eats" width="230" height="58" /><img class="partner-logo" src="just-eat.svg" alt="Just Eat" width="230" height="58" /></div></div>
+        </div>
+      </article>
+      <article class="chapter" data-chapter="2" style="--tone:var(--lime)"><div class="ops"><div class="hud staff-card"><span class="bars"><i></i><i></i><i></i></span><small>AI-POWERED STAFF MANAGEMENT</small><strong>Drive down staff costs.</strong></div></div>
+        <div class="staff-list"><div class="feature-popup staff-popup"><span>01 / 04</span><strong>AI Driven staff scheduling</strong></div>
+        <div class="feature-popup staff-popup"><span>02 / 04</span><strong>Staff app for communication</strong></div>
+        <div class="feature-popup staff-popup"><span>03 / 04</span><strong>Forecast all staff costs</strong></div>
+        <div class="feature-popup staff-popup"><span>04 / 04</span><strong>Handle admin roles</strong></div></div>
+      </article>
+      <article class="chapter" data-chapter="3" style="--tone:var(--cyan)">
+        <div class="hud driver-card"><svg class="map" viewBox="0 0 58 42" aria-hidden="true"><path d="M3 34 C15 34 18 9 31 15 S43 34 55 4"/><circle cx="3" cy="34" r="3"/><circle cx="55" cy="4" r="3"/></svg><small>DIRECT SALES</small><strong>Own your database</strong></div>
+        <div class="logistics-list"><div class="feature-popup logistics-popup"><span>01 / 08</span><strong>Custom app and websales</strong></div>
+        <div class="feature-popup logistics-popup"><span>02 / 08</span><strong>Manage offers and discounts</strong></div>
+        <div class="feature-popup logistics-popup"><span>03 / 08</span><strong>Extensive Loyalty capabilities</strong></div>
+        <div class="feature-popup logistics-popup"><span>04 / 08</span><strong>Driver management</strong></div>
+        <div class="feature-popup logistics-popup"><span>05 / 08</span><strong>Driver tracking for consumers</strong></div>
+        <div class="feature-popup logistics-popup"><span>06 / 08</span><strong>AI driven auto dispatch</strong></div>
+        <div class="feature-popup logistics-popup"><span>07 / 08</span><strong>Driver app</strong></div>
+        <div class="feature-popup logistics-popup"><span>08 / 08</span><strong>Call centre</strong></div></div>
+      </article>
+      <svg class="connections" aria-hidden="true"></svg>
+      <div class="maistro" aria-hidden="true"><span class="maistro-label">Maistro AI</span><div class="agent-figure"><img class="agent-body" src="maistro.png" alt="" /></div></div>
+      <div class="progress" aria-hidden="true"><span id="chapter-name">Suppliers</span><div class="ticks"><i class="tick active"></i><i class="tick"></i><i class="tick"></i><i class="tick"></i></div></div>
+      <div class="brand"><em>Chase your margins,<br><span>not your tail.</span></em></div>
+    </div>
+  </section>
+  <script src="story.js"></script>
+</body>
+</html>
