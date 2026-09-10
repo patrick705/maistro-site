@@ -63,7 +63,7 @@ export function PageBuilderView({
   onPageDeleted: () => void
 }) {
   const client = useClient({ apiVersion: API_VERSION })
-  const { doc, patch, rawPatch } = useKitchenPatch(pageId, 'page')
+  const { doc, patch, rawPatch, error } = useKitchenPatch(pageId, 'page')
   const [hoverBlock, setHoverBlock] = useState<string | null>(null)
   const [editing, setEditing] = useState<string | null>(null)
   const [addMenuOpen, setAddMenuOpen] = useState(false)
@@ -261,6 +261,11 @@ export function PageBuilderView({
         {relativeTime(page._updatedAt) && <span>edited {relativeTime(page._updatedAt)}</span>}
         {isArchived && <span style={{ color: '#9c6a1c', fontWeight: 700 }}>archived</span>}
       </div>
+      {error && (
+        <div style={{ marginBottom: 12, padding: '8px 11px', border: `1px solid ${kitchen.danger}`, borderRadius: 8, background: '#FDECEC', fontSize: 12, color: kitchen.danger }}>
+          {error}
+        </div>
+      )}
       <div style={{ marginBottom: 22 }}>
         {!isHome && page.slug?.current && RESERVED_SLUGS.includes(page.slug.current) && (
           <div style={{ fontSize: 11, color: kitchen.danger, marginTop: 4 }}>

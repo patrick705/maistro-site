@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useClient, useEditState } from 'sanity'
 import type { Patch } from '@sanity/client'
 
@@ -13,18 +13,28 @@ const API_VERSION = '2024-01-01'
 export function useKitchenPatch(id: string, type: string) {
   const client = useClient({ apiVersion: API_VERSION })
   const editState = useEditState(id, type)
+  const [error, setError] = useState<string | null>(null)
 
   // Shared by `patch` and `rawPatch` below — the only difference is what
-  // operation runs against the draft once it's guaranteed to exist.
+  // operation runs against the draft once it's guaranteed to exist. Every
+  // call site in Kitchen fires this without awaiting it, so a failed commit
+  // (permission error, network blip, a stale transaction) used to vanish
+  // with no feedback at all — the field looked edited but the document
+  // never actually changed. Surfacing it here covers every caller at once.
   const withDraft = useCallback(
     async (build: (p: Patch) => Patch) => {
       const draftId = `drafts.${id}`
       const base = editState.draft ?? editState.published ?? { _type: type }
-      await client
-        .transaction()
-        .createIfNotExists({ ...base, _id: draftId, _type: type })
-        .patch(draftId, build)
-        .commit({ autoGenerateArrayKeys: true })
+      try {
+        await client
+          .transaction()
+          .createIfNotExists({ ...base, _id: draftId, _type: type })
+          .patch(draftId, build)
+          .commit({ autoGenerateArrayKeys: true })
+        setError(null)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to save — try again.')
+      }
     },
     [client, id, type, editState.draft, editState.published],
   )
@@ -43,5 +53,5 @@ export function useKitchenPatch(id: string, type: string) {
 
   const doc = editState.draft ?? editState.published ?? null
 
-  return { patch, rawPatch, doc, editState }
+  return { patch, rawPatch, doc, editState, error }
 }
