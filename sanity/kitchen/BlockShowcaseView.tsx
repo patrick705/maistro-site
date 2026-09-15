@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useClient } from 'sanity'
 
-import { BLOCK_CATEGORIES, BLOCK_TYPES } from './blockTypes'
+import { BLOCK_CATEGORIES, REAL_BLOCK_TYPES } from './blockTypes'
 import { genericBlockContent } from './blockShowcaseContent'
 import { KitchenErrorBoundary } from './KitchenErrorBoundary'
 import { LivePreview } from './livePreview/LivePreview'
@@ -29,7 +29,7 @@ export function BlockShowcaseView({ onSelect }: { onSelect: (v: KitchenView) => 
 
   // Computed once — each card keeps the same example instance for the life of
   // this view rather than regenerating (and re-keying) on every re-render.
-  const items = useMemo(() => BLOCK_TYPES.map((t) => ({ ...t, block: genericBlockContent(t.type) })), [])
+  const items = useMemo(() => REAL_BLOCK_TYPES.map((t) => ({ ...t, block: genericBlockContent(t.type) })), [])
 
   async function cloneIntoPage(type: string) {
     const pageId = targetByType[type]

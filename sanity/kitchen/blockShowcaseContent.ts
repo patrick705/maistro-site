@@ -1,4 +1,5 @@
 import { randomKey } from './blockTypes'
+import { BEFORE_AFTER_EMBED_CODE } from './embedSnippets'
 
 // Generic placeholder assets uploaded for the gallery/banner block types —
 // brand-palette gradients with a plain label, safe to reuse across every
@@ -30,70 +31,6 @@ const PLACEHOLDER_ASSETS = {
     url: 'https://cdn.sanity.io/images/u7g3hn1o/production/cacfa7d371a385ddd89d6434ddc8dc93d8f950b5-1600x900.png',
   },
 }
-
-// Points at the widget hosted at public/maistro-kitchen/index.html — must
-// stay same-origin with the page for the resize-observer script's
-// frame.contentDocument read to work (see that file's own README).
-const BEFORE_AFTER_EMBED_CODE = `<style>
-  .maistro-website-embed {
-    display: block;
-    width: 100%;
-    height: 760px;
-    border: 0;
-  }
-  @media (max-width: 720px) {
-    .maistro-website-embed { height: calc(56.28vw + 90px); }
-  }
-</style>
-<iframe
-  class="maistro-website-embed"
-  src="/maistro-kitchen/index.html"
-  title="Before and after Maistro: an interactive kitchen comparison"
-  loading="lazy"
-></iframe>
-<script>
-(() => {
-  document.querySelectorAll('.maistro-website-embed').forEach(frame => {
-    if (frame.dataset.maistroEmbedReady) return;
-    frame.dataset.maistroEmbedReady = 'true';
-    let observer;
-    let sceneBlock;
-    let pending;
-
-    const fit = () => {
-      if (!sceneBlock || pending) return;
-      pending = requestAnimationFrame(() => {
-        pending = null;
-        const height = Math.ceil(sceneBlock.getBoundingClientRect().height);
-        if (height > 0 && frame.style.height !== height + 'px') {
-          frame.style.height = height + 'px';
-        }
-      });
-    };
-
-    const connect = () => {
-      if (observer) observer.disconnect();
-      sceneBlock = null;
-      try {
-        sceneBlock = frame.contentDocument &&
-          frame.contentDocument.querySelector('.maistro-story');
-      } catch (_) {
-        return;
-      }
-      if (!sceneBlock) return;
-      fit();
-      if ('ResizeObserver' in window) {
-        observer = new ResizeObserver(fit);
-        observer.observe(sceneBlock);
-      }
-    };
-
-    frame.addEventListener('load', connect);
-    window.addEventListener('resize', fit, { passive: true });
-    connect();
-  });
-})();
-</script>`
 
 function placeholderImage(key: keyof typeof PLACEHOLDER_ASSETS, alt: string) {
   const { ref, url } = PLACEHOLDER_ASSETS[key]

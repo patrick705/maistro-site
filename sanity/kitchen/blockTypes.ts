@@ -1,3 +1,5 @@
+import { BEFORE_AFTER_EMBED_CODE } from './embedSnippets'
+
 /** Block types with a themeable section identity — these get a real Design tab. Utility/media blocks (news grid, logo strip, social links, gallery, video) don't have a section identity of their own to restyle. */
 export const DESIGN_TAB_BLOCK_TYPES = new Set([
   'richHeroBlock',
@@ -76,11 +78,27 @@ export const BLOCK_TYPES: { type: string; label: string; icon: string; category:
   { type: 'contactFormBlock', label: 'Contact section', icon: '✉️', category: 'Editorial & conversion', description: 'Headline, subhead, lead form' },
   { type: 'roiCalculatorBlock', label: 'ROI calculator', icon: '◱', category: 'Custom blocks', description: 'Stores, prime cost and voice AI — live savings' },
   { type: 'customHtmlBlock', label: 'Custom HTML', icon: '</>', category: 'Custom blocks', description: 'Upload or paste raw HTML, embeds, scripts' },
+  {
+    type: 'customHtmlBlock:beforeAfter',
+    label: 'Before/After comparison',
+    icon: '🍽️',
+    category: 'Custom blocks',
+    description: 'Pre-filled kitchen before/after embed — same as on Home',
+  },
   { type: 'ctaBannerBlock', label: 'CTA band', icon: '📣', category: 'Editorial & conversion', description: 'Closing headline + button' },
 
   { type: 'textBlock', label: 'Text box', icon: '📝', category: 'Other', description: 'Freeform heading + paragraphs' },
   { type: 'sideBySideBlock', label: 'Side-by-side', icon: '⬛', category: 'Other', description: 'Image + text, either side' },
 ]
+
+/**
+ * BLOCK_TYPES entries whose `type` is a real schema name — excludes
+ * pseudo-types like 'customHtmlBlock:beforeAfter' (a pre-filled variant for
+ * "+ Add block" only). Block Showcase must use this list, not BLOCK_TYPES
+ * directly: genericBlockContent() has no case for a pseudo-type and would
+ * fall through to its default, producing a block with an invalid `_type`.
+ */
+export const REAL_BLOCK_TYPES = BLOCK_TYPES.filter((t) => !t.type.includes(':'))
 
 export function randomKey() {
   return Math.random().toString(36).slice(2, 10)
@@ -129,6 +147,18 @@ export function emptyBlock(type: string): Record<string, any> {
       return { _type: type, _key, images: [] }
     case 'customHtmlBlock':
       return { _type: type, _key, sandboxed: true, fullWidth: false }
+    // Pseudo-type, not a real schema name — a pre-filled customHtmlBlock so
+    // this widget is reachable straight from "+ Add block", not just via
+    // Block Showcase. Must hardcode _type here since `type` itself isn't one.
+    case 'customHtmlBlock:beforeAfter':
+      return {
+        _type: 'customHtmlBlock',
+        _key,
+        label: 'Before/After Maistro kitchen comparison',
+        code: BEFORE_AFTER_EMBED_CODE,
+        sandboxed: false,
+        fullWidth: false,
+      }
     case 'scrollGalleryBlock':
     case 'mediaMosaicBlock':
     case 'mediaCardGridBlock':
