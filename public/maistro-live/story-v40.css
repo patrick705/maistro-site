@@ -1,0 +1,33 @@
+/* Floating signal panels, with a feature-specific animated diagram. */
+.hud{border:1px solid #ffffff30;border-radius:8px 22px 22px 8px;background:linear-gradient(112deg,#091f2aef,#133040c9);box-shadow:0 18px 42px #00101655,inset 0 1px #ffffff18;border-left:3px solid var(--tone);padding:21px 23px 21px 70px}
+.hud small,.stock-card small{color:#fff;font-size:clamp(22px,2vw,29px);letter-spacing:-.035em}
+.hud strong{color:var(--tone);font-size:16px}.stock-card strong{color:#fff;font-size:clamp(27px,2.7vw,38px)}
+.hud .money{color:var(--gold);border-color:#f4be6290}.hud .money i{color:var(--gold)}.hud .heart{color:#ff7f9f;text-shadow:0 0 18px #ff7f9f70}
+.hud .map path{stroke:var(--cyan)}.hud .map circle{fill:var(--cyan)}.hud .bars i{background:#c6ef7830;border-color:var(--lime)}
+.stock-steps i{background:#f4be6233}.stock-steps i.active{background:var(--gold);box-shadow:0 0 9px #f4be6260}
+.stock-popup,.channel-popup,.feature-popup{isolation:isolate;overflow:visible;width:clamp(280px,30vw,420px);padding:30px 29px 25px;border:1px solid color-mix(in srgb,var(--tone) 52%,transparent);border-radius:7px 28px 7px 28px;background:linear-gradient(125deg,#082532f2 0%,#0b2239e8 48%,#162a47d9 100%);box-shadow:0 28px 70px #00132166,inset 0 1px #ffffff36,0 0 35px color-mix(in srgb,var(--tone) 13%,transparent);color:#fff;transform-origin:50% 100%}
+.stock-popup:nth-of-type(3),.channel-popup:nth-child(even),.logistics-popup{border-radius:28px 7px 28px 7px}
+.stock-popup::before,.channel-popup::before,.feature-popup::before{display:block;content:"";position:absolute;left:28px;top:-2px;width:76px;height:3px;background:var(--tone);box-shadow:0 0 16px var(--tone);border-radius:10px}
+.stock-popup::after,.channel-popup::after,.feature-popup::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(ellipse at 95% 5%,color-mix(in srgb,var(--tone) 23%,transparent),transparent 62%)}
+.stock-popup>span,.channel-popup>span,.feature-popup>span{display:none}
+.stock-popup>strong,.channel-popup>strong,.feature-popup>strong{display:block;max-width:100%;margin:0;font-size:clamp(30px,3.15vw,44px);font-weight:800;line-height:1.02;letter-spacing:-.055em;color:#fff;text-shadow:0 2px 16px #001d3240}
+.stock-popup>strong::first-line,.feature-popup>strong::first-line{color:var(--tone)}
+.stock-popup p,.channel-popup p{font-size:16px;line-height:1.4;color:#cee1ed;margin:15px 0 0}
+.signal-visual{display:block;width:100%;height:52px;margin:23px 0 0;overflow:visible;color:var(--tone);border-top:1px solid #ffffff1a;padding-top:12px}
+.signal-visual .signal-grid{stroke:#ffffff20;stroke-width:1;fill:none}
+.signal-visual .signal-track{stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--tone) 55%,transparent))}
+.signal-visual .signal-node{fill:#0c2839;stroke:currentColor;stroke-width:2}
+.signal-visual .signal-flow{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-dasharray:.10 .90;animation:signal-travel 3.8s linear infinite}
+.signal-visual .signal-pulse{fill:var(--tone);transform-box:fill-box;transform-origin:center;animation:signal-breathe 2.5s ease-in-out infinite}
+.partner-group{padding:25px;gap:15px;background:#fafffff5;border-color:#ffffff90;box-shadow:0 24px 60px #00151b40}
+.partner-group::after,.partner-group::before{display:none}.partner-group .partner-logo{max-width:195px;height:43px}
+.connections path{stroke-width:1.25;filter:drop-shadow(0 0 3px #061d28cc)}
+@keyframes signal-travel{to{stroke-dashoffset:-1}}
+@keyframes signal-breathe{50%{opacity:.4;transform:scale(.8)}}
+@media(max-width:820px){
+ .hud{padding:18px 16px 18px 44px;border-radius:6px 17px 17px 6px}.hud small,.stock-card small{font-size:21px}.hud strong{font-size:14px}.stock-card strong{font-size:28px}
+ .stock-popup,.stock-popup:nth-of-type(3),.channel-popup,.channel-popup:nth-child(even),.feature-popup{width:78%;max-width:340px;padding:25px 24px 21px;border-radius:6px 23px 6px 23px}
+ .stock-popup>strong,.channel-popup>strong,.feature-popup>strong{font-size:31px}.stock-popup p,.channel-popup p{font-size:15px}.signal-visual{height:45px;margin-top:19px}
+ .partner-group{gap:14px}.partner-group .partner-logo{height:39px;max-width:185px}
+}
+@media(prefers-reduced-motion:reduce){.signal-flow,.signal-pulse{animation:none!important}}

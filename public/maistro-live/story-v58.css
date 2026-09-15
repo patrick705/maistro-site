@@ -1,0 +1,4 @@
+.hud,.hud.stock-card{background:linear-gradient(120deg,#061820a6,#102c3c80);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.stock-popup,.channel-popup,.feature-popup{background:linear-gradient(125deg,#0b243294,#122b3c73);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.channel-popups .channel-popup.partner-group:has(.partner-logo){background:linear-gradient(125deg,#071e2aaa,#102c3a94)}
+.hud small,.hud strong,.stock-popup strong,.channel-popup strong,.feature-popup strong{text-shadow:0 1px 5px #00131db3}

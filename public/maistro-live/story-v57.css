@@ -1,0 +1,1 @@
+.maistro .agent-figure{transform:perspective(650px) rotateY(var(--conductor-spin,0deg)) scaleX(var(--conductor-facing,-1)) translateY(var(--conductor-hop,0px)) rotateZ(var(--body-lean,0deg)) scaleY(var(--body-stretch,1))!important;transform-origin:50% 96%}

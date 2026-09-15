@@ -1,0 +1,18 @@
+.stock-card{padding:24px 24px 20px 78px;border:1px solid #f4be6260;border-radius:4px 18px 18px 18px;background:linear-gradient(130deg,#081b25f7,#10262ae8);box-shadow:0 20px 50px #0005,0 0 32px #f4be6210;animation:stock-arrival .8s cubic-bezier(.16,1,.3,1) both}
+.stock-card small{font:600 15px/1.2 DM Mono,monospace;letter-spacing:.15em;color:var(--gold);margin-bottom:12px}
+.stock-card strong{font-size:clamp(27px,2.7vw,39px);line-height:1.06;color:#fff;letter-spacing:-.045em;font-weight:800}
+.stock-card .money{left:23px;top:30px}
+.stock-steps{display:flex;gap:7px;margin-top:20px}
+.stock-steps i{height:2px;flex:1;background:#f4be6226;transition:background .25s,box-shadow .25s}
+.stock-steps i.active{background:var(--gold);box-shadow:0 0 8px #f4be6288}
+.stock-popup{position:absolute;left:9%;top:48%;width:min(340px,34vw);padding:22px 26px;border-left:2px solid var(--gold);border-top:1px solid #f4be6260;border-radius:0 14px 14px 14px;background:linear-gradient(120deg,#071b27f2,#0a2534d9);box-shadow:0 18px 38px #0004;opacity:0;visibility:hidden;will-change:transform,opacity}
+.stock-popup:nth-of-type(3){left:auto;right:8%;top:51%}
+.stock-popup span{display:block;margin-bottom:13px;font:500 12px/1 DM Mono,monospace;letter-spacing:.15em;color:#f4be62}
+.stock-popup strong{display:block;font-size:clamp(23px,2.5vw,34px);line-height:1.08;letter-spacing:-.035em;color:#fff}
+.stock-popup p{font-size:16px;line-height:1.45;color:#d0e1e7;margin:13px 0 0}
+@keyframes stock-arrival{from{opacity:0;clip-path:inset(0 0 100% 0)}to{opacity:1;clip-path:inset(0)}}
+@media(max-width:820px){
+ .stock-card{padding:18px 16px 16px 46px}.stock-card small{font-size:13px;letter-spacing:.09em}.stock-card strong{font-size:29px}.stock-card .money{left:9px;top:25px}.stock-steps{margin-top:14px}
+ .stock-popup,.stock-popup:nth-of-type(3){left:6%;right:auto;top:49%;width:78%;padding:20px 22px}.stock-popup:nth-of-type(3){left:auto;right:6%}.stock-popup strong{font-size:28px}.stock-popup p{font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){.stock-card{animation:none}.stock-steps i{transition:none}}

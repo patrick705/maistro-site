@@ -1,0 +1,2 @@
+/* Wider artwork fills the viewport without stretching its proportions. */
+.world{width:max(100vw,120svh);aspect-ratio:862/1825}

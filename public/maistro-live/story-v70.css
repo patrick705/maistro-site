@@ -1,0 +1,4 @@
+/* Restore generous mobile reading time while retaining compact cards. */
+@media(max-width:820px){
+  .story{height:3000svh}
+}

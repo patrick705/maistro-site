@@ -1,0 +1,4 @@
+/* Extend the restaurant reading journey by 50%, retaining the opening duration. */
+.story{height:2600svh}
+.world{aspect-ratio:724/2172}
+@media(max-width:820px){.story{height:3125svh}}

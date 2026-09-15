@@ -1,0 +1,14 @@
+/* Alternate the lead panels and keep supporting details on the opposite edge. */
+.stock-card,[data-chapter="2"] .ops{left:3%;right:auto}
+[data-chapter="1"] .ops,.driver-card{left:auto;right:3%}
+.stock-list,.staff-list{left:auto;right:3%}
+.channel-popups,.logistics-list{left:3%;right:auto}
+.hud,.hud.stock-card{background:linear-gradient(120deg,#061820c9,#102c3ca8);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);box-shadow:0 18px 48px #00101844,inset 0 1px #ffffff26}
+.stock-popup,.channel-popup,.feature-popup{background:linear-gradient(125deg,#0b2432ba,#122b3c9e);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 12px 30px #00132130}
+.channel-popups .channel-popup.partner-group:has(.partner-logo){background:linear-gradient(125deg,#071e2ac9,#102c3ab8)}
+@media(max-width:820px){
+ .stock-card,[data-chapter="2"] .ops{left:4%;right:auto}
+ [data-chapter="1"] .ops,.driver-card{left:auto;right:4%}
+ .stock-list,.staff-list{left:auto;right:4%}
+ .channel-popups,.logistics-list{left:4%;right:auto}
+}

@@ -1,0 +1,13 @@
+/* Slightly clearer relationship lines without letting them dominate the scene. */
+.connections path{
+  stroke-width:1.35;
+  stroke-dasharray:6 9;
+  opacity:.78;
+  filter:drop-shadow(0 0 2px color-mix(in srgb,currentColor 32%,transparent));
+}
+.connections circle{opacity:.78}
+@media(max-width:820px){
+  .connections path{stroke-width:1.45;opacity:.82}
+  .connections circle{opacity:.82}
+}
+

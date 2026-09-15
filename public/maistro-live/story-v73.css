@@ -1,0 +1,4 @@
+/* Natural chapter pacing: the viewport stays spacious while scroll distance is concise. */
+.story{height:1000svh}
+@media(max-width:820px){.story{height:1050svh}}
+

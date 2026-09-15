@@ -1,0 +1,4 @@
+/* Hybrid scrollytelling: generous reading space without an endless timeline. */
+.story{height:1500svh}
+@media(max-width:820px){.story{height:1600svh}}
+
