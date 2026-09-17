@@ -52,19 +52,16 @@
   });
 
   // This page runs inside an iframe on the host site — a separate browsing
-  // context, so scrolling past our own top/bottom doesn't naturally hand
-  // off to the host page the way nested scroll containers do in a single
-  // document. Forward the residual wheel input to the parent once we're at
-  // our own boundary, so the host page keeps scrolling instead of feeling
-  // stuck. No-ops harmlessly if not actually embedded in an iframe.
+  // context, so scroll input over it never reaches the host page at all by
+  // default — the header (and rest of the page) would only ever move once
+  // this story finished scrolling internally. Forward every wheel tick to
+  // the parent from the very first scroll, in parallel with our own normal
+  // internal scrolling (no preventDefault), so the host page always moves
+  // together with the story instead of only unlocking at the end.
+  // No-ops harmlessly if not actually embedded in an iframe.
   if (window.parent !== window) {
     window.addEventListener("wheel", (e) => {
-      const atTop = root.scrollTop <= 0;
-      const atBottom = root.scrollTop + window.innerHeight >= root.scrollHeight - 1;
-      if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
-        e.preventDefault();
-        window.parent.postMessage({ source: "maistro-widget-scroll", deltaY: e.deltaY }, "*");
-      }
-    }, { passive: false });
+      window.parent.postMessage({ source: "maistro-widget-scroll", deltaY: e.deltaY }, "*");
+    }, { passive: true });
   }
 })();
