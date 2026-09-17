@@ -4,6 +4,7 @@ import { DemoModal } from '@/components/DemoModal'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { ThemeVars } from '@/components/ThemeVars'
+import { WidgetScrollForwarder } from '@/components/WidgetScrollForwarder'
 import { DemoModalProvider } from '@/lib/demo-modal-context'
 import { getPagesForNav, getSiteSettings } from '@/lib/sanity/fetch'
 
@@ -14,6 +15,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
   return (
     <ThemeVars theme={siteSettings.theme}>
       <DemoModalProvider>
+        <WidgetScrollForwarder />
         <SiteHeader
           siteName={siteSettings.siteName}
           logo={siteSettings.logo}

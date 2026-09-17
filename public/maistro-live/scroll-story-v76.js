@@ -286,4 +286,21 @@
   addEventListener('scroll',update,{passive:true});addEventListener('resize',measure,{passive:true});
   document.querySelectorAll('img').forEach(img=>img.addEventListener('load',measure));
   document.fonts?.ready.then(measure);reduced.addEventListener('change',update);measure();
+
+  // This page runs inside an iframe on the host site — a separate browsing
+  // context, so scrolling past our own top/bottom doesn't naturally hand off
+  // to the host page the way nested scroll containers do in a single
+  // document. Forward the residual wheel input to the parent once we're at
+  // our own boundary (reusing atStoryEnd's own scrollingElement check), so
+  // the host page keeps scrolling instead of feeling stuck.
+  if(window.parent!==window){
+    const scrollingEl=()=>document.scrollingElement||document.documentElement;
+    const atStoryTop=()=>scrollingEl().scrollTop<=0;
+    addEventListener('wheel',e=>{
+      if((e.deltaY<0&&atStoryTop())||(e.deltaY>0&&atStoryEnd())){
+        e.preventDefault();
+        window.parent.postMessage({source:'maistro-widget-scroll',deltaY:e.deltaY},'*');
+      }
+    },{passive:false});
+  }
 })();

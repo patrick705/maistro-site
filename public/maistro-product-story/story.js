@@ -50,4 +50,21 @@
     window.scrollTo({ top: 0, behavior: reducedMotion.matches ? "auto" : "smooth" });
     window.setTimeout(restartAnimation, 700);
   });
+
+  // This page runs inside an iframe on the host site — a separate browsing
+  // context, so scrolling past our own top/bottom doesn't naturally hand
+  // off to the host page the way nested scroll containers do in a single
+  // document. Forward the residual wheel input to the parent once we're at
+  // our own boundary, so the host page keeps scrolling instead of feeling
+  // stuck. No-ops harmlessly if not actually embedded in an iframe.
+  if (window.parent !== window) {
+    window.addEventListener("wheel", (e) => {
+      const atTop = root.scrollTop <= 0;
+      const atBottom = root.scrollTop + window.innerHeight >= root.scrollHeight - 1;
+      if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
+        e.preventDefault();
+        window.parent.postMessage({ source: "maistro-widget-scroll", deltaY: e.deltaY }, "*");
+      }
+    }, { passive: false });
+  }
 })();
