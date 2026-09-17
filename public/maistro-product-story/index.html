@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111c">
+  <meta name="description" content="Maistro brings business data together, then uses agentic AI to help lower costs, grow sales and widen margins.">
+  <title>Maistro — Inside your margin</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307111c'/%3E%3Cpath d='M13 44V20h8l11 14 11-14h8v24h-8V31L32 45 21 31v13z' fill='%23f4fbff'/%3E%3Cpath d='M13 20h8v24h-8z' fill='%235de5f5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <svg class="site-weave" viewBox="0 0 1000 6000" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <filter id="weaveGlow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+          <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+        </filter>
+      </defs>
+      <path class="weave-echo" d="M 560 -40 C 555 95 650 190 795 300 C 860 350 885 430 860 510 C 846 555 838 592 835 620 C 820 760 690 880 390 930 C 250 955 160 1030 145 1120 C 115 1340 280 1515 720 1600 C 1040 1660 915 2025 630 2250 C 315 2490 75 2550 150 2900 C 225 3240 760 3100 860 3500 C 940 3830 500 3950 330 4200 C 150 4470 400 4700 760 4860 C 1040 5050 760 5350 500 5600 C 300 5800 420 5960 560 6000"></path>
+      <path id="weavePath" class="weave-base" d="M 560 -40 C 555 95 650 190 795 300 C 860 350 885 430 860 510 C 846 555 838 592 835 620 C 820 760 690 880 390 930 C 250 955 160 1030 145 1120 C 115 1340 280 1515 720 1600 C 1040 1660 915 2025 630 2250 C 315 2490 75 2550 150 2900 C 225 3240 760 3100 860 3500 C 940 3830 500 3950 330 4200 C 150 4470 400 4700 760 4860 C 1040 5050 760 5350 500 5600 C 300 5800 420 5960 560 6000"></path>
+      <path class="weave-active" pathLength="1" d="M 560 -40 C 555 95 650 190 795 300 C 860 350 885 430 860 510 C 846 555 838 592 835 620 C 820 760 690 880 390 930 C 250 955 160 1030 145 1120 C 115 1340 280 1515 720 1600 C 1040 1660 915 2025 630 2250 C 315 2490 75 2550 150 2900 C 225 3240 760 3100 860 3500 C 940 3830 500 3950 330 4200 C 150 4470 400 4700 760 4860 C 1040 5050 760 5350 500 5600 C 300 5800 420 5960 560 6000"></path>
+      <circle class="weave-packet packet-one" r="4">
+        <animateMotion dur="16s" repeatCount="indefinite" rotate="auto"><mpath href="#weavePath"></mpath></animateMotion>
+      </circle>
+      <circle class="weave-packet packet-two" r="3">
+        <animateMotion dur="16s" begin="-8s" repeatCount="indefinite" rotate="auto"><mpath href="#weavePath"></mpath></animateMotion>
+      </circle>
+    </svg>
+    <section class="chapter hero is-visible" data-step="00" id="top">
+      <div class="chapter__inner">
+        <div class="hero-layout">
+          <div class="hero-heading">
+            <h1 class="reveal delay-1" aria-label="Meet Maistro. Your operation’s brain"><span class="hero-title-meet">Meet <span class="accent">Maistro.</span></span> <span class="hero-title-brain">Your operation’s <em>brain</em></span></h1>
+          </div>
+          <div class="hero-copy reveal delay-2">
+            <p class="lead hero-lead">Maistro connects every tool in your venue, learns how it really trades, and makes the daily decisions —</p>
+            <div class="hero-results" aria-label="So costs go down and sales go up">
+              <span class="hero-results__so">so</span>
+              <span class="hero-result hero-result--cost"><small>Costs</small><strong>go down</strong><i aria-hidden="true">↓</i></span>
+              <span class="hero-result hero-result--sales"><small>Sales</small><strong>go up</strong><i aria-hidden="true">↑</i></span>
+            </div>
+          </div>
+          <div class="margin-stage hero-visual">
+            <div class="animation-frame is-playing" id="marginAnimation">
+              <picture>
+                <source media="(prefers-reduced-motion: reduce)" srcset="assets/maistro-margin-chart-static.png">
+                <img class="margin-gif" id="marginGif" src="assets/maistro-margin-chart.gif" width="960" height="436" fetchpriority="high" decoding="async" alt="Revenue rises and costs fall as Maistro opens the margin.">
+              </picture>
+              <div class="chart-surface" aria-hidden="true"></div>
+              <img class="robot-hold" src="assets/maistro-robot-hold.png" width="260" height="436" decoding="async" alt="" aria-hidden="true">
+              <div class="margin-wipe" aria-hidden="true"></div>
+              <div class="margin-brand" aria-hidden="true">M<em>ai</em>stro</div>
+            </div>
+            <div class="hero-actions">
+              <span class="scroll-cue">Follow the story</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" data-step="01" id="how">
+      <div class="chapter__inner">
+        <div class="tool-intro">
+          <p class="eyebrow reveal">The intelligence layer</p>
+          <h2 class="reveal delay-1">How Maistro <span class="green">uses AI</span></h2>
+          <p class="lead reveal delay-2">We collect data from all tools, process it in the cloud and then use the Maistro AI magic to provide results.</p>
+        </div>
+        <div class="matrix-shell reveal delay-2">
+          <table class="tool-matrix">
+            <thead>
+              <tr>
+                <th scope="col">Module</th>
+                <th scope="col">What it does</th>
+                <th scope="col">Reduces costs</th>
+                <th scope="col">Increases sales</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tool-name">Staff</td>
+                <td class="tool-description">Forecasts demand and drafts the rota, so you’re never over- or under-staffed.</td>
+                <td class="impact-cell impact-cell--cost"><span class="impact-dot on cost-on" data-mobile-label="▼ Costs" aria-label="Reduces costs"></span></td>
+                <td class="impact-cell impact-cell--sales"><span class="impact-dot on sales-on" data-mobile-label="▲ Sales" aria-label="Increases sales"></span></td>
+              </tr>
+              <tr>
+                <td class="tool-name">Stock</td>
+                <td class="tool-description">Predicts what you’ll use and orders it, so waste drops and you never run out.</td>
+                <td class="impact-cell impact-cell--cost"><span class="impact-dot on cost-on" data-mobile-label="▼ Costs" aria-label="Reduces costs"></span></td>
+                <td class="impact-cell impact-cell--sales"><span class="impact-dot on sales-on" data-mobile-label="▲ Sales" aria-label="Increases sales"></span></td>
+              </tr>
+              <tr>
+                <td class="tool-name">Voice AI</td>
+                <td class="tool-description">Answers every call and takes the order into the POS — and upsells while it’s at it.</td>
+                <td class="impact-cell impact-cell--cost"><span class="impact-dot on cost-on" data-mobile-label="▼ Costs" aria-label="Reduces costs"></span></td>
+                <td class="impact-cell impact-cell--sales"><span class="impact-dot on sales-on" data-mobile-label="▲ Sales" aria-label="Increases sales"></span></td>
+              </tr>
+              <tr>
+                <td class="tool-name">Deliveries</td>
+                <td class="tool-description">Routes drivers automatically, so orders arrive faster without a manager on the phone.</td>
+                <td class="impact-cell impact-cell--cost"><span class="impact-dot on cost-on" data-mobile-label="▼ Costs" aria-label="Reduces costs"></span></td>
+                <td class="impact-cell impact-cell--sales"><span class="impact-dot on sales-on" data-mobile-label="▲ Sales" aria-label="Increases sales"></span></td>
+              </tr>
+              <tr>
+                <td class="tool-name">Reporting</td>
+                <td class="tool-description">Ask a question in plain English and get the answer — no digging through reports.</td>
+                <td class="impact-cell impact-cell--cost"><span class="impact-dot on cost-on" data-mobile-label="▼ Costs" aria-label="Reduces costs"></span></td>
+                <td class="impact-cell impact-cell--sales"><span class="impact-dot" data-mobile-label="▲ Sales" aria-label="Does not increase sales"></span></td>
+              </tr>
+              <tr>
+                <td class="tool-name">Admin</td>
+                <td class="tool-description">Add a starter, change a price, onboard a team member. Seconds, across every site.</td>
+                <td class="impact-cell impact-cell--cost"><span class="impact-dot on cost-on" data-mobile-label="▼ Costs" aria-label="Reduces costs"></span></td>
+                <td class="impact-cell impact-cell--sales"><span class="impact-dot" data-mobile-label="▲ Sales" aria-label="Does not increase sales"></span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="matrix-note">One brain. Every action tied back to margin.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter agent-section" data-step="02" id="why">
+      <div class="chapter__inner">
+        <div class="why-layout">
+          <div class="why-copy">
+            <p class="eyebrow reveal">Straight answers. Better decisions.</p>
+            <h2 class="reveal delay-1">Why you should use <span class="accent">Maistro</span></h2>
+            <p class="why-statement reveal delay-2">Maistro collects all data, projects outcomes, plans and executes based on the evidence. If you ask a question, you get a straight answer.</p>
+          </div>
+
+          <div class="phone-stage reveal delay-2">
+            <div class="phone-orbit" aria-hidden="true"></div>
+            <div class="iphone" role="group" aria-label="A conversation with Maistro">
+              <div class="iphone__screen">
+                <div class="iphone__status" aria-hidden="true">
+                  <span>9:41</span>
+                  <span class="iphone__island"></span>
+                  <span class="iphone__signals"><i></i><i></i><i></i></span>
+                </div>
+                <div class="chat-head">
+                  <span class="chat-head__back" aria-hidden="true">‹</span>
+                  <span class="chat-head__mark" aria-hidden="true">M</span>
+                  <span class="chat-head__name"><strong>Maistro</strong><small>Online</small></span>
+                  <span class="chat-head__more" aria-hidden="true">•••</span>
+                </div>
+                <div class="chat-body">
+                  <p class="chat-day">Today</p>
+                  <div class="message message--user">
+                    Hi Maistro, productivity is up in all stores apart from our local store. Can you advise me how to fix this?
+                    <time>09:42</time>
+                  </div>
+                  <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
+                  <div class="message message--maistro">
+                    Can you please stop hiring relatives and it will be fine?
+                    <time>09:42</time>
+                  </div>
+                  <div class="message message--user message--reply">
+                    Yes Maistro
+                    <time>09:43</time>
+                  </div>
+                </div>
+                <div class="chat-compose" aria-hidden="true">
+                  <span class="chat-compose__plus">+</span>
+                  <span class="chat-compose__field">Message Maistro</span>
+                  <span class="chat-compose__send">↑</span>
+                </div>
+                <span class="iphone__home" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter tools-section" data-step="03" id="tools">
+      <div class="chapter__inner">
+        <div class="tool-intro">
+          <p class="eyebrow reveal">The Maistro stack</p>
+          <h2 class="reveal delay-1">Tools of the <span class="green">trade.</span></h2>
+          <p class="section-answer reveal delay-2">Bring your own, or use ours.</p>
+          <p class="lead reveal delay-2">Maistro connects to the POS, kitchen screens and ordering channels you already run. Where there’s a gap, we supply the tool — already wired into the brain from day one.</p>
+        </div>
+        <div class="tool-grid" role="list" aria-label="Maistro tools">
+          <article class="tool-card tool-card--cyan" role="listitem">
+            <span class="tool-number">01</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0M12 17v4M9 21h6"></path></svg>
+            </div>
+            <h3>Voice AI</h3>
+            <p>Answers every call, takes the order, upsells. No one leaves the pass.</p>
+          </article>
+          <article class="tool-card tool-card--green" role="listitem">
+            <span class="tool-number">02</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 8h5M17 8h.01M9 17v3M15 17v3M7 20h10"></path></svg>
+            </div>
+            <h3>POS</h3>
+            <p>Counter, table and online sales in one screen, with drivers alongside.</p>
+          </article>
+          <article class="tool-card tool-card--pink" role="listitem">
+            <span class="tool-number">03</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="14" rx="2"></rect><circle cx="12" cy="10" r="2"></circle><path d="M8 21h8M12 17v4"></path></svg>
+            </div>
+            <h3>Kiosks</h3>
+            <p>Guests order themselves and see the right upsell every time.</p>
+          </article>
+          <article class="tool-card tool-card--cyan" role="listitem">
+            <span class="tool-number">04</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"></circle><path d="M3 10h14M10 3a11 11 0 0 1 0 14M10 3a11 11 0 0 0 0 14M16 16h5l-1 5h-4z"></path></svg>
+            </div>
+            <h3>Online ordering</h3>
+            <p>Your own app and website. Your customers, your margin.</p>
+          </article>
+          <article class="tool-card tool-card--green" role="listitem">
+            <span class="tool-number">05</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="6" rx="1"></rect><rect x="14" y="4" width="7" height="6" rx="1"></rect><rect x="8.5" y="15" width="7" height="6" rx="1"></rect><path d="M6.5 10v2h11v-2M12 12v3"></path></svg>
+            </div>
+            <h3>Marketplace orders</h3>
+            <p>Just Eat, Deliveroo and Uber Eats land in the same queue.</p>
+          </article>
+          <article class="tool-card tool-card--pink" role="listitem">
+            <span class="tool-number">06</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 13v-2a8 8 0 0 1 16 0v2M4 13a2 2 0 0 1 2-2h1v6H6a2 2 0 0 1-2-2zM20 13a2 2 0 0 0-2-2h-1v6h1a2 2 0 0 0 2-2zM17 18c-1 2-3 3-5 3"></path></svg>
+            </div>
+            <h3>Central ordering</h3>
+            <p>One team takes calls for every store; orders route to the right kitchen.</p>
+          </article>
+          <article class="tool-card tool-card--cyan" role="listitem">
+            <span class="tool-number">07</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 16h16M6 16a6 6 0 0 1 12 0M12 7v3M9 7h6M5 20h14"></path></svg>
+            </div>
+            <h3>Kitchen display</h3>
+            <p>The right ticket on the right screen at the right time.</p>
+          </article>
+          <article class="tool-card tool-card--green" role="listitem">
+            <span class="tool-number">08</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M8 7h8M8 11h8M8 15h5M11 19h2"></path></svg>
+            </div>
+            <h3>Digital menus</h3>
+            <p>Schedule menus, change a price, pause a product — from the POS.</p>
+          </article>
+          <article class="tool-card tool-card--pink" role="listitem">
+            <span class="tool-number">09</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M3 7h11v10H3zM14 11h4l3 3v3h-7z"></path><circle cx="7" cy="18" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>
+            </div>
+            <h3>Driver management</h3>
+            <p>Automatic dispatch and live tracking for every driver.</p>
+          </article>
+          <article class="tool-card tool-card--cyan" role="listitem">
+            <span class="tool-number">10</span>
+            <div class="tool-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 13v-3l13-5v13L4 13zM7 14l1 5h4l-2-6M20 8v7"></path></svg>
+            </div>
+            <h3>Marketing</h3>
+            <p>Email, push, SMS, loyalty and discounts run from one place.</p>
+          </article>
+        </div>
+        <p class="tools-note reveal delay-3">Already on Square, Toast or Lightspeed? Keep it. Maistro connects once.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-step="04" id="fit">
+      <div class="chapter__inner">
+        <p class="eyebrow reveal">Your tools + ours</p>
+        <h2 class="question-long reveal delay-1">Can we use some of your tools and <span class="green">some of ours?</span></h2>
+        <p class="section-answer reveal delay-2">Yes. Keep what works. Add what moves the margin.</p>
+        <p class="lead reveal delay-2">Use your existing POS, choose Maistro tools, or mix and match the two into one connected setup.</p>
+        <div class="mix-stage reveal delay-2" aria-label="Existing business tools connect with Maistro tools">
+          <div class="stack">
+            <p class="stack__label">Your existing stack</p>
+            <span class="stack__item">POS</span><span class="stack__item">Venue tools</span><span class="stack__item">Existing systems</span>
+          </div>
+          <div class="merge" aria-hidden="true">+</div>
+          <div class="stack stack--maistro">
+            <p class="stack__label">Maistro stack</p>
+            <span class="stack__item">Online sales</span><span class="stack__item">Margin tools</span><span class="stack__item">Agentic AI</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter closing" data-step="05" id="close">
+      <div class="chapter__inner">
+        <p class="eyebrow reveal">The outcome</p>
+        <h2 class="reveal delay-1">A wider margin.<br><span class="accent">A business that keeps learning.</span></h2>
+        <p class="lead reveal delay-2">Maistro brings the data, tools and decisions together—then stays inside the margin to keep improving it.</p>
+        <div class="closing-mark reveal delay-2" aria-hidden="true"><div class="closing-logo">M<em>ai</em>stro</div></div>
+        <button class="text-button back-to-top reveal delay-3" type="button" id="backToTop">Replay the story ↑</button>
+      </div>
+    </section>
+  </main>
+  <script src="story.js"></script>
+</body>
+</html>
