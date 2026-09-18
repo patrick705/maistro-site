@@ -37,6 +37,41 @@ export const customHtmlBlock = defineType({
       type: 'boolean',
       initialValue: false,
     }),
+    defineField({
+      name: 'textEdits',
+      title: 'Text edits',
+      description:
+        'Override specific text inside the embed without touching its code — match an existing CSS selector (class, ID, or tag) from the embedded HTML and give it new text. Only plain text content is replaced; the surrounding markup, styles and scripts are untouched.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'textEdit',
+          fields: [
+            defineField({
+              name: 'selector',
+              title: 'CSS selector',
+              description: 'e.g. "#contactTitle" or ".hero-title-meet" — must match an element already in the embed.',
+              type: 'string',
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: 'text',
+              title: 'New text',
+              type: 'text',
+              rows: 2,
+              validation: (r) => r.required(),
+            }),
+          ],
+          preview: {
+            select: { selector: 'selector', text: 'text' },
+            prepare({ selector, text }) {
+              return { title: selector, subtitle: text }
+            },
+          },
+        },
+      ],
+    }),
   ],
   preview: {
     select: { title: 'label' },

@@ -236,7 +236,8 @@ export const pageBySlugQuery = groq`
       _type == "customHtmlBlock" => {
         label,
         "file": file.asset->{"url": url},
-        code, sandboxed, fullWidth
+        code, sandboxed, fullWidth,
+        textEdits[]{_key, selector, text}
       }
     },
 

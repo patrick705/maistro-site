@@ -291,13 +291,14 @@ function ProgressItemFields({
   )
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: kitchen.textMuted }}>
         {label}
       </span>
       {children}
+      {hint && <span style={{ fontSize: 11, color: kitchen.textMuted, fontWeight: 400, textTransform: 'none', letterSpacing: 'normal' }}>{hint}</span>}
     </label>
   )
 }
@@ -850,6 +851,33 @@ export const SimpleBlockEditor = forwardRef<SimpleBlockEditorHandle, { block: Re
           <input type="checkbox" checked={draft.fullWidth ?? false} onChange={(e) => set('fullWidth', e.target.checked)} />
           Full width (ignore page margins)
         </label>
+        <Field
+          label="Text edits"
+          hint="Change copy inside the embed by CSS selector, without touching its code — e.g. selector #contactTitle, or .hero-title-meet. Only works for pasted code pointing at a same-origin embed (our own /maistro-*/ widgets); uploaded files and sandboxed embeds can't be reached."
+        >
+          <ArrayEditor
+            items={draft.textEdits ?? []}
+            onChange={(next) => set('textEdits', next)}
+            newItem={() => ({ _key: randomKey(), selector: '', text: '' })}
+            addLabel="+ Add text edit"
+            renderItem={(item, update) => (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <input
+                  style={{ ...inputStyle, fontFamily: kitchen.fontMono, fontSize: 11.5 }}
+                  placeholder="CSS selector, e.g. #contactTitle"
+                  value={item.selector ?? ''}
+                  onChange={(e) => update({ selector: e.target.value })}
+                />
+                <textarea
+                  style={{ ...textareaStyle, minHeight: 50 }}
+                  placeholder="New text"
+                  value={item.text ?? ''}
+                  onChange={(e) => update({ text: e.target.value })}
+                />
+              </div>
+            )}
+          />
+        </Field>
       </>
     ),
     richHeroBlock: (

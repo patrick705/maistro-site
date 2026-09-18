@@ -32,6 +32,52 @@ export function CustomHtmlBlockView({ block }: { block: CustomHtmlBlock }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [block.code, useIframe])
 
+  // "Text edits" let a site owner tweak copy inside an embed (a headline, a
+  // button label) by CSS selector, without touching the embed's own code.
+  // Most of our real embeds are a small wrapper — this same "unsandboxed
+  // pasted code" path — around a same-origin <iframe> pointing at a static
+  // widget file, so the selector actually needs to run inside THAT nested
+  // document, not this outer wrapper. Cross-origin embeds (an uploaded
+  // file, or a sandboxed srcDoc iframe) can't be reached at all — the
+  // try/catch just lets those silently no-op instead of throwing.
+  useEffect(() => {
+    if (useIframe || !block.code || !containerRef.current) return
+    const edits = block.textEdits ?? []
+    if (edits.length === 0) return
+
+    function applyEdits(scope: Document | HTMLElement) {
+      for (const edit of edits) {
+        if (!edit.selector || !edit.text) continue
+        try {
+          scope.querySelectorAll(edit.selector).forEach((el) => {
+            el.textContent = edit.text
+          })
+        } catch {
+          // Invalid selector — skip it rather than breaking the rest of the block.
+        }
+      }
+    }
+
+    const container = containerRef.current
+    const nestedIframe = container.querySelector('iframe')
+    if (!nestedIframe) {
+      applyEdits(container)
+      return
+    }
+
+    const tryApply = () => {
+      try {
+        if (nestedIframe.contentDocument) applyEdits(nestedIframe.contentDocument)
+      } catch {
+        // Cross-origin nested iframe — nothing reachable from here.
+      }
+    }
+    if (nestedIframe.contentDocument?.readyState === 'complete') tryApply()
+    nestedIframe.addEventListener('load', tryApply)
+    return () => nestedIframe.removeEventListener('load', tryApply)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [block.code, block.textEdits, useIframe])
+
   if (!block.file?.url && !block.code) return null
 
   if (useIframe) {

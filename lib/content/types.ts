@@ -594,6 +594,12 @@ export interface MultiImageBannerBlock {
   heading?: string
 }
 
+export interface CustomHtmlTextEdit {
+  _key: string
+  selector: string
+  text: string
+}
+
 export interface CustomHtmlBlock {
   _type: 'customHtmlBlock'
   _key: string
@@ -602,6 +608,7 @@ export interface CustomHtmlBlock {
   code?: string
   sandboxed?: boolean
   fullWidth?: boolean
+  textEdits?: CustomHtmlTextEdit[]
 }
 
 export type PageBlock =
