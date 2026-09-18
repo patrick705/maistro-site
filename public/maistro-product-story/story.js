@@ -53,15 +53,28 @@
 
   // This page runs inside an iframe on the host site — a separate browsing
   // context, so scroll input over it never reaches the host page at all by
-  // default — the header (and rest of the page) would only ever move once
-  // this story finished scrolling internally. Forward every wheel tick to
-  // the parent from the very first scroll, in parallel with our own normal
-  // internal scrolling (no preventDefault), so the host page always moves
-  // together with the story instead of only unlocking at the end.
+  // default. Forwarding EVERY wheel tick unconditionally (an earlier version
+  // of this) fixed the host header feeling "stuck", but also dragged
+  // whatever's below this block (footer, other sections) into view long
+  // before the story itself finished — this page is much taller internally
+  // than the host page has room for below it. Instead: forward just enough
+  // to clear the host header (HEADER_CLEARANCE px), which needs very little
+  // scroll since the header is a fixed height; any upward scroll forwards
+  // immediately so scrolling back up always retreats the header right away;
+  // and forwarding resumes at our own top/bottom boundary so the rest of the
+  // host page is still reachable once the story is actually finished.
   // No-ops harmlessly if not actually embedded in an iframe.
   if (window.parent !== window) {
+    const HEADER_CLEARANCE = 200;
+    const atOwnTop = () => root.scrollTop <= 0;
+    const atOwnBottom = () => root.scrollTop + window.innerHeight >= root.scrollHeight - 1;
     window.addEventListener("wheel", (e) => {
-      window.parent.postMessage({ source: "maistro-widget-scroll", deltaY: e.deltaY }, "*");
+      let parentY;
+      try { parentY = window.parent.scrollY } catch (err) { parentY = null }
+      if (parentY === null) return;
+      const forward = (e.deltaY > 0 && (parentY < HEADER_CLEARANCE || atOwnBottom())) ||
+        (e.deltaY < 0 && (parentY > 0 || atOwnTop()));
+      if (forward) window.parent.postMessage({ source: "maistro-widget-scroll", deltaY: e.deltaY }, "*");
     }, { passive: true });
   }
 })();
