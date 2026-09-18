@@ -326,13 +326,18 @@
   if(window.parent!==window){
     const HEADER_CLEARANCE=110;
     const atOwnTop=()=>(document.scrollingElement||document.documentElement).scrollTop<=0;
+    // Tracks our own running estimate of how far we've pushed the parent,
+    // rather than reading window.parent.scrollY back — that read lags behind
+    // in-flight postMessage calls, so a burst of rapid wheel ticks could each
+    // see a stale "haven't reached the cap yet" value and all forward, badly
+    // overshooting HEADER_CLEARANCE before any of them landed.
+    let forwarded=0;
     addEventListener('wheel',e=>{
-      let parentY;
-      try{parentY=window.parent.scrollY}catch(err){parentY=null}
-      if(parentY===null)return;
-      const forward=(e.deltaY>0&&(parentY<HEADER_CLEARANCE||atStoryEnd()))||
-        (e.deltaY<0&&(parentY>0||atOwnTop()));
-      if(forward)window.parent.postMessage({source:'maistro-widget-scroll',deltaY:e.deltaY},'*');
+      const goingDown=e.deltaY>0;
+      const forward=goingDown?(forwarded<HEADER_CLEARANCE||atStoryEnd()):(forwarded>0||atOwnTop());
+      if(!forward)return;
+      window.parent.postMessage({source:'maistro-widget-scroll',deltaY:e.deltaY},'*');
+      forwarded=goingDown?Math.min(HEADER_CLEARANCE,forwarded+e.deltaY):Math.max(0,forwarded+e.deltaY);
     },{passive:true});
   }
 })();
