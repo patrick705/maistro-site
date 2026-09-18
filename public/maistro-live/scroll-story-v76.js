@@ -5,26 +5,42 @@
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),mix=(a,b,t)=>a+(b-a)*t,ease=t=>t*t*(3-2*t);
   const states = [
-    {name:'Stock',color:'#78dbe8',panel:'.stock-card',focus:.12,targets:[[.44,.063],[.60,.079],[.78,.096],[.21,.15],[.49,.18],[.79,.20],[.35,.32],[.58,.445]]},
-    {name:'Menu',color:'#b5a0ff',panel:'.menu-card',focus:.45,targets:[[.27,.40],[.42,.417],[.29,.47],[.388,.50],[.475,.53],[.445,.256],[.52,.278],[.60,.299]]},
-    {name:'Staff',color:'#c6ef78',panel:'.staff-card',focus:.675,targets:[[.28,.320],[.40,.33],[.48,.355],[.55,.375],[.73,.385],[.94,.354],[.28,.409],[.469,.449],[.662,.470],[.61,.605],[.74,.241],[.55,.224]]},
-    {name:'Direct sales',color:'#68e8f7',panel:'.driver-card',focus:.925,targets:[[.07,.818],[.17,.848],[.26,.872],[.375,.90],[.50,.933],[.614,.955],[.69,.866],[.91,.919]]}
+    {name:'Financial Hub',color:'#68e8f7',panel:'.financial-hub-card',focus:.145,side:'right',targets:[[.28,.105],[.48,.155],[.68,.105],[.57,.238]]},
+    {name:'Stock',color:'#78dbe8',panel:'.stock-card',focus:.405,side:'left',targets:[[.37,.337],[.51,.342],[.67,.345],[.20,.422],[.42,.422],[.63,.431],[.31,.492],[.61,.505]]},
+    {name:'Menu',color:'#b5a0ff',panel:'.menu-card',focus:.625,side:'right',targets:[[.25,.625],[.39,.642],[.31,.684],[.44,.689],[.56,.652],[.39,.542],[.57,.555],[.72,.57]]},
+    {name:'Staff',color:'#c6ef78',panel:'.staff-card',focus:.79,side:'left',targets:[[.28,.556],[.44,.565],[.60,.575],[.74,.596],[.29,.667],[.53,.676],[.67,.695],[.21,.754],[.42,.781],[.63,.797],[.79,.823],[.52,.865]]},
+    {name:'Direct sales',color:'#68e8f7',panel:'.driver-card',focus:.955,side:'right',targets:[[.09,.928],[.22,.943],[.34,.963],[.49,.951],[.61,.971],[.75,.939],[.84,.961],[.93,.929]]}
   ];
 
-  const points=states.map(s=>(s.focus-states[0].focus)/(states[3].focus-states[0].focus));
+  const officeFocus=.085;
+
+  const points=states.map(s=>(s.focus-states[0].focus)/(states[4].focus-states[0].focus));
   const welcome=$('.welcome'),outro=$('.outro'),outroLink=outro?.querySelector('.outro-cta');
   let layout, wanted=0, progress=null, introWanted=0, introProgress=null, frame=0,last=0,angle=60,active=-1;
   let scrollChapter=0,scrollLocal=0,lastDistance=null,goingBack=false;
   let outroTimer=0,outroVisible=false;
-  const chapterStops=[0,.17,.46,.64,1];
-  const revealMemory=[0,0,0,0];
+  // Allocate scroll distance by message count so every submenu gets a clear beat.
+  const chapterStops=[0,.16,.285,.55,.71,1];
+  const revealTiming=[
+    {start:.07,end:.88,fade:.62},
+    {start:.08,end:.86,fade:.62},
+    {start:.07,end:.88,fade:.62},
+    {start:.08,end:.86,fade:.62},
+    {start:.06,end:.90,fade:.62}
+  ];
+  const revealMemory=[0,0,0,0,0];
   let revealKey='', gestureStart=-Infinity;
   let mascotX=null,mascotY=null,mascotChapter=-1,spinStart=-Infinity,spinBase=0;
+  const financeCards=[...document.querySelectorAll('.financial-hub-popup')];
   const stockCards=[...document.querySelectorAll('.stock-popup')],stockSteps=[...document.querySelectorAll('.stock-steps i')];
-  const stockTargets=[[[.49,.19],[.60,.08]],[[.79,.213]],[[.35,.33],[.58,.468]]];
+  const stockTargets=[[[.36,.337],[.52,.343]],[[.68,.347]],[[.31,.467],[.60,.505]]];
   const channelCards=[...document.querySelectorAll('.channel-popup')];
-  const channelTargets=[[.245,.425],[.442,.462],[.383,.552],[[.38,.306],[.56,.306],[.75,.306]],[.556,.306],[.337,.444],[.630,.484]];
-  const featureGroups=[{chapter:2,cards:[...document.querySelectorAll('.staff-popup')],targets:[[.61,.605],[.61,.605],[.662,.470],[.55,.224]]},{chapter:3,cards:[...document.querySelectorAll('.logistics-popup')],targets:[null,null,null,[.732,.904],[.593,.966],[.313,.914],[.456,.942],null]}];
+  const channelTargets=[[.245,.645],[.43,.67],[.35,.714],[[.30,.572],[.51,.572],[.72,.572]],[.58,.574],[.29,.68],[.63,.70]];
+  const featureGroups=[
+    {chapter:0,cards:financeCards,targets:[[.28,.105],[.48,.155],[.68,.105],[.57,.238]],connectActiveOnly:true},
+    {chapter:3,cards:[...document.querySelectorAll('.staff-popup')],targets:[[.52,.865],[.63,.797],[.29,.667],[.58,.566]]},
+    {chapter:4,cards:[...document.querySelectorAll('.logistics-popup')],targets:[null,null,null,[.75,.939],[.61,.971],[.34,.963],[.49,.951],null]}
+  ];
 
   // Small conceptual diagrams support each message without adding dashboard data.
   const signalPaths={
@@ -37,7 +53,7 @@
   const signalKinds=['forecast','portion','flow','wave','flow','flow','flow','flow','flow','forecast','wave','forecast','flow','flow','flow','flow','route','route','route','route','wave'];
   const signalCards=[...stockCards,...channelCards.filter(el=>!el.classList.contains('partner-group')),...featureGroups.flatMap(g=>g.cards)];
   signalCards.forEach((card,i)=>{
-    const kind=signalKinds[i]||'flow',path=signalPaths[kind];
+    const kind=card.dataset.signal||signalKinds[i]||'flow',path=signalPaths[kind];
     const graphic=document.createElementNS('http://www.w3.org/2000/svg','svg');
     graphic.setAttribute('class','signal-visual');graphic.setAttribute('viewBox','0 0 200 44');graphic.setAttribute('aria-hidden','true');
     graphic.innerHTML='<path class="signal-grid" d="M0 42H200 M25 0V44 M75 0V44 M125 0V44 M175 0V44"/>'+
@@ -48,9 +64,9 @@
 
   const tags=[
     [],
-    [],[],[]
+    [],[],[],[]
   ];
-  const nodes=Array.from({length:24},()=>{
+  const nodes=Array.from({length:28},()=>{
     const path=document.createElementNS('http://www.w3.org/2000/svg','path'),dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
     dot.setAttribute('r','4');lines.append(path,dot);return {path,dot};
   });
@@ -83,7 +99,7 @@
     const base=stage.getBoundingClientRect(),w=stage.clientWidth,h=stage.clientHeight,aw=agent.offsetWidth,ah=agent.offsetHeight;
     // All layout reads happen on resize/load, never interleaved with frame writes.
     const panels=states.map((s,i)=>{
-      const r=chapters[i].querySelector(s.panel).getBoundingClientRect(),left=r.left-base.left,right=r.right-base.left,top=r.top-base.top,onLeft=i%2===0;
+      const r=chapters[i].querySelector(s.panel).getBoundingClientRect(),left=r.left-base.left,right=r.right-base.left,top=r.top-base.top,onLeft=s.side==='left';
       return {left,right,top,height:r.height,onLeft,x:clamp(onLeft?right+24:left-aw-30,8,w-aw-8),y:clamp(top+r.height*.48-ah*.3,60,h-ah-90)};
     });
     tags.forEach((list,i)=>list.forEach(t=>{t.el=chapters[i].querySelector(t.selector);t.width=t.el.offsetWidth;t.height=t.el.offsetHeight}));
@@ -103,7 +119,7 @@
     const raw=clamp((distance-layout.h)/Math.max(1,layout.range-layout.h),0,1);
     // Each chapter holds still while its messages arrive, then hands over to
     // the next restaurant area during the final part of that section.
-    let section=0;while(section<3&&raw>=chapterStops[section+1])section++;
+    let section=0;while(section<4&&raw>=chapterStops[section+1])section++;
     scrollChapter=section;
     scrollLocal=clamp((raw-chapterStops[section])/(chapterStops[section+1]-chapterStops[section]),0,1);
     const handover=ease(clamp((scrollLocal-.72)/.28,0,1));
@@ -112,7 +128,7 @@
     const reverseFrom=points[Math.max(0,section-1)],reverseTo=points[section];
     wanted=goingBack
       ?mix(reverseFrom,reverseTo,ease(scrollLocal))
-      :(section===3?points[3]:mix(points[section],points[section+1],handover));
+      :(section===4?points[4]:mix(points[section],points[section+1],handover));
     schedule();
   }
   function render(now){
@@ -129,20 +145,22 @@
     welcome.style.visibility=welcomeOpacity>.001?'visible':'hidden';
     welcome.setAttribute('aria-hidden',String(welcomeOpacity<.5));
     agent.style.opacity=String(storyOpacity);
-    $('.brand').style.opacity=String(storyOpacity);
     $('.progress').style.opacity=String(storyOpacity);
     progress=progress===null?wanted:mix(progress,wanted,alpha);
     if(Math.abs(progress-wanted)<.00001)progress=wanted;
     const {w,h,ww,wh,aw,ah,panels}=layout;
-    const signageArrive=scrollChapter===1?ease(clamp((scrollLocal-.25)/.11,0,1)):0;
-    const signageLeave=scrollChapter===1?ease(clamp((scrollLocal-.57)/.12,0,1)):0;
+    const signageArrive=scrollChapter===2?ease(clamp((scrollLocal-.25)/.11,0,1)):0;
+    const signageLeave=scrollChapter===2?ease(clamp((scrollLocal-.57)/.12,0,1)):0;
     const signageAttention=signageArrive*(1-signageLeave);
-    const focus=mix(states[0].focus,states[3].focus,progress)-.065*signageAttention;
-    let from=0;while(from<2&&progress>points[from+1])from++;
+    const operatingFocus=mix(states[0].focus,states[4].focus,progress)-.045*signageAttention;
+    const officeToStock=ease(clamp((introProgress-.34)/.66,0,1));
+    const focus=mix(officeFocus,operatingFocus,officeToStock);
+    let from=0;while(from<states.length-2&&progress>points[from+1])from++;
     const t=clamp((progress-points[from])/(points[from+1]-points[from]),0,1),blend=ease(t);
     const index=t<.5?from:from+1,s=states[index],panel=panels[index];
     const top=clamp(wh*focus-h*.5,0,Math.max(0,wh-h));
-    const fx=.15+.7*mix([.62,.47,.56,.47][from],[.62,.47,.56,.47][from+1],blend)+signageAttention*(w<821?.11:.055);
+    const operatingFx=.15+.7*mix([.50,.58,.47,.56,.47][from],[.50,.58,.47,.56,.47][from+1],blend)+signageAttention*(w<821?.11:.055);
+    const fx=mix(.50,operatingFx,officeToStock);
     const left=w<821&&ww>w?clamp(w*.5-ww*fx,w-ww,0):(w-ww)*.5;
     world.style.left='0';world.style.transform=`translate3d(${left}px,${-top}px,0)`;
     const cross=ease(clamp((t-.30)/.40,0,1));
@@ -167,25 +185,24 @@
       n.dot.setAttribute('cx',dest.x);n.dot.setAttribute('cy',dest.y);
     }
     const origin={x:panel.onLeft?panel.right:panel.left,y:panel.top+panel.height*.5};
-    (index===2?s.targets:[]).forEach(p=>{const d=screen(p);if(d.x>8&&d.x<w-8&&d.y>8&&d.y<h-12)connect(origin,d)});
-    // Messages are driven by ordinary progress through their own chapter and
-    // remain visible until the chapter naturally leaves the viewport.
-    const revealProgress=(chapter,count)=>{
+    (index===3?s.targets:[]).forEach(p=>{const d=screen(p);if(d.x>8&&d.x<w-8&&d.y>8&&d.y<h-12)connect(origin,d)});
+    // Messages build cumulatively as the visitor moves through each chapter.
+    const revealProgress=(chapter,count,start=revealTiming[chapter].start,end=revealTiming[chapter].end)=>{
       if(scrollChapter<chapter)return 0;
       if(scrollChapter>chapter){revealMemory[chapter]=count;return count}
-      const current=clamp(scrollLocal/.68,0,1)*count;
+      const current=clamp((scrollLocal-start)/Math.max(.001,end-start),0,1)*count;
       revealMemory[chapter]=Math.max(revealMemory[chapter],current);
       return revealMemory[chapter];
     };
-    const channelProgress=revealProgress(1,channelCards.length);
+    const channelProgress=revealProgress(2,channelCards.length);
     channelCards.forEach((card,i)=>{
       const local=channelProgress-i;
-      const opacity=ease(clamp(local/.22,0,1));
+      const opacity=ease(clamp(local/revealTiming[2].fade,0,1));
       card.style.opacity=String(opacity);card.style.visibility=opacity>.001?'visible':'hidden';
       card.setAttribute('aria-hidden',String(opacity<.5));
       const rise=reduced.matches?0:(1-opacity)*28;
       card.style.transform=`translate3d(0,${rise}px,0) perspective(700px) rotateX(${reduced.matches?0:(1-opacity)*9}deg) scale(${reduced.matches?1:.94+.06*opacity})`;
-      if(opacity>.01&&index===1){
+      if(opacity>.01&&index===2){
         const r=layout.channelRects[i],source={x:r.x+r.width*.5,y:r.y+rise};
         const targets=Array.isArray(channelTargets[i][0])?channelTargets[i]:[channelTargets[i]];
         connect({x:origin.x,y:origin.y},source);
@@ -193,33 +210,38 @@
       }
     });
     // The opening promise leads into three distinct stock-management beats.
-    const stockProgress=revealProgress(0,stockCards.length);
+    const stockProgress=revealProgress(1,stockCards.length);
     stockCards.forEach((card,i)=>{
       const local=stockProgress-i;
-      const opacity=ease(clamp(local/.22,0,1));
+      const opacity=ease(clamp(local/revealTiming[1].fade,0,1));
       const rise=reduced.matches?0:(1-opacity)*28;
       card.style.opacity=String(opacity);card.style.visibility=opacity>.001?'visible':'hidden';
       card.style.transform=`translate3d(0,${rise}px,0) perspective(700px) rotateX(${reduced.matches?0:(1-opacity)*9}deg) scale(${reduced.matches?1:.94+.06*opacity})`;
       card.setAttribute('aria-hidden',String(opacity<.5));
-      stockSteps[i].classList.toggle('active',index===0&&local>=0);
-      if(opacity>.01&&index===0){
+      stockSteps[i].classList.toggle('active',index===1&&local>=0);
+      if(opacity>.01&&index===1){
         const r=layout.stockRects[i],source={x:r.x+r.width*.5,y:r.y+rise};
         connect(origin,source);
         stockTargets[i].forEach(p=>{const d=screen(p);if(d.x>8&&d.x<w-8&&d.y>8&&d.y<h-12)connect(source,d)});
       }
     });
     featureGroups.forEach(group=>{
-      const position=revealProgress(group.chapter,group.cards.length);
+      const position=revealProgress(
+        group.chapter,
+        group.cards.length,
+        group.revealStart??revealTiming[group.chapter].start,
+        group.revealEnd??revealTiming[group.chapter].end
+      );
       group.position=position;
+      const currentIndex=clamp(Math.floor(position-.001),0,group.cards.length-1);
       group.cards.forEach((card,i)=>{
         const local=position-i;
-        const fadeOut=1;
-        const opacity=ease(clamp(local/.22,0,1))*fadeOut;
+        const opacity=ease(clamp(local/(group.fadeSpan??revealTiming[group.chapter].fade),0,1));
         const rise=reduced.matches?0:(1-opacity)*28;
         card.style.opacity=String(opacity);card.style.visibility=opacity>.001?'visible':'hidden';
         card.style.transform=`translate3d(0,${rise}px,0) perspective(700px) rotateX(${reduced.matches?0:(1-opacity)*9}deg) scale(${reduced.matches?1:.94+.06*opacity})`;
         card.setAttribute('aria-hidden',String(opacity<.5));
-        if(opacity>.01&&index===group.chapter){
+        if(opacity>.01&&index===group.chapter&&(!group.connectActiveOnly||i===currentIndex)){
           const r=group.rects[i],source={x:r.x+r.width*.5,y:r.y+rise};
           connect(origin,source);
           if(group.targets[i]){const d=screen(group.targets[i]);if(d.x>8&&d.x<w-8&&d.y>8&&d.y<h-12)connect(source,d)}
@@ -234,7 +256,7 @@
       if(visible)connect({x:x+20,y:y+tag.height},d);
     });
     // Follow the active feature while retaining one spin per chapter crossing.
-    const group=index===0?{cards:stockCards,rects:layout.stockRects,position:stockProgress}:index===1?{cards:channelCards,rects:layout.channelRects,position:channelProgress}:featureGroups.find(g=>g.chapter===index);
+    const group=index===1?{cards:stockCards,rects:layout.stockRects,position:stockProgress}:index===2?{cards:channelCards,rects:layout.channelRects,position:channelProgress}:featureGroups.find(g=>g.chapter===index);
     const position=group.position;
     const selected=clamp(Math.floor(position-.001),0,group.cards.length-1);
     const nextReveal=storyOpacity>.5&&position>.001?`${index}:${selected}`:'';
@@ -252,7 +274,8 @@
     const cardOnLeft=target?target.x+target.width*.5<w*.5:panel.onLeft;
     const breathingRoom=w<821?32:52;
     const destinationX=target?clamp(cardOnLeft?target.x+target.width+breathingRoom:target.x-aw-breathingRoom,10,w-aw-10):clamp((panel.left+panel.right-aw)/2,10,w-aw-10);
-    const destinationY=target?clamp(target.y+target.height*.5-ah*.42,12,h-ah-18):Math.max(10,panel.top-ah-24);
+    const bottomClearance=index===0?(w<821?110:150):18;
+    const destinationY=target?clamp(target.y+target.height*.5-ah*.42,12,h-ah-bottomClearance):Math.max(10,panel.top-ah-24);
     const movementAlpha=reduced.matches?1:1-Math.exp(-dt/170);
     mascotX=mascotX===null?destinationX:mix(mascotX,destinationX,movementAlpha);
     mascotY=mascotY===null?destinationY:mix(mascotY,destinationY,movementAlpha);
@@ -270,12 +293,13 @@
     const aimX=target?target.x+target.width*.5:(panel.left+panel.right)*.5,aimY=target?target.y+target.height*.5:panel.top+35;
     const radians=Math.atan2(aimY-(ay+ah*.28),(aimX-(ax+aw*(facing<0?.6:.4)))*facing);
     // Keep the arm raised in a conductor's working position, rather than aiming like a spear.
-    const desired=reduced.matches?0:clamp(-32+(radians*180/Math.PI)*.06,-44,-20);
+    const aimInfluence=index===0?.16:.06;
+    const desired=reduced.matches?0:clamp(-32+(radians*180/Math.PI)*aimInfluence,index===0?-55:-44,index===0?-12:-20);
     angle=mix(angle,desired,alpha);
     // A two-beat conducting phrase: broad, continuous arcs with soft starts and finishes.
     const beat=clamp((now-gestureStart)/1700,0,1),conducting=!reduced.matches&&beat<1;
     const envelope=conducting?Math.sin(Math.PI*beat):0;
-    const sweep=18*Math.sin(4*Math.PI*beat)*envelope;
+    const sweep=(index===0?24:18)*Math.sin(4*Math.PI*beat)*envelope;
     const resting=reduced.matches?0:airborne;
     agent.style.setProperty('--arm-angle',mix(angle+sweep,-12,resting)+'deg');
     const sway=2.8*Math.sin(2*Math.PI*beat)*envelope;
@@ -289,11 +313,9 @@
 
   // This page runs inside an iframe on the host site — a separate browsing
   // context, so scroll input over it never reaches the host page at all by
-  // default — the header (and rest of the page) would only ever move once
-  // this story finished scrolling internally. Forward every wheel tick to
-  // the parent from the very first scroll, in parallel with our own normal
-  // internal scrolling (no preventDefault), so the host page always moves
-  // together with the story instead of only unlocking at the end.
+  // default. Forward every wheel tick to the parent from the very first
+  // scroll, in parallel with our own normal internal scrolling (no
+  // preventDefault), so the host page always moves together with the story.
   if(window.parent!==window){
     addEventListener('wheel',e=>{
       window.parent.postMessage({source:'maistro-widget-scroll',deltaY:e.deltaY},'*');

@@ -1,0 +1,6 @@
+/* Slower, count-balanced submenu storytelling. */
+.story{height:960svh}
+
+@media(max-width:820px){
+  .story{height:1040svh}
+}

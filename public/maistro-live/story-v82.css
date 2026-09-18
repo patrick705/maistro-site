@@ -1,0 +1,31 @@
+/* Unpublished Maistro HQ world study: one continuous image from office to operations. */
+.story{
+  height:500svh;
+  background:#07111c;
+}
+.stage{
+  background:#07111c;
+}
+.world{
+  width:max(100vw,142svh);
+  height:auto;
+  aspect-ratio:724/2172;
+}
+.world img{
+  width:100%;
+  height:auto;
+  aspect-ratio:724/2172;
+}
+.shade{
+  background:
+    linear-gradient(90deg,rgba(2,9,18,.62),rgba(2,9,18,.07) 50%,rgba(2,9,18,.24)),
+    linear-gradient(0deg,rgba(2,9,18,.58),transparent 29%,rgba(2,9,18,.12));
+}
+
+@media(max-width:820px){
+  .story{height:500svh}
+  .world{width:142svh;height:auto}
+  .shade{
+    background:linear-gradient(180deg,rgba(2,9,18,.56),rgba(2,9,18,.04) 46%,rgba(2,9,18,.66));
+  }
+}

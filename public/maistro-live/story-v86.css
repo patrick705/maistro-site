@@ -1,0 +1,6 @@
+/* Give the Financial Hub four distinct, readable scroll beats. */
+.story{height:720svh}
+
+@media(max-width:820px){
+  .story{height:720svh}
+}

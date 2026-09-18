@@ -1,0 +1,63 @@
+/* Financial Hub spacing and pacing refinement. */
+.story{height:680svh}
+
+.financial-hub-card{
+  top:clamp(90px,11svh,130px);
+  width:min(470px,40vw);
+  min-height:196px;
+  padding:25px 25px 24px 106px;
+  transform:translate3d(0,var(--message-lift,0),0);
+  transition:transform .7s cubic-bezier(.2,.8,.2,1);
+}
+.financial-hub-icon{left:24px;top:62px;width:64px;height:64px}
+.financial-hub-icon svg{width:52px;height:52px}
+.hub-kicker{margin-bottom:13px}
+.financial-hub-card small{font-size:clamp(34px,3.45vw,49px);margin-bottom:10px}
+.financial-hub-card strong{max-width:325px;font-size:clamp(15px,1.22vw,18px)}
+
+.financial-hub-list{
+  top:34%;
+  right:3%;
+  width:min(330px,25vw);
+  gap:7px;
+}
+.financial-hub-list .financial-hub-popup{
+  min-height:0;
+  padding:11px 15px 12px;
+  border-radius:3px 14px 3px 14px;
+}
+.financial-hub-list .financial-hub-popup>span{margin-bottom:5px;font-size:9px}
+.financial-hub-list .financial-hub-popup>strong,
+.financial-hub-list .financial-hub-popup>strong::first-line{
+  font-size:clamp(17px,1.3vw,20px);
+  line-height:1.1;
+}
+.financial-hub-list .signal-visual{display:none}
+
+@media(max-width:820px){
+  .story{height:680svh}
+  .financial-hub-card{
+    top:72px;
+    width:70%;
+    max-width:292px;
+    padding:13px 12px 13px 62px;
+  }
+  .financial-hub-icon{left:9px;top:37px;width:44px;height:44px}
+  .financial-hub-icon svg{width:37px;height:37px}
+  .hub-kicker{margin-bottom:6px;font-size:8px}
+  .financial-hub-card small{margin-bottom:5px;font-size:26px}
+  .financial-hub-card strong{font-size:12px}
+  .financial-hub-list{top:37%;right:4%;width:70%;max-width:270px;gap:4px}
+  .financial-hub-list .financial-hub-popup{padding:7px 10px 8px}
+  .financial-hub-list .financial-hub-popup>span{margin-bottom:4px;font-size:8px}
+  .financial-hub-list .financial-hub-popup>strong,
+  .financial-hub-list .financial-hub-popup>strong::first-line{font-size:14px;line-height:1.08}
+}
+
+@media(max-height:680px) and (max-width:820px){
+  .financial-hub-card{top:58px}
+  .financial-hub-list{top:35%;gap:3px}
+  .financial-hub-list .financial-hub-popup{padding:6px 9px 7px}
+  .financial-hub-list .financial-hub-popup>strong,
+  .financial-hub-list .financial-hub-popup>strong::first-line{font-size:13px}
+}

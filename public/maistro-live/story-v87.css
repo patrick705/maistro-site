@@ -1,0 +1,31 @@
+/* Alternate the main chapter panels from right to left, beginning at HQ. */
+.finance-hub-chapter .financial-hub-card{
+  left:auto;
+  right:3%;
+  top:clamp(210px,27svh,290px);
+}
+
+.finance-hub-chapter .financial-hub-list{
+  left:3%;
+  right:auto;
+  top:36%;
+}
+
+@media(max-width:820px){
+  .finance-hub-chapter .financial-hub-card{
+    left:auto;
+    right:4%;
+    top:128px;
+  }
+
+  .finance-hub-chapter .financial-hub-list{
+    left:4%;
+    right:auto;
+    top:43%;
+  }
+}
+
+@media(max-height:680px) and (max-width:820px){
+  .finance-hub-chapter .financial-hub-card{top:104px}
+  .finance-hub-chapter .financial-hub-list{top:44%}
+}
