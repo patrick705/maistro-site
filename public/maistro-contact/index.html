@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111c">
+  <meta name="description" content="Contact Maistro by email or send the team a real, physical postcard.">
+  <title>Contact Maistro</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307111c'/%3E%3Crect x='11' y='16' width='42' height='32' rx='5' fill='%23f5fbff' stroke='%235de5f5' stroke-width='3'/%3E%3Cpath d='m15 21 17 14 17-14' fill='none' stroke='%2307111c' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='47' cy='20' r='5' fill='%2346df8b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="nav" aria-label="Primary navigation">
+    <a class="brand" href="#top" aria-label="Maistro contact page">
+      <span class="brand__mark" aria-hidden="true">M</span>
+      <span>Maistro</span>
+    </a>
+    <span class="nav__label">Contact</span>
+    <a class="nav__story" href="https://maistro-our-story.patrick-shan-1947.chatgpt.site/">Our story <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="top">
+    <section class="contact-stage" aria-labelledby="contactTitle">
+      <div class="ambient ambient--cyan" aria-hidden="true"></div>
+      <div class="ambient ambient--green" aria-hidden="true"></div>
+      <div class="contact-grid">
+        <div class="contact-copy">
+          <p class="eyebrow"><span aria-hidden="true"></span>Open line to Maistro HQ</p>
+          <h1 id="contactTitle">Contact us.<br><em>Your way.</em></h1>
+          <p class="intro">Choose email or postcard, then write your note directly on the card.</p>
+
+          <div class="prize-note">
+            <span aria-hidden="true">€100</span>
+            <p><strong>Best postcard wins €100.</strong>One winner, every month.</p>
+          </div>
+
+          <fieldset class="delivery-picker" aria-describedby="deliveryStatus">
+            <legend>Choose how to send it</legend>
+            <div class="delivery-options">
+              <button class="delivery-option is-selected" type="button" data-method="email" aria-pressed="true">
+                <span class="delivery-option__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M3.5 6.5h17v11h-17zM4 7l8 6 8-6"/></svg>
+                </span>
+                <span class="delivery-option__copy"><strong>Email</strong><small>Send it straight to our inbox.</small></span>
+                <span class="delivery-option__check" aria-hidden="true">✓</span>
+              </button>
+              <button class="delivery-option" type="button" data-method="postcard" aria-pressed="false">
+                <span class="delivery-option__icon delivery-option__icon--postcard" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M3.5 5.5h17v13h-17zM14 5.5v13M16.7 8.2h1.7v1.7h-1.7zM5.8 14.5h5.3M5.8 16.7h4"/></svg>
+                </span>
+                <span class="delivery-option__copy"><strong>Postcard</strong><small>(Yes, it will be physically sent!)</small></span>
+                <span class="delivery-option__check" aria-hidden="true">✓</span>
+              </button>
+            </div>
+          </fieldset>
+          <p class="delivery-status" id="deliveryStatus" aria-live="polite"><span aria-hidden="true">✦</span> Email selected — write your message on the postcard.</p>
+        </div>
+
+        <div class="postcard-shell is-flipped" id="postcardShell">
+          <div class="postcard-shadow" aria-hidden="true"></div>
+          <div class="postcard-tilt" id="postcardTilt">
+            <div class="postcard-flipper" id="postcardFlipper">
+              <article class="postcard postcard--front" id="postcardFront" aria-label="Front of the Maistro postcard" aria-hidden="true" inert>
+                <div class="postcard__grain" aria-hidden="true"></div>
+                <div class="postcard__edge" aria-hidden="true"></div>
+                <figure class="front-art" aria-hidden="true">
+                  <img src="assets/postcard-ai-overlords.webp" width="1672" height="941" alt="">
+                  <span class="front-art__scan"></span>
+                </figure>
+                <div class="front-header">
+                  <strong>POSTCARD 001</strong>
+                  <span>THE INTELLIGENCE ERA</span>
+                </div>
+                <div class="front-copy">
+                  <p>AI OPERATIONS · LIVE</p>
+                  <h2>All hail our<br><em>AI overlord:</em><br><strong>Maistro.</strong></h2>
+                </div>
+                <div class="front-footer">
+                  <div class="front-prize" aria-label="Best postcard wins 100 euros each month">
+                    <small>BEST NOTE</small><b>€100</b><span>EACH MONTH</span>
+                  </div>
+                  <button class="flip-control" id="flipToWrite" type="button" aria-controls="postcardForm" aria-expanded="true">
+                    Back to your message <i aria-hidden="true">↻</i>
+                  </button>
+                </div>
+              </article>
+
+              <form class="postcard postcard--back" id="postcardForm" aria-hidden="false" novalidate>
+                <input id="deliveryMethod" name="deliveryMethod" type="hidden" value="email">
+                <div class="postcard__grain" aria-hidden="true"></div>
+                <div class="postcard__edge" aria-hidden="true"></div>
+
+                <div class="postcard__message">
+                  <div class="postcard__topline">
+                    <button class="flip-back" id="flipToFront" type="button"><span aria-hidden="true">↶</span> See postcard front</button>
+                    <span id="postcardDate"></span>
+                  </div>
+                  <label for="message">Your message</label>
+                  <textarea id="message" name="message" maxlength="560" required placeholder="Dear Maistro,&#10;&#10;I have an idea worth talking about…"></textarea>
+                  <span class="message-count"><b id="messageCount">0</b>/560</span>
+                </div>
+
+                <div class="postcard__address">
+                  <div class="stamp" aria-hidden="true">
+                    <span class="stamp__inner"><b>M</b><small>MAISTRO<br>EXPRESS</small></span>
+                  </div>
+                  <span class="postmark" aria-hidden="true"><i></i><i></i><i></i><b>MAISTRO HQ<br><small>MAKE IT HAPPEN</small></b></span>
+
+                  <div class="to-block" aria-hidden="true">
+                    <small>TO:</small>
+                    <strong>THE MAISTRO TEAM</strong>
+                    <span>THE PEOPLE WHO MAKE</span>
+                    <span>BUSINESS RUN BETTER</span>
+                  </div>
+
+                  <div class="sender-fields">
+                    <div class="field">
+                      <label for="name">Your name</label>
+                      <input id="name" name="name" type="text" autocomplete="name" required placeholder="Name">
+                      <span class="field__line" aria-hidden="true"></span>
+                    </div>
+                    <div class="field">
+                      <label for="email">Your email</label>
+                      <input id="email" name="email" type="email" autocomplete="email" required placeholder="Email">
+                      <span class="field__line" aria-hidden="true"></span>
+                    </div>
+                  </div>
+
+                  <button class="send-button" type="submit">
+                    <span class="send-button__idle" id="sendButtonLabel">Send email <i aria-hidden="true">→</i></span>
+                    <span class="send-button__sending" id="sendProgressLabel">Sending…</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="sent-card" id="sentCard" aria-live="polite" aria-hidden="true">
+            <div class="sent-card__mark" aria-hidden="true">✓</div>
+            <p id="sentKicker">Email ready.</p>
+            <strong id="sentMessage">One real inbox away from take-off.</strong>
+            <button type="button" id="writeAnother">Write another</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span aria-hidden="true">✦</span>
+    <p><strong>Preview mode</strong>Connect your inbox and postcard fulfilment service to activate delivery.</p>
+  </div>
+
+  <script src="contact.js"></script>
+</body>
+</html>
