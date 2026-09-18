@@ -65,7 +65,7 @@
   // host page is still reachable once the story is actually finished.
   // No-ops harmlessly if not actually embedded in an iframe.
   if (window.parent !== window) {
-    const HEADER_CLEARANCE = 200;
+    const HEADER_CLEARANCE = 110;
     const atOwnTop = () => root.scrollTop <= 0;
     const atOwnBottom = () => root.scrollTop + window.innerHeight >= root.scrollHeight - 1;
     window.addEventListener("wheel", (e) => {

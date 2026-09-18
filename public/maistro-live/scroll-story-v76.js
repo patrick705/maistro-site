@@ -324,7 +324,7 @@
   // and forwarding resumes at our own top/bottom boundary so the rest of the
   // host page is still reachable once the story is actually finished.
   if(window.parent!==window){
-    const HEADER_CLEARANCE=200;
+    const HEADER_CLEARANCE=110;
     const atOwnTop=()=>(document.scrollingElement||document.documentElement).scrollTop<=0;
     addEventListener('wheel',e=>{
       let parentY;
