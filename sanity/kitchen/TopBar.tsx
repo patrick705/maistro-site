@@ -9,6 +9,8 @@ const BREADCRUMB_LABEL: Record<string, string> = {
   collection: 'Collections',
   doc: 'Collections',
   media: 'Media',
+  blockShowcase: 'Block Showcase',
+  customHtmlIndex: 'Custom HTML',
 }
 
 const SETTINGS_SECTION_LABEL: Record<string, string> = {

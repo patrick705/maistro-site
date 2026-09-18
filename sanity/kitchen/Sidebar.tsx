@@ -35,7 +35,8 @@ const PAGES_QUERY = `*[_type == "page"]{
 const COUNTS_QUERY = `{
   "newsArticle": count(*[_type == "newsArticle"]),
   "lead": count(*[_type == "lead"]),
-  "media": count(*[_type == "sanity.imageAsset"])
+  "media": count(*[_type == "sanity.imageAsset"]),
+  "customHtml": count(*[_type == "page"].blocks[_type == "customHtmlBlock"])
 }`
 
 function rowStyle(active: boolean): React.CSSProperties {
@@ -76,7 +77,7 @@ export function Sidebar({
 }) {
   const client = useClient({ apiVersion: API_VERSION })
   const { data: rawPages, refetch } = useLiveQuery<RawPageRow[]>(PAGES_QUERY)
-  const { data: counts } = useLiveQuery<{ newsArticle: number; lead: number; media: number }>(COUNTS_QUERY)
+  const { data: counts } = useLiveQuery<{ newsArticle: number; lead: number; media: number; customHtml: number }>(COUNTS_QUERY)
   const [showArchived, setShowArchived] = useState(false)
   const [dragId, setDragId] = useState<string | null>(null)
   const [overId, setOverId] = useState<string | null>(null)
@@ -648,6 +649,13 @@ export function Sidebar({
           <div onClick={() => onSelect({ kind: 'blockShowcase' })} style={rowStyle(view?.kind === 'blockShowcase')}>
             <span style={{ width: 14, textAlign: 'center', fontSize: 11, color: kitchen.textFaint }}>◱</span>
             <span style={{ flex: 1 }}>Block Showcase</span>
+          </div>
+          <div onClick={() => onSelect({ kind: 'customHtmlIndex' })} style={rowStyle(view?.kind === 'customHtmlIndex')}>
+            <span style={{ width: 14, textAlign: 'center', fontSize: 11, color: kitchen.textFaint, fontFamily: kitchen.fontMono }}>{'</>'}</span>
+            <span style={{ flex: 1 }}>Custom HTML</span>
+            <span style={{ fontSize: 10, color: kitchen.textFaint, fontFamily: kitchen.fontMono }}>
+              {counts?.customHtml ?? 0}
+            </span>
           </div>
         </div>
       </div>

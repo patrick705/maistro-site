@@ -7,6 +7,7 @@ import { CollectionListView } from './CollectionListView'
 import { NewsCollectionView } from './NewsCollectionView'
 import { CollectionDocEditor } from './CollectionDocEditor'
 import { BlockShowcaseView } from './BlockShowcaseView'
+import { CustomHtmlIndexView } from './CustomHtmlIndexView'
 import { MediaLibraryView } from './MediaLibraryView'
 import { ThemeSettings } from './settings/Theme'
 import { GeneralSettings } from './settings/General'
@@ -27,6 +28,7 @@ export type KitchenView =
   | { kind: 'doc'; type: 'newsArticle'; id: string }
   | { kind: 'media' }
   | { kind: 'blockShowcase' }
+  | { kind: 'customHtmlIndex' }
   | null
 
 const DEFAULT_PAGE_QUERY = `*[_type == "page" && !(_id in path("drafts.**"))] | order(menuOrder asc, title asc){_id, "slug": slug.current}`
@@ -126,6 +128,7 @@ export function KitchenTool() {
           {view?.kind === 'doc' && <CollectionDocEditor id={view.id} onBack={() => setView({ kind: 'collection', type: 'newsArticle' })} />}
           {view?.kind === 'media' && <MediaLibraryView />}
           {view?.kind === 'blockShowcase' && <BlockShowcaseView onSelect={setView} />}
+          {view?.kind === 'customHtmlIndex' && <CustomHtmlIndexView onSelect={setView} />}
         </div>
       </main>
     </div>
