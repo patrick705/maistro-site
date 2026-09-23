@@ -234,7 +234,7 @@ body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .bu
 .nav {
   display: flex;
   gap: 32px;
-  font-size: calc(15px * var(--type-scale));
+  font-size: calc(19px * var(--type-scale));
   font-weight: 600;
   font-family: var(--font-body);
 }
@@ -250,9 +250,9 @@ body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .bu
 .cta {
   background: var(--brand);
   color: var(--warm);
-  font-size: calc(14px * var(--type-scale));
+  font-size: calc(16px * var(--type-scale));
   font-weight: 700;
-  padding: 13px 26px;
+  padding: 15px 30px;
   border: none;
   border-radius: 10px;
   font-family: var(--font-body);
