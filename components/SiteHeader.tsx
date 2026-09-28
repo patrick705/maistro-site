@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 import { BookDemoButton } from './BookDemoButton'
 import { Logo } from './Logo'
@@ -32,9 +33,9 @@ export function SiteHeader({
 
   return (
     <header className={className}>
-      <div className={styles.logoWrap}>
+      <Link href="/" className={styles.logoWrap} aria-label={`${siteName} — home`}>
         <Logo siteName={siteName} variant="header" logo={logo} />
-      </div>
+      </Link>
 
       <SiteNav navItems={navItems} />
 

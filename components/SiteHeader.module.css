@@ -229,6 +229,7 @@ body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .bu
   display: flex;
   align-items: center;
   gap: 11px;
+  text-decoration: none;
 }
 
 .nav {
