@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Explore a restaurant connected by Maistro. One brain for orders, stock, staff, delivery and reports across your empire.">
+<title>Maistro — Know your business. Grow your margins.</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23041120'/%3E%3Cpath d='M7 23V9l9 10 9-10v14' fill='none' stroke='%2355edda' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+
+
+
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Marketplace logos: official Deliveroo consumer CDN (logo-white.svg), Just Eat UK newsroom media kit (Just Eat-Logo-Orange-Primary-Hor-RGB), Uber brand portal (UE_Logo_Horizontal_RGB_White). Original assets retained. -->
+<main id="journey">
+<section class="stage" data-chapter="0" aria-label="Explore the connected Maistro restaurant">
+  
+  <div class="scene" id="scene"><img class="restaurant-art" src="assets/restaurant-kds.png" width="941" height="1672" alt="An elevated cutaway of a modern restaurant, with HQ, a stock room, kitchen with separate KDS screens for mains and sides, counter, two staff checking their phones, kiosk, dining area and delivery bikes." fetchpriority="high"><div id="restaurant-displays" aria-hidden="true"></div><div id="kitchen-displays" aria-hidden="true"></div><div id="delivery-riders" aria-hidden="true"></div></div>
+  <div class="atmosphere" aria-hidden="true"></div>
+  <div class="opening-wash" aria-hidden="true"></div>
+  <div class="ambient-light" aria-hidden="true"></div>
+  <div class="brain" id="brain"><img src="assets/brain.webp" width="1000" height="821" alt="Maistro, the restaurant brain"><span class="brain-orbit" aria-hidden="true"></span><span class="brain-name">Maistro</span></div>
+  <svg class="connections" id="connections" aria-hidden="true"><g id="paths"></g><g id="packets"></g><g id="channel-flow-layer"></g><g id="staff-flow-layer"></g></svg>
+  <div class="targets" id="targets"></div><div id="rider-assignments" hidden></div>
+  <div class="copy" aria-live="polite" aria-atomic="true">
+    <article class="chapter active" data-chapter="0" id="intro"><div class="eyebrow">Restaurant intelligence</div><h1>Know your business.<br><em>Grow your margins.</em></h1><p>One AI brain connecting your tools, data and decisions.</p><div class="intro-actions"><a class="contact-action" href="../say-hi/index.html">Contact us <span aria-hidden="true">↗</span></a><button class="intro-action" id="explore" type="button">Explore the restaurant <span aria-hidden="true">↓</span></button></div></article>
+    <article class="chapter stock-copy" data-chapter="1" aria-hidden="true"><div class="eyebrow">AI stock management</div><h2>Forecast.<br>Auto order.<br><em>Drive down costs.</em></h2><button class="forecast-preview" id="open-forecast" type="button" aria-label="View the Toolkit demand forecast full size"><img src="assets/stock-forecasting.png" width="1864" height="1004" alt="Maistro Toolkit demand forecast showing live stock, daily demand and stock runway."><span>Demand forecast <b aria-hidden="true">↗</b></span></button></article>
+    <article class="chapter kitchen-copy" data-chapter="2" aria-hidden="true"><div class="eyebrow">Kitchen operations</div><h2>Right order<br>to the right screen<br><em>at the right time.</em></h2><div class="kitchen-meal" id="kitchen-meal"><div class="kitchen-meal-head"><strong>Order #1051</strong><span>Burger + fries</span></div><div class="kitchen-meal-items"><div><span class="meal-photo" data-meal-photo="burger"></span><strong>1 × Cheeseburger</strong><small>Grill KDS</small></div><div><span class="meal-photo" data-meal-photo="fries"></span><strong>1 × Fries</strong><small>Fries KDS</small></div></div><div class="kitchen-meal-footer"><button type="button" id="kitchen-send">Send again <span aria-hidden="true">↗</span></button><span>Example order</span></div></div><div id="kitchen-routing-status" class="kitchen-routing-status" role="status">Order → Maistro → two kitchen screens</div></article>
+    <article class="chapter staff-copy" data-chapter="3" aria-hidden="true"><div class="eyebrow">AI staff management</div><h2>Right team.<br><em>Better margins.</em></h2><p>Forecast staffing needs. Reduce labour costs. Send shifts straight to your team.</p><div class="staff-forecast"><span>Dinner service forecast</span><strong>4 staff needed</strong><div class="forecast-slots" aria-hidden="true"><i class="confirmed"></i><i class="confirmed"></i><i></i><i></i></div><div id="staff-team-status" role="status">2 of 4 shifts confirmed</div><div class="staff-accept-event" id="staff-accept-event" role="status">Sending Alex’s shift</div><button type="button" id="staff-replay">↻ Replay shifts</button><small>Example shift plan</small></div></article>
+    <article class="chapter orders-copy" data-chapter="4" aria-hidden="true" aria-live="off">
+      <div class="eyebrow">All your channels, connected</div><h2>Every order. <em>One heart.</em></h2>
+      <div class="channel-picker" role="group" aria-label="Explore ordering channels">
+        <button type="button" class="voice-channel channel-button" data-channel="voice" aria-pressed="true"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><strong>Voice AI</strong></button>
+        <button type="button" class="channel-button" data-channel="pos" aria-pressed="false">POS</button>
+        <button type="button" class="channel-button" data-channel="kiosk" aria-pressed="false">Kiosk</button>
+        <button type="button" class="channel-button" data-channel="web" aria-pressed="false">Direct online</button>
+        <button type="button" class="channel-button logo-chip" data-channel="uber" aria-pressed="false" aria-label="Explore Uber Eats orders"><img id="logo-uber" src="assets/uber-eats.svg" alt="Uber Eats"></button>
+        <button type="button" class="channel-button logo-chip" data-channel="deliveroo" aria-pressed="false" aria-label="Explore Deliveroo orders"><img id="logo-deliveroo" src="assets/deliveroo.svg" alt="Deliveroo"></button>
+        <button type="button" class="channel-button logo-chip" data-channel="justeat" aria-pressed="false" aria-label="Explore Just Eat orders"><img id="logo-justeat" src="assets/just-eat.png" alt="Just Eat"></button>
+        <button type="button" class="channel-button" data-channel="signage" aria-pressed="false">Digital menus</button>
+      </div>
+      <div class="order-ticket menu-hub" id="order-ticket" hidden inert role="group" aria-label="Menu Manager receiving example orders">
+        <div class="hub-heading"><span class="hub-heart" id="hub-heart" aria-hidden="true">♥</span><div><h3>Menu Manager</h3><span>Orders in. Menus out.</span></div><span class="hub-live" id="hub-live">Connected</span></div>
+        <div class="hub-order-body" id="hub-order-body">
+          <div class="ticket-header"><div class="ticket-source" id="ticket-source"></div><div class="ticket-number"><strong id="ticket-number">#1042</strong><span id="ticket-type">Collection</span></div></div>
+          <ol class="ticket-items" id="ticket-items"></ol><div class="ticket-note" id="ticket-note"></div>
+        </div>
+        <div class="hub-waiting" id="hub-waiting">Incoming order…</div>
+        <div class="ticket-route" id="ticket-route" aria-label="Order progress"><span>Menu Manager</span><i aria-hidden="true">→</i><span>Maistro</span><i aria-hidden="true">→</i><span>Kitchen</span></div>
+        <div class="ticket-status"><span id="ticket-status" role="status">Receiving order</span><small>Example order</small></div>
+      </div>
+      <div class="channel-tour-controls"><button id="channel-tour" type="button" aria-pressed="true"><span id="channel-tour-symbol" aria-hidden="true">Ⅱ</span><span id="channel-tour-label">Pause tour</span></button><span id="channel-tour-position">01 / 08</span><div class="channel-tour-track" aria-hidden="true"><i id="channel-tour-progress"></i></div></div><div class="channel-caption sr-only" id="channel-caption">Voice order → Menu Manager → Maistro → kitchen</div>
+    </article>
+    <article class="chapter delivery-copy" data-chapter="5" aria-hidden="true"><div class="eyebrow">AI driver management</div><h2>Auto dispatch.<br><em>Fresher food.</em></h2><p>Less waiting. More orders delivered fresh.</p>
+      <div class="dispatch-panel"><div class="dispatch-head"><strong>Ready to deliver</strong><span>3 orders · example</span></div><div class="dispatch-workspace"><div class="dispatch-map-wrap">
+        <svg id="dispatch-map" viewBox="0 0 420 208" role="img" aria-label="Illustrative delivery map with several active drivers. Maistro assigns one driver, who waits outside the restaurant while the others continue moving.">
+          <defs><pattern id="map-grid" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M18 0H0V18" fill="none" stroke="#426077" stroke-opacity=".08"/></pattern><filter id="map-glow"><feGaussianBlur stdDeviation="2.4"/></filter></defs>
+          <rect width="420" height="208" fill="#091c2a"/><rect width="420" height="208" fill="url(#map-grid)"/>
+          <g fill="#143128"><path d="M14 125H94V188H14Z"/><path d="M290 11H332V53H290Z"/></g>
+          <g fill="#102a3b"><path d="M23 20H76V62H23Z M105 18H166V59H105Z M195 20H247V60H195Z M270 76H327V124H270Z M178 130H230V183H178Z M257 145H323V190H257Z M355 109H402V177H355Z M102 120H130V184H102Z"/></g>
+          <g fill="none" stroke="#253e51" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><path d="M0 88H420 M151 0V208 M260 0V208 M347 0V208 M0 111H151 M151 154H420 M87 0V111 M0 198H420 M260 42H420"/></g>
+          <g fill="none" stroke="#5e7484" stroke-opacity=".28" stroke-width="1"><path d="M0 88H420 M151 0V208 M260 0V208 M347 0V208 M0 111H151 M151 154H420 M87 0V111 M0 198H420 M260 42H420"/></g>
+          <path id="dispatch-route" d="M151 154V88H220H260V42H367" fill="none" stroke="#70e8ed" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path id="dispatch-route-soft" d="M151 154V88H220H260V42H367" fill="none" stroke="#70e8ed" stroke-width="6" opacity=".22" filter="url(#map-glow)"/>
+          <g class="map-restaurant" transform="translate(220 88)"><circle r="16" fill="#57ead71c"/><rect x="-8" y="-8" width="16" height="16" rx="4" fill="#57ead7"/><text y="4" text-anchor="middle" fill="#09242d" font-size="12" font-weight="700">M</text><text x="-4" y="-24" text-anchor="middle" class="map-label">Restaurant</text></g>
+          <g id="driver-waiting-tag" opacity="0" transform="translate(220 124)"><rect x="-45" y="-8" width="90" height="17" rx="8.5"/><text y="4" text-anchor="middle">WAITING OUTSIDE</text></g>
+          <g id="map-customer" transform="translate(367 42)"><circle r="9" fill="#102739" stroke="#b7c7ff" stroke-width="2"/><circle r="3" fill="#c6d0ff"/><text y="-18" text-anchor="middle" class="map-label">Customer</text></g>
+          <g id="driver-one" class="map-driver" transform="translate(63 88)"><circle r="11" fill="#143849" stroke="#729daf"/><text y="4" text-anchor="middle">1</text></g>
+          <g id="driver-two" class="map-driver selected-driver" transform="translate(151 154)"><circle class="driver-aura" r="18" fill="#70e8ed" opacity=".12"/><circle r="11" fill="#85edec" stroke="#d2ffff"/><text y="4" text-anchor="middle" fill="#061c25">2</text></g>
+          <g id="driver-three" class="map-driver" transform="translate(347 172)"><circle r="11" fill="#143849" stroke="#729daf"/><text y="4" text-anchor="middle">3</text></g>
+        </svg>
+        </div><div class="driver-list" role="group" aria-label="Select an order to see its driver assignment">
+          <button type="button" class="driver-row" data-driver="0" aria-pressed="true"><span class="delivery-order-head"><strong>#1052</strong><span class="delivery-order-channel" data-order-channel="deliveroo"></span></span><span class="delivery-order-items">1 × Burger · 1 × Fries</span><span class="delivery-order-driver"><span class="driver-portrait" data-driver-portrait="0" aria-hidden="true"></span><span>Liam</span><small class="driver-state">Ready</small></span></button>
+          <button type="button" class="driver-row" data-driver="1" aria-pressed="false"><span class="delivery-order-head"><strong>#1053</strong><span class="delivery-order-channel" data-order-channel="web">Direct online</span></span><span class="delivery-order-items">1 × Pizza · 2 × Coke</span><span class="delivery-order-driver"><span class="driver-portrait" data-driver-portrait="1" aria-hidden="true"></span><span>Sofia</span><small class="driver-state">Ready</small></span></button>
+          <button type="button" class="driver-row" data-driver="2" aria-pressed="false"><span class="delivery-order-head"><strong>#1054</strong><span class="delivery-order-channel" data-order-channel="justeat"></span></span><span class="delivery-order-items">2 × Wraps · 1 × Fries</span><span class="delivery-order-driver"><span class="driver-portrait" data-driver-portrait="2" aria-hidden="true"></span><span>Daniel</span><small class="driver-state">Ready</small></span></button>
+        </div></div>
+        <div class="dispatch-status"><span class="dispatch-dot" aria-hidden="true"></span><span id="dispatch-status">Order ready · selecting a driver</span><button id="dispatch-replay" type="button" aria-label="Replay auto dispatch demonstration">↻</button></div>
+      </div>
+    </article>
+    <article class="chapter office-copy hq-copy" data-chapter="6" aria-hidden="true"><div class="eyebrow">HQ · agentic AI</div><h2>Talk to your<br><em>business.</em></h2><p>Run your empire with Maistro’s agentic AI agent. Create reports. Run tasks. Just ask.</p>
+      <div class="hq-agent"><div class="agent-head"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><strong>Maistro agent</strong><small>Try an example</small></div><div class="agent-choices" role="group" aria-label="Try Maistro agent"><button type="button" data-agent="report" aria-pressed="true">Create a report</button><button type="button" data-agent="task" aria-pressed="false">Run a task</button></div><div class="agent-prompt" id="agent-prompt">“Show this week’s sales across my locations.”</div><div id="agent-status" class="agent-status" role="status">Your sales report is ready.</div><div id="agent-report">
+      <div class="report-card" aria-label="Explore example reports">
+        <div class="report-head"><strong>Reports</strong><span>All locations</span></div>
+        <div class="report-tabs" role="tablist" aria-label="Report type"><button id="report-sales" type="button" role="tab" data-report="sales" aria-selected="true" aria-controls="report-panel">Sales</button><button id="report-labour" type="button" role="tab" data-report="labour" aria-selected="false" aria-controls="report-panel" tabindex="-1">Labour</button><button id="report-stock" type="button" role="tab" data-report="stock" aria-selected="false" aria-controls="report-panel" tabindex="-1">Stock</button></div>
+        <div id="report-panel" role="tabpanel" aria-labelledby="report-sales" tabindex="0"><div class="report-chart" role="img" aria-label="Example sales pattern across one week"><div class="report-column"><span class="report-bar" style="--bar:37%"></span></div><div class="report-column"><span class="report-bar" style="--bar:49%"></span></div><div class="report-column"><span class="report-bar" style="--bar:42%"></span></div><div class="report-column"><span class="report-bar" style="--bar:61%"></span></div><div class="report-column"><span class="report-bar" style="--bar:87%"></span></div><div class="report-column"><span class="report-bar" style="--bar:94%"></span></div><div class="report-column"><span class="report-bar" style="--bar:72%"></span></div></div><div class="report-days" aria-hidden="true"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div><div class="report-foot"><span id="report-caption">Sales by day</span><small>Illustrative week</small></div></div>
+      </div></div><ol id="agent-tasks" class="agent-tasks" hidden><li>Forecast tomorrow’s demand</li><li>Create kitchen prep tasks</li><li>Add the tasks to the kitchen queue</li></ol><div class="agent-demo-note">Illustrative agent demo</div></div>
+    </article>
+    <article class="chapter margins-copy" data-chapter="7" aria-hidden="true" aria-live="off">
+      <div class="margin-heading"><div class="eyebrow">The Maistro effect</div><h2>Grow your <em>margins.</em></h2></div>
+      <div class="margin-visual" id="margin-visual" role="img" aria-label="An illustrative animation: sales rise, costs fall, and the profit between them grows.">
+        <svg id="margin-graph" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="profit-light" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#4dffd9" stop-opacity=".02"/><stop offset=".55" stop-color="#22eeb8" stop-opacity=".16"/><stop offset="1" stop-color="#4dffd9" stop-opacity=".34"/></linearGradient>
+            <linearGradient id="sales-light"><stop stop-color="#57ead7" stop-opacity=".25"/><stop offset=".55" stop-color="#57ead7"/><stop offset="1" stop-color="#acffe1"/></linearGradient>
+            <linearGradient id="cost-light"><stop stop-color="#9681e8" stop-opacity=".20"/><stop offset=".55" stop-color="#b39eff"/><stop offset="1" stop-color="#d5c4ff"/></linearGradient>
+            <linearGradient id="profit-edge"><stop stop-color="#72ffdf" stop-opacity="0"/><stop offset="1" stop-color="#72ffdf" stop-opacity=".8"/></linearGradient>
+            <clipPath id="profit-clip"><path id="profit-clip-path"/></clipPath>
+          </defs>
+          <path id="profit-depth" class="profit-depth"/>
+          <path id="profit-area" fill="url(#profit-light)"/>
+          <g id="profit-contours" clip-path="url(#profit-clip)" aria-hidden="true"></g>
+          <path id="sales-halo" class="margin-halo sales-stroke"/>
+          <path id="costs-halo" class="margin-halo costs-stroke"/>
+          <path id="sales-curve" class="margin-curve sales-stroke"/>
+          <path id="costs-curve" class="margin-curve costs-stroke"/>
+          <path id="margin-bracket" class="margin-bracket"/>
+          <g id="profit-particles"></g>
+          <circle id="sales-end" class="margin-end sales-end" r="4"/>
+          <circle id="costs-end" class="margin-end costs-end" r="4"/>
+        </svg>
+        <div class="margin-line-label sales-label" id="sales-label"><span>Sales</span><b aria-hidden="true">↗</b></div>
+        <div class="margin-line-label costs-label" id="costs-label"><span>Costs</span><b aria-hidden="true">↘</b></div>
+        <div class="profit-word" id="profit-word" aria-hidden="true"><span>YOUR</span><strong>PROFIT</strong><small>More stays yours.</small></div>
+      </div>
+      <div class="margin-controls">
+        <button type="button" class="margin-replay" id="margin-replay"><span aria-hidden="true">↻</span> Replay growth</button>
+        <label class="margin-scrub" for="margin-growth"><span>Drag to grow your margin</span><input id="margin-growth" type="range" min="0" max="100" step="1" value="0" aria-label="Margin growth animation" aria-valuetext="Starting margin"><small>Illustrative animation</small></label>
+        <a class="contact-action margin-contact" href="../say-hi/index.html">Contact us <span aria-hidden="true">↗</span></a>
+      </div>
+    </article>
+  </div>
+  <div class="staff-app" id="staff-app" hidden inert>
+    <div class="staff-switch" role="group" aria-label="Choose staff member"><button type="button" data-staff="alex" aria-pressed="true">Alex</button><button type="button" data-staff="mia" aria-pressed="false">Mia</button></div>
+    <div class="staff-phone" id="staff-phone" role="group" aria-label="Maistro staff app example">
+      <div class="phone-status" aria-hidden="true"><span>9:41</span><i class="phone-island"></i><span>▮▮▮ ▰</span></div>
+      <div class="phone-screen"><div class="staff-app-brand">M<span>ai</span>stro <small>STAFF</small></div>
+        <div class="staff-person"><span id="staff-avatar">AM</span><div><small>Your schedule</small><strong id="staff-person-name">Alex Murphy</strong></div></div>
+        <div class="staff-week" aria-label="Schedule week"><span>M<b>21</b></span><span>T<b>22</b></span><span>W<b>23</b></span><span>T<b>24</b></span><span class="selected">F<b>25</b></span><span>S<b>26</b></span><span>S<b>27</b></span></div>
+        <div class="staff-shift"><div class="shift-top"><span>FRIDAY</span><span id="shift-state">NEW SHIFT</span></div><strong id="staff-shift-time">17:00 – 23:00</strong><span id="staff-role">Front of house</span><div class="shift-location">Dinner service · Main restaurant</div><button type="button" id="accept-shift">Accept shift <span aria-hidden="true">✓</span></button></div>
+        <div class="staff-next"><span>Saturday</span><strong id="staff-next-time">16:00 – 22:00</strong><small>Scheduled</small></div>
+        <div class="staff-app-feedback" id="staff-app-feedback" role="status">New shift from Maistro</div>
+      </div><div class="phone-home" aria-hidden="true"></div>
+    </div><div class="staff-demo-note">Try the staff app</div>
+  </div>
+  <div class="floor-note" id="floor-note" hidden><span>01</span> STOCK ROOM</div>
+  <footer class="footer"><div class="progress-rail" aria-hidden="true"><span id="progress"></span></div><div class="chapter-count"><b id="chapter-number">01</b> / <span id="chapter-total">08</span></div><nav class="chapter-nav" aria-label="Restaurant sections"><button type="button" data-go="0" aria-current="step">Overview</button><button type="button" data-go="1">Stock</button><button type="button" data-go="2">Kitchen</button><button type="button" data-go="3">Staff</button><button type="button" data-go="4">Orders</button><button type="button" data-go="5">Delivery</button><button type="button" data-go="6">HQ</button><button type="button" data-go="7">Margins</button></nav><div class="scroll-hint">Explore <span aria-hidden="true">↓</span></div></footer>
+  <div id="accessible-state" class="sr-only" role="status"></div>
+</section>
+</main>
+<dialog id="forecast-dialog" aria-labelledby="forecast-dialog-title"><div class="forecast-dialog-head"><strong id="forecast-dialog-title">Demand forecasting</strong><button type="button" id="close-forecast" aria-label="Close forecast preview">Close <span aria-hidden="true">×</span></button></div><img src="assets/stock-forecasting.png" width="1864" height="1004" alt="Full Maistro Toolkit forecasting table: products, current stock, daily demand forecasts and stock runway."></dialog>
+<img id="scene-driver-atlas" src="assets/scene-drivers.png" hidden alt="">
+<img id="driver-portrait-atlas" src="assets/driver-portraits.png" width="2030" height="775" hidden alt="">
+<img id="meal-item-atlas" src="assets/meal-items.png" width="1774" height="887" hidden alt="">
+
+  <script src="script.js" defer></script>
+</body>
+</html>
