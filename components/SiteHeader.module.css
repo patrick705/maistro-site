@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 48px;
+  padding: 16px 40px;
   background: var(--surface);
 }
 
@@ -273,7 +273,7 @@ body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .bu
   color: var(--warm);
   font-size: calc(16px * var(--type-scale));
   font-weight: 700;
-  padding: 15px 30px;
+  padding: 12px 26px;
   border: none;
   border-radius: 10px;
   font-family: var(--font-body);
