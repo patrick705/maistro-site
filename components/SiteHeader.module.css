@@ -34,6 +34,10 @@
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
 }
 
+.transparent .navLinkActive {
+  color: var(--accent);
+}
+
 /*
  * Only the outer "M...stro" logo text, never the nested "ai" span (which
  * keeps its own accent/warm colour from Logo.module.css) — the `>` here is
@@ -77,6 +81,10 @@ body:has([data-header-overlay='true']) .navLink,
 body:has([data-header-overlay='true']) .navLinkActive {
   color: #fff;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+
+body:has([data-header-overlay='true']) .navLinkActive {
+  color: var(--accent);
 }
 
 body:has([data-header-overlay='true']) .logoWrap > span {
@@ -234,7 +242,7 @@ body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .bu
 
 .nav {
   display: flex;
-  gap: 32px;
+  gap: 22px;
   font-size: calc(19px * var(--type-scale));
   font-weight: 600;
   font-family: var(--font-body);
@@ -246,6 +254,18 @@ body:has([data-header-nav-color='accent']):has([data-header-overlay='true']) .bu
 
 .navLinkActive {
   color: var(--accent);
+  position: relative;
+}
+
+.navLinkActive::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
 }
 
 .cta {
