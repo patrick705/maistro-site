@@ -8,6 +8,7 @@ import { NewsCollectionView } from './NewsCollectionView'
 import { CollectionDocEditor } from './CollectionDocEditor'
 import { BlockShowcaseView } from './BlockShowcaseView'
 import { CustomHtmlIndexView } from './CustomHtmlIndexView'
+import { CustomSitePageView } from './CustomSitePageView'
 import { MediaLibraryView } from './MediaLibraryView'
 import { ThemeSettings } from './settings/Theme'
 import { GeneralSettings } from './settings/General'
@@ -23,6 +24,7 @@ export type SettingsSection = 'theme' | 'general' | 'navigation' | 'analytics' |
 
 export type KitchenView =
   | { kind: 'page'; id: string }
+  | { kind: 'customSitePage'; id: string }
   | { kind: 'settings'; section: SettingsSection }
   | { kind: 'collection'; type: 'newsArticle' | 'lead' }
   | { kind: 'doc'; type: 'newsArticle'; id: string }
@@ -129,6 +131,16 @@ export function KitchenTool() {
           {view?.kind === 'media' && <MediaLibraryView />}
           {view?.kind === 'blockShowcase' && <BlockShowcaseView onSelect={setView} />}
           {view?.kind === 'customHtmlIndex' && <CustomHtmlIndexView onSelect={setView} />}
+          {view?.kind === 'customSitePage' && (
+            <CustomSitePageView
+              pageId={view.id}
+              onNavigateToPage={(id) => setView({ kind: 'customSitePage', id })}
+              onPageDeleted={() => {
+                const home = pages?.find((p) => p.slug === 'home') ?? pages?.[0]
+                setView(home ? { kind: 'page', id: home._id } : null)
+              }}
+            />
+          )}
         </div>
       </main>
     </div>

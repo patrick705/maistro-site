@@ -12,6 +12,16 @@ export const page = defineType({
     { name: 'seo', title: 'SEO' },
   ],
   fields: [
+    defineField({
+      name: 'pageKind',
+      title: 'Page kind',
+      description:
+        'Custom site pages are managed from their own "Custom Sites" section in Kitchen (a single embedded site, not the block builder) — set automatically, not meant to be changed by hand.',
+      type: 'string',
+      group: 'content',
+      options: { list: [{ title: 'Standard (blocks)', value: 'standard' }, { title: 'Custom site (single embed)', value: 'customSite' }] },
+      initialValue: 'standard',
+    }),
     defineField({ name: 'title', title: 'Title', type: 'string', group: 'content', validation: (r) => r.required() }),
     defineField({
       name: 'slug',

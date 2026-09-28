@@ -6,6 +6,7 @@ import { useKitchenPatch } from './useKitchenPatch'
 
 const BREADCRUMB_LABEL: Record<string, string> = {
   page: 'Pages',
+  customSitePage: 'Custom Sites',
   collection: 'Collections',
   doc: 'Collections',
   media: 'Media',
@@ -169,7 +170,7 @@ export function TopBar({
   // from Kitchen — changes looked like they "did nothing" because the live site only ever reads
   // the published document.
   const docRef =
-    view?.kind === 'page'
+    view?.kind === 'page' || view?.kind === 'customSitePage'
       ? { id: view.id, type: 'page' }
       : view?.kind === 'doc'
         ? { id: view.id, type: view.type }
