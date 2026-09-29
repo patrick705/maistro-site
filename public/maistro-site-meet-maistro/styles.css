@@ -13,6 +13,54 @@
   --weave-offset:1
 }
 
+/*
+ * Recreated: the export's own sections.css (referenced by an @import that
+ * 404s) was missing from the package, so the "why you should use Maistro"
+ * phone/chat mockup had no styling at all — every other chapter's rules
+ * live directly in this file, only this component's base rules were lost.
+ * The responsive overrides for it further down in this file were already
+ * present and still apply on top of these.
+ */
+.why-layout{display:grid;grid-template-columns:1.05fr 1fr;align-items:center;gap:4rem}
+.why-copy{max-width:620px}
+.why-statement{margin-top:1.5rem;font-size:1.1rem;line-height:1.7;color:var(--muted)}
+
+.phone-stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:700px}
+.phone-orbit{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(93,229,245,.18),transparent 70%);filter:blur(10px);z-index:0}
+.iphone{position:relative;z-index:1;width:min(100%,340px);height:700px;background:#050b12;border-radius:52px;padding:14px;box-shadow:0 40px 90px rgba(0,0,0,.55),inset 0 0 0 2px rgba(255,255,255,.06)}
+.iphone__screen{position:relative;width:100%;height:100%;background:var(--ink);border-radius:40px;overflow:hidden;display:flex;flex-direction:column}
+.iphone__status{display:flex;align-items:center;justify-content:space-between;padding:18px 26px 8px;font-size:.8rem;font-weight:600;color:var(--paper)}
+.iphone__island{width:90px;height:22px;border-radius:14px;background:#000}
+.iphone__signals{display:flex;gap:3px;align-items:flex-end}
+.iphone__signals i{display:block;width:3px;background:var(--paper);border-radius:1px}
+.iphone__signals i:nth-child(1){height:6px}
+.iphone__signals i:nth-child(2){height:9px}
+.iphone__signals i:nth-child(3){height:12px}
+
+.chat-head{display:flex;align-items:center;gap:10px;padding:10px 20px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.chat-head__back{font-size:1.3rem;color:var(--cyan)}
+.chat-head__mark{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(93,229,245,.15);border:1px solid rgba(93,229,245,.5);color:var(--cyan);font-weight:700;flex:0 0 auto}
+.chat-head__name{display:flex;flex-direction:column;line-height:1.2}
+.chat-head__name strong{font-size:.92rem;color:var(--paper);font-weight:600}
+.chat-head__name small{font-size:.72rem;color:var(--green)}
+.chat-head__more{margin-left:auto;color:var(--muted);letter-spacing:2px}
+
+.chat-body{flex:1;padding:18px 20px;display:flex;flex-direction:column;align-items:flex-end;gap:10px;overflow:hidden}
+.chat-day{align-self:center;font-size:.7rem;color:var(--muted);margin:0 0 6px;text-transform:uppercase;letter-spacing:.08em}
+.message{max-width:82%;padding:10px 14px;border-radius:16px;font-size:.85rem;line-height:1.4}
+.message time{display:block;margin-top:4px;font-size:.65rem;opacity:.6;text-align:right}
+.message--user{align-self:flex-end;background:#d8f0fb;color:var(--ink);border-bottom-right-radius:4px}
+.message--maistro{align-self:flex-end;background:#1c4b3a;color:var(--paper);border-bottom-right-radius:4px}
+.message--reply{background:#cdeaf8;color:var(--ink)}
+.typing{display:flex;gap:4px;align-self:flex-end;padding:10px 14px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--muted);opacity:.6}
+
+.chat-compose{display:flex;align-items:center;gap:10px;padding:12px 16px 22px;border-top:1px solid rgba(255,255,255,.08)}
+.chat-compose__plus{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08);color:var(--muted);font-size:1rem;flex:0 0 auto}
+.chat-compose__field{flex:1;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--muted);font-size:.82rem}
+.chat-compose__send{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--cyan);color:var(--ink);font-weight:700;flex:0 0 auto}
+.iphone__home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:3px;background:rgba(255,255,255,.3)}
+
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--ink)}
 body{
