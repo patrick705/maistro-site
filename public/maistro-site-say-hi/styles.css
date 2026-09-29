@@ -46,7 +46,7 @@ button{color:inherit}
 a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}
 
 main{min-height:100svh}
-.contact-stage{position:relative;min-height:100svh;display:grid;align-items:center;overflow:hidden;padding:clamp(3rem,5vw,5rem) clamp(1.2rem,5vw,5.8rem);isolation:isolate}
+.contact-stage{position:relative;min-height:100svh;display:grid;align-items:start;overflow:hidden;padding:clamp(1.25rem,2.5vw,2rem) clamp(1.2rem,5vw,5.8rem);isolation:isolate}
 .contact-grid{position:relative;z-index:2;display:grid;grid-template-columns:minmax(270px,.69fr) minmax(610px,1.31fr);align-items:center;gap:clamp(2.75rem,5.5vw,7rem);width:min(1460px,100%);margin:0 auto}
 .ambient{position:absolute;z-index:-1;border:1px solid;border-radius:50%;opacity:.18;pointer-events:none}
 .ambient::before{content:"";position:absolute;inset:12%;border:1px dashed currentColor;border-radius:inherit}
