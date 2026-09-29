@@ -72,6 +72,20 @@
 .chat-compose__send{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--cyan);color:var(--ink);font-weight:700;flex:0 0 auto}
 .iphone__home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:3px;background:rgba(255,255,255,.3)}
 
+/*
+ * Recreated: .voice-call-card had no base position/box rule at all (only
+ * its children — __top/__wave/__reply — survived from the missing
+ * sections.css). With no position:absolute it rendered as a normal-flow
+ * figcaption appended after the hero image, and since its parent
+ * (.story-panel__art) has overflow:hidden sized to the image's own
+ * aspect-ratio, the card's bottom content (the Maistro reply) was
+ * silently clipped off instead of overlaying the image as a floating card.
+ */
+.voice-call-card{position:absolute;right:1.5rem;bottom:1.5rem;left:auto;z-index:2;width:min(280px,55%);padding:1rem 1.1rem;border-radius:1rem;background:rgba(7,17,28,.82);backdrop-filter:blur(6px);border:1px solid rgba(93,229,245,.25);box-shadow:0 20px 45px rgba(0,0,0,.35);color:var(--paper);font-size:.85rem;line-height:1.4}
+.voice-call-card p{margin:0 0 .6rem;padding:.55rem .7rem;border-radius:.6rem;background:rgba(255,255,255,.06);font-size:.8rem;line-height:1.4;color:var(--paper)}
+.voice-call-card p:last-child{margin-bottom:0}
+.voice-call-card strong{display:block;font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.2rem}
+
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--ink)}
 body{
@@ -482,6 +496,11 @@ h2{margin-bottom:1.5rem;font-size:clamp(2.6rem,6vw,6rem);line-height:.98;font-we
 }
 .animation-frame picture{position:relative;z-index:1;display:block;width:100%;height:100%}
 .margin-gif{position:relative;z-index:0;display:block;width:100%;height:100%;object-fit:cover}
+.margin-gif--static{display:none}
+@media(prefers-reduced-motion:reduce){
+  video.margin-gif{display:none}
+  .margin-gif--static{display:block}
+}
 .chart-surface{
   position:absolute;
   left:0;

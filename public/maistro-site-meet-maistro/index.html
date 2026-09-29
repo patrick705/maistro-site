@@ -49,10 +49,11 @@
           </div>
           <div class="margin-stage hero-visual">
             <div class="animation-frame is-playing" id="marginAnimation">
-              <picture>
-                <source media="(prefers-reduced-motion: reduce)" srcset="assets/maistro-margin-chart-static.png">
-                <img class="margin-gif" id="marginGif" src="assets/maistro-margin-chart.gif" width="960" height="436" fetchpriority="high" decoding="async" alt="Revenue rises and costs fall as Maistro opens the margin.">
-              </picture>
+              <video class="margin-gif" id="marginGif" width="960" height="436" muted loop playsinline autoplay preload="auto" aria-label="Revenue rises and costs fall as Maistro opens the margin.">
+                <source src="assets/maistro-margin-chart.webm" type="video/webm">
+                <source src="assets/maistro-margin-chart.mp4" type="video/mp4">
+              </video>
+              <img class="margin-gif margin-gif--static" src="assets/maistro-margin-chart-static.png" width="960" height="436" decoding="async" alt="Revenue rises and costs fall as Maistro opens the margin.">
               <div class="chart-surface" aria-hidden="true"></div>
               <img class="robot-hold" src="assets/maistro-robot-hold.png" width="260" height="436" decoding="async" alt="" aria-hidden="true">
               <div class="margin-wipe" aria-hidden="true"></div>

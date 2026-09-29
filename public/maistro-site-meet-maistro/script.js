@@ -96,8 +96,8 @@
   const restartAnimation = () => {
     if (reducedMotion.matches) return;
     frame.classList.remove("is-playing");
-    const cleanSource = gif.getAttribute("src").split("?")[0];
-    gif.setAttribute("src", cleanSource + "?replay=" + Date.now());
+    gif.currentTime = 0;
+    gif.play();
     void frame.offsetWidth;
     frame.classList.add("is-playing");
   };

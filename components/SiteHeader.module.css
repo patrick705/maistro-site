@@ -28,6 +28,22 @@
   box-shadow: none;
 }
 
+/*
+ * Transparent + sticky together: a page that floats the nav over its own
+ * hero but is also long enough to scroll (the custom-site embeds) needs the
+ * nav to stay reachable the whole way down, not vanish once you scroll past
+ * the hero (position:absolute only holds a spot in the document, it isn't
+ * pinned to the viewport). Once stuck, back it with the same dark navy the
+ * embeds already reserve space for, so it stays legible over whatever
+ * scrolls underneath — light or dark — instead of turning invisible
+ * (white-on-white) or unreadable.
+ */
+.transparent.sticky {
+  position: sticky;
+  background: #07111c;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
 .transparent .navLink,
 .transparent .navLinkActive {
   color: #fff;
