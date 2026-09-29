@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useClient } from 'sanity'
 
 import { useLiveQuery } from './useLiveQuery'
@@ -25,9 +26,47 @@ const SOURCE_LABEL: Record<string, string> = {
   'say-hi': 'Say Hi postcard',
 }
 
+function csvEscape(value: string) {
+  const needsQuotes = /[",\n]/.test(value)
+  const escaped = value.replace(/"/g, '""')
+  return needsQuotes ? `"${escaped}"` : escaped
+}
+
+function downloadCsv(rows: Row[]) {
+  const headers = ['Name', 'Email', 'Company', 'Venues', 'Source', 'Delivery method', 'Entered competition', 'Message', 'Submitted at']
+  const lines = [headers.join(',')]
+  for (const row of rows) {
+    lines.push(
+      [
+        row.name ?? '',
+        row.email ?? '',
+        row.company ?? '',
+        row.venues ?? '',
+        row.source ? SOURCE_LABEL[row.source] || row.source : '',
+        row.deliveryMethod ?? '',
+        row.enteredCompetition ? 'Yes' : '',
+        row.message ?? '',
+        row.submittedAt ?? '',
+      ]
+        .map((v) => csvEscape(String(v)))
+        .join(','),
+    )
+  }
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `leads-${new Date().toISOString().slice(0, 10)}.csv`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
+}
+
 export function CollectionListView({ type }: { type: 'lead' }) {
   const client = useClient({ apiVersion: '2024-01-01' })
   const { data: rows, refetch } = useLiveQuery<Row[]>(LEADS_QUERY)
+  const [copied, setCopied] = useState(false)
 
   async function remove(id: string) {
     if (!confirm('Delete this document? This cannot be undone.')) return
@@ -36,9 +75,26 @@ export function CollectionListView({ type }: { type: 'lead' }) {
     refetch()
   }
 
+  async function copyEmails() {
+    const emails = (rows ?? []).map((r) => r.email).filter(Boolean).join('\n')
+    await navigator.clipboard.writeText(emails)
+    setCopied(true)
+    window.setTimeout(() => setCopied(false), 2000)
+  }
+
   return (
     <div style={{ maxWidth: 900, margin: '0 auto', padding: '26px 24px 72px' }}>
-      <h1 style={{ margin: '0 0 18px', fontFamily: kitchen.fontDisplay, fontSize: 26, fontWeight: 700 }}>Leads</h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18, flexWrap: 'wrap' }}>
+        <h1 style={{ margin: 0, fontFamily: kitchen.fontDisplay, fontSize: 26, fontWeight: 700 }}>Leads</h1>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+          <button type="button" onClick={copyEmails} disabled={!rows?.length} style={rowBtnStyle(false)}>
+            {copied ? 'Copied!' : 'Copy all emails'}
+          </button>
+          <button type="button" onClick={() => rows && downloadCsv(rows)} disabled={!rows?.length} style={rowBtnStyle(false)}>
+            Export CSV
+          </button>
+        </div>
+      </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
         {(rows ?? []).map((row) => (
           <div
