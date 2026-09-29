@@ -191,6 +191,21 @@
         ? "Your postcard is ready for the €500 monthly competition. Winner announced every month."
         : "Ready for print, postage and the road to Maistro HQ."
       : "One real inbox away from take-off.";
+    fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: byId("name").value,
+        email: byId("email").value,
+        message: message.value,
+        source: "say-hi",
+        deliveryMethod: selectedMethod,
+        enteredCompetition: hasEnteredCompetition,
+      }),
+    }).catch(() => {
+      // Same rule as every other form on the site: a CMS hiccup never blocks
+      // the visitor-facing "sent" animation below.
+    });
     animatePreviewSend();
     showToast();
   });

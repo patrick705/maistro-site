@@ -24,7 +24,17 @@ export async function POST(request: Request) {
   const message = cleanField((body as Record<string, unknown>).message)
   const rawSource = (body as Record<string, unknown>).source
   const source =
-    rawSource === 'contact-form' ? 'contact-form' : rawSource === 'roi-calculator' ? 'roi-calculator' : 'demo-modal'
+    rawSource === 'contact-form'
+      ? 'contact-form'
+      : rawSource === 'roi-calculator'
+        ? 'roi-calculator'
+        : rawSource === 'say-hi'
+          ? 'say-hi'
+          : 'demo-modal'
+  const rawDeliveryMethod = (body as Record<string, unknown>).deliveryMethod
+  const deliveryMethod =
+    source === 'say-hi' && (rawDeliveryMethod === 'email' || rawDeliveryMethod === 'postcard') ? rawDeliveryMethod : undefined
+  const enteredCompetition = source === 'say-hi' ? Boolean((body as Record<string, unknown>).enteredCompetition) : undefined
 
   if (!email) {
     return NextResponse.json({ error: 'Email is required' }, { status: 400 })
@@ -47,6 +57,8 @@ export async function POST(request: Request) {
       venues,
       message,
       source,
+      deliveryMethod,
+      enteredCompetition,
       submittedAt: new Date().toISOString(),
     })
     return NextResponse.json({ ok: true, stored: true })
