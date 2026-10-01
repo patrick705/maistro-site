@@ -234,6 +234,26 @@
     document.documentElement.style.setProperty("--postcard-x", "0deg");
   });
 
+  // Auto-flip between front and back every 5s while idle, pausing while the
+  // visitor is actively filling in the form (name/email/message) or the
+  // card is mid-send/already sent.
+  let autoFlipTimer;
+  const isEditingDetails = () => Boolean(document.activeElement && form.contains(document.activeElement));
+  const scheduleAutoFlip = () => {
+    window.clearTimeout(autoFlipTimer);
+    if (reduceMotion.matches) return;
+    autoFlipTimer = window.setTimeout(() => {
+      if (isEditingDetails() || form.classList.contains("is-sending") || sentCard.classList.contains("is-visible")) return;
+      setFlipped(!shell.classList.contains("is-flipped"), false);
+      scheduleAutoFlip();
+    }, 5000);
+  };
+  form.addEventListener("focusin", () => window.clearTimeout(autoFlipTimer));
+  form.addEventListener("focusout", scheduleAutoFlip);
+  flipToWrite.addEventListener("click", scheduleAutoFlip);
+  flipToFront.addEventListener("click", scheduleAutoFlip);
+  scheduleAutoFlip();
+
   const modelContext = document.modelContext;
   if (modelContext?.registerTool) {
     const lifecycle = new AbortController();
