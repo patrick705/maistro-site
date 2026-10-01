@@ -231,6 +231,12 @@ html.maistro-connected .head-actions{pointer-events:auto}
 .chapter h1,.chapter h2{font-size:30px!important;line-height:1.08!important;max-width:330px;margin-bottom:12px!important}
 .chapter>p,.chapter>.eyebrow,.chapter>h1,.chapter>h2,.margin-heading{transition:opacity .8s ease,filter .8s ease}
 .stage.mobile-playing .chapter>h1,.stage.mobile-playing .chapter>h2,.stage.mobile-playing .chapter>.eyebrow,.stage.mobile-playing .chapter>p,.stage.mobile-playing .margin-heading{opacity:0;pointer-events:none;filter:blur(3px)}
+/* Overridden: after ~4s idle on mobile, "mobile-playing" mode deliberately
+   faded the chapter's own heading/eyebrow/body text to near-invisible to
+   spotlight an ambient demo animation (stock schedule, capture-label, etc).
+   Repeatedly reported as "content missing/not loading" since nothing
+   signals this is intentional — keeping the real copy always visible. */
+.stage.mobile-playing .chapter>h1,.stage.mobile-playing .chapter>h2,.stage.mobile-playing .chapter>.eyebrow,.stage.mobile-playing .chapter>p,.stage.mobile-playing .margin-heading{opacity:1;pointer-events:auto;filter:none}
 .chapter>p{display:none}.intro-actions{position:fixed;left:20px;bottom:92px;margin:0!important;gap:12px!important}.intro-actions a,.intro-actions button{font-size:13px!important;padding:12px!important;min-height:44px}
 .stage .atmosphere,.stage .opening-wash{background:linear-gradient(180deg,#04111f 0%,#04111fe0 17%,#04111f35 36%,transparent 55%,#04111f22 76%,#04111f 100%)!important}
 .floor-note,.chapter-count,.chapter-nav,.scroll-hint{display:none!important}.footer{height:72px;padding:0 18px!important}
