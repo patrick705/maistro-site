@@ -136,9 +136,9 @@ h1 em{color:var(--cyan);font-style:normal;text-shadow:0 0 60px rgba(93,229,245,.
 .postcard-editor__footer b{color:var(--green)}
 .postcard-editor__footer button{padding:0;border:0;background:transparent;cursor:pointer;color:var(--cyan);font-size:.72rem;font-weight:800;text-decoration:underline;text-underline-offset:3px}
 
-.postcard-shell{position:relative;min-height:520px;perspective:1800px;isolation:isolate}
+.postcard-shell{position:relative;min-height:590px;perspective:1800px;isolation:isolate}
 .postcard-shadow{position:absolute;z-index:-1;inset:10% 7% -8%;border-radius:40%;background:rgba(0,0,0,.62);filter:blur(38px);transform:translateY(18px)}
-.postcard-tilt{position:relative;min-height:520px;transform:rotateX(var(--postcard-x)) rotateY(var(--postcard-y)) rotate(-1.15deg);transform-style:preserve-3d;transition:transform .22s ease-out,opacity .6s ease,filter .6s ease}
+.postcard-tilt{position:relative;min-height:590px;transform:rotateX(var(--postcard-x)) rotateY(var(--postcard-y)) rotate(-1.15deg);transform-style:preserve-3d;transition:transform .22s ease-out,opacity .6s ease,filter .6s ease}
 .postcard-flipper{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.72,.16,1)}
 .postcard-shell.is-flipped .postcard-flipper{transform:rotateY(180deg)}
 .postcard{
