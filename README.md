@@ -5,11 +5,14 @@ content managed in an embedded Sanity Studio.
 
 ## What's here
 
-- **Homepage** (`/`) — fully built, pixel-matching the approved
-  `Maistro Homepage.dc.html` mockup: hero, tabbed ops dashboard, About
-  pipeline diagram, services grid, results band, and a contact form.
-  Copy, stats, service cards, results and the demo-modal text are all
-  editable in the Studio.
+- **Homepage** (`/`) — `/` is hardcoded to render whichever `page` document
+  currently holds the slug `home` (see `docs/RUNBOOK.md` §1). Right now
+  that document is a single `customSite` embed, not the block-built design
+  described below. The original pixel-matching rebuild of
+  `Maistro Homepage.dc.html` — hero, tabbed ops dashboard, About pipeline
+  diagram, services grid, results band, and a contact form, all editable in
+  the Studio — still exists and is still live, just at `/home-classic`
+  instead of `/`, and isn't linked from the top nav.
 - **Product** (`/product`) — built to match the approved `Product.dc.html`
   mockup: hero (no stats row), a horizontal pipeline strip (channels →
   Menu Manager → Maistro → outcomes, distinct from the homepage's vertical
@@ -39,14 +42,16 @@ content managed in an embedded Sanity Studio.
   `IntegrationsBand`, `SimpleHero`, `LogoWall`, `FeaturedCaseStudy`,
   `TestimonialGrid`, `NewsGrid`) — the three pages are not simple reskins
   of the homepage's sections.
-- **Contact** — the nav's "Contact" link jumps to the contact form at the
-  bottom of the homepage (`/#contact`); there's no separate Contact page yet.
+- **Contact** — there's now a dedicated `/contact` page (hero, contact
+  form, social links), though it isn't currently linked from the top nav
+  (see `docs/RUNBOOK.md` §1 for what is).
 - **"Book a demo"** (nav, hero, contact) opens an animated modal. Both that
   modal and the homepage contact form POST to `/api/leads`, which stores a
   `lead` document in Sanity — check the Studio's **Leads** list.
-- **Theme**: the palette (5 options), "playful" mode, and the results-band
-  visibility are all editable in Site Settings in the Studio — no code
-  changes needed to retheme.
+- **Theme**: palette (picked from a growing library — 44 and counting,
+  managed in Site Settings → Theme → Palette library), font pairing, type
+  scale, "playful" mode, and results-band visibility are all editable in
+  Site Settings in the Studio — no code changes needed to retheme.
 - The "designed dashboard" (KPIs, charts, rota, stock bars) is illustrative
   product UI, not marketing copy — it's static data in
   `lib/content/dashboardData.ts`, not wired to Sanity.
@@ -58,15 +63,15 @@ content managed in an embedded Sanity Studio.
 2. **Create an API token**: in that project, go to API → Tokens → Add API
    token, give it the **Editor** role, and copy it — you'll only see it
    once.
-3. Copy the env template and fill it in:
-   ```bash
-   cp .env.local.example .env.local
-   ```
+3. Create `.env.local` with:
    ```
    NEXT_PUBLIC_SANITY_PROJECT_ID=<your project id>
    NEXT_PUBLIC_SANITY_DATASET=production
    SANITY_API_WRITE_TOKEN=<the token you just created>
    ```
+   (there's no `.env.local.example` to copy from — see `docs/RUNBOOK.md`
+   §5 for the full set of env vars, including the separate `.env` file the
+   standalone Sanity CLI reads.)
 4. Install dependencies and seed the starting content (hero copy, services,
    results, etc. — the same copy as the mockup):
    ```bash
@@ -95,8 +100,11 @@ npm run dev
 - `app/studio/` — embedded Sanity Studio, outside the `(site)` layout.
 - `app/api/leads/` — route handler that stores demo/contact submissions in
   Sanity.
-- `sanity/schemaTypes/` — content schema (Site Settings, Home/Product/
-  Customers/News Pages, News Article, Lead).
+- `sanity/schemaTypes/` — content schema: a generic `page` document (any
+  slug, a reorderable array of 29 block types), Site Settings, News
+  Article, Lead, and the Brand Palette library.
+- `sanity/kitchen/` — Kitchen CMS, the bespoke Studio UI that replaces the
+  default structure tool as the primary editing surface.
 - `lib/content/` — TypeScript types, the palette definitions, the
   hardcoded dashboard data, and the fallback/seed copy.
 - `lib/sanity/` — Sanity client, GROQ queries, and fetch-with-fallback
@@ -105,7 +113,18 @@ npm run dev
 
 ## Deploying
 
-Deploy like any Next.js app (e.g. Vercel). Set the same env vars from
-`.env.local` in your hosting provider, then run `npm run seed` once
-(pointed at your production dataset) to populate initial content — or just
-write it directly in the Studio.
+Deploy like any Next.js app (e.g. Vercel) — this also deploys the embedded
+Studio at `/studio`, no separate step needed. Set the same env vars from
+`.env.local` in your hosting provider.
+
+There's a **second, independently-deployed Studio** (Sanity's own hosting,
+via `npx sanity deploy`) sharing the same dataset and schema — see
+`docs/RUNBOOK.md` §6 for when you need to redeploy it too.
+
+For a fresh dataset, run `npm run seed` once to populate starting content —
+note it only seeds 5 of the 44 brand palettes currently in production (see
+`docs/RUNBOOK.md` §4) — or just write content directly in Kitchen.
+
+See `docs/RUNBOOK.md` for the full current-state picture: routes (including
+what's actually live at `/` right now), the block list, Kitchen's views, the
+palette library, env conventions, and open questions.
