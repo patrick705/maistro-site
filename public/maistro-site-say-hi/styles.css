@@ -277,6 +277,7 @@ textarea::placeholder{color:#6f919e;opacity:.76}
 @media (max-width:1080px){
   .contact-stage{align-items:start}
   .contact-grid{grid-template-columns:1fr;width:min(820px,100%);gap:3rem}
+  .contact-copy,.postcard-shell{min-width:0}
   .contact-copy{text-align:center}
   .eyebrow{justify-content:center}
   .intro{margin-right:auto;margin-left:auto}
