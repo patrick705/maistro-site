@@ -13,7 +13,7 @@ function Card({ service }: { service: ServiceCard }) {
       <div className={styles.icon}>{service.icon}</div>
       <h3 className={styles.title}>{service.title}</h3>
       <p className={styles.description}>{service.description}</p>
-      {service.bullets.length > 0 && (
+      {(service.bullets?.length ?? 0) > 0 && (
         <div className={styles.bullets}>
           {service.bullets.map((bullet) => (
             <div key={bullet} className={styles.bullet}>
