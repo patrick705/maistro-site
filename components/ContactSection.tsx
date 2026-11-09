@@ -18,7 +18,7 @@ export function ContactSection({
 }: {
   content: ContactContent
   /** Injected rather than hardcoded so this component has no dependency on the live leads API — lets the Kitchen CMS preview reuse it without risking a real lead getting submitted. */
-  onSubmit: (fields: { name: string; email: string; message: string }) => Promise<void>
+  onSubmit: (fields: { name: string; email: string; postcode?: string; message: string }) => Promise<void>
   style?: React.CSSProperties
 }) {
   const [status, setStatus] = useState<Status>('idle')
@@ -31,6 +31,7 @@ export function ContactSection({
       await onSubmit({
         name: String(data.get('name') || ''),
         email: String(data.get('email') || ''),
+        postcode: String(data.get('postcode') || ''),
         message: String(data.get('message') || ''),
       })
       setStatus('success')
@@ -58,6 +59,7 @@ export function ContactSection({
             <input name="name" required placeholder="Name" className={styles.input} />
             <input name="email" required type="email" placeholder="Work email" className={styles.input} />
           </div>
+          <input name="postcode" placeholder="Postcode / Eircode" className={styles.input} />
           <textarea
             name="message"
             placeholder="What would you like Maistro to run?"
