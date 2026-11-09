@@ -56,10 +56,10 @@ export function ContactSection({
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.row2}>
-            <input name="name" required placeholder="Name" className={styles.input} />
-            <input name="email" required type="email" placeholder="Work email" className={styles.input} />
+            <input name="name" required autoComplete="name" placeholder="Name" className={styles.input} />
+            <input name="email" required type="email" autoComplete="email" placeholder="Work email" className={styles.input} />
           </div>
-          <input name="postcode" placeholder="Postcode / Eircode" className={styles.input} />
+          <input name="postcode" autoComplete="postal-code" placeholder="Postcode / Eircode" className={styles.input} />
           <textarea
             name="message"
             placeholder="What would you like Maistro to run?"
