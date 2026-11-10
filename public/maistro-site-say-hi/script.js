@@ -174,7 +174,7 @@
       }, reduceMotion.matches ? 20 : 700);
     }, reduceMotion.matches ? 20 : 760);
   };
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!form.checkValidity()) {
       form.classList.remove("is-invalid");
@@ -183,31 +183,42 @@
       form.reportValidity();
       return;
     }
-    sentKicker.textContent = selectedMethod === "postcard"
-      ? hasEnteredCompetition ? "Competition entry ready." : "Postcard ready."
-      : "Email ready.";
-    sentMessage.textContent = selectedMethod === "postcard"
-      ? hasEnteredCompetition
-        ? "Your postcard is ready for the €500 monthly competition. Winner announced every month."
-        : "Ready for print, postage and the road to Maistro HQ."
-      : "One real inbox away from take-off.";
-    fetch("/api/leads", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: byId("name").value,
-        email: byId("email").value,
-        message: message.value,
-        source: "say-hi",
-        deliveryMethod: selectedMethod,
-        enteredCompetition: hasEnteredCompetition,
-      }),
-    }).catch(() => {
-      // Same rule as every other form on the site: a CMS hiccup never blocks
-      // the visitor-facing "sent" animation below.
-    });
-    animatePreviewSend();
-    showToast();
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton?.setAttribute("disabled", "true");
+    sendButtonLabel.textContent = selectedMethod === "postcard" ? "Stamping…" : "Sending…";
+
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: byId("name").value,
+          email: byId("email").value,
+          message: message.value,
+          source: "say-hi",
+          deliveryMethod: selectedMethod,
+          enteredCompetition: hasEnteredCompetition,
+        }),
+      });
+      if (!response.ok) throw new Error("Lead delivery failed");
+
+      sentKicker.textContent = selectedMethod === "postcard"
+        ? hasEnteredCompetition ? "Competition entry received." : "Postcard received."
+        : "Message received.";
+      sentMessage.textContent = selectedMethod === "postcard"
+        ? hasEnteredCompetition
+          ? "Your postcard is in the €500 monthly competition."
+          : "Your postcard has reached the Maistro team."
+        : "Your message has reached the Maistro team.";
+      animatePreviewSend();
+      showToast();
+    } catch {
+      setDeliveryStatus("We couldn’t send that just now. Please try again in a moment.");
+    } finally {
+      submitButton?.removeAttribute("disabled");
+      sendButtonLabel.innerHTML = `${selectedMethod === "postcard" ? "Send postcard" : "Send email"} <i aria-hidden="true">→</i>`;
+    }
   });
   writeAnother.addEventListener("click", () => {
     sentCard.classList.remove("is-visible");
