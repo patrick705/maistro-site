@@ -2,8 +2,44 @@ import { NextResponse } from 'next/server'
 
 import { getWriteClient, isSanityConfigured } from '@/lib/sanity/client'
 
-const MAX_FIELD_LENGTH = 500
+const MAX_FIELD_LENGTH = 560
 const HUBDECK_TIMEOUT_MS = 8000
+const ALLOWED_FORM_ORIGINS = new Set([
+  'https://maistro-contact.patrick-shan-1947.chatgpt.site',
+  'https://yesmaistro.com',
+  'https://www.yesmaistro.com',
+  'https://maistro-connected.patrick-shan-1947.chatgpt.site',
+])
+
+function isAllowedOrigin(request: Request): boolean {
+  const origin = request.headers.get('origin')
+  return !origin || origin === new URL(request.url).origin || ALLOWED_FORM_ORIGINS.has(origin)
+}
+
+function responseHeaders(request: Request): Headers {
+  const headers = new Headers({ 'Cache-Control': 'no-store', Vary: 'Origin' })
+  const origin = request.headers.get('origin')
+  if (origin && isAllowedOrigin(request)) {
+    headers.set('Access-Control-Allow-Origin', origin)
+  }
+  return headers
+}
+
+function jsonResponse(request: Request, body: unknown, status = 200) {
+  return NextResponse.json(body, { status, headers: responseHeaders(request) })
+}
+
+export async function OPTIONS(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return jsonResponse(request, { error: 'Origin not allowed' }, 403)
+  }
+
+  const headers = responseHeaders(request)
+  headers.set('Allow', 'POST, OPTIONS')
+  headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS')
+  headers.set('Access-Control-Allow-Headers', 'Content-Type')
+  return new NextResponse(null, { status: 204, headers })
+}
 
 function cleanField(value: unknown, maxLength = MAX_FIELD_LENGTH): string | undefined {
   if (typeof value !== 'string') return undefined
@@ -44,9 +80,8 @@ async function forwardToHubdeck({
   const url = process.env.HUBDECK_INBOUND_URL?.trim()
   const token = process.env.HUBDECK_INBOUND_TOKEN?.trim()
 
-  if (!url && !token) return false
   if (!url || !token) {
-    throw new Error('Hubdeck inbound relay is partially configured')
+    throw new Error('Hubdeck inbound relay is not configured')
   }
 
   const response = await fetch(url, {
@@ -73,28 +108,26 @@ async function forwardToHubdeck({
     signal: AbortSignal.timeout(HUBDECK_TIMEOUT_MS),
   })
 
-  const responseText = await response.text()
   if (!response.ok) {
     throw new Error('Hubdeck inbound returned HTTP ' + response.status)
   }
 
-  if (responseText) {
-    try {
-      const result = JSON.parse(responseText) as { ok?: boolean }
-      if (result.ok === false) throw new Error('Hubdeck rejected the enquiry')
-    } catch (error) {
-      if (error instanceof Error && error.message === 'Hubdeck rejected the enquiry') throw error
-      // Hubdeck may return an empty body even after accepting the enquiry.
-    }
+  const result = await response.json().catch(() => null) as { ok?: unknown } | null
+  if (result?.ok !== true) {
+    throw new Error('Hubdeck response did not confirm receipt of the enquiry')
   }
 
   return true
 }
 
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return jsonResponse(request, { error: 'Origin not allowed' }, 403)
+  }
+
   const body = await request.json().catch(() => null)
   if (!body || typeof body !== 'object') {
-    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
+    return jsonResponse(request, { error: 'Invalid request body' }, 400)
   }
 
   const values = body as Record<string, unknown>
@@ -110,10 +143,10 @@ export async function POST(request: Request) {
   const pageUrl = request.headers.get('referer') || ''
 
   if (!email) {
-    return NextResponse.json({ error: 'Email is required' }, { status: 400 })
+    return jsonResponse(request, { error: 'Email is required' }, 400)
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return NextResponse.json({ error: 'Enter a valid email address' }, { status: 400 })
+    return jsonResponse(request, { error: 'Enter a valid email address' }, 400)
   }
 
   let hubdeckStored = false
@@ -130,9 +163,10 @@ export async function POST(request: Request) {
     })
   } catch (err) {
     console.error('[leads] failed to relay lead to Hubdeck:', err)
-    return NextResponse.json(
+    return jsonResponse(
+      request,
       { error: 'We could not send your enquiry right now. Please try again.' },
-      { status: 502 },
+      502,
     )
   }
 
@@ -160,5 +194,6 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ ok: true, stored, hubdeckStored })
+  return jsonResponse(request, { ok: true, stored, hubdeckStored })
 }
+
